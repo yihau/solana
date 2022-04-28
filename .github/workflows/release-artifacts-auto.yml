@@ -1,0 +1,12 @@
+name: release-artifacts-auto
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  release-artifacts:
+    uses: ./.github/workflows/release-artifacts.yml
+    with:
+      tag: $GITHUB_REF_NAME

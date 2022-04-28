@@ -1,0 +1,129 @@
+name: release-artifacts
+
+on:
+  workflow_call:
+    inputs:
+      tag:
+        required: false
+        type: string
+
+jobs:
+  osx:
+    runs-on: macos-12
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Copy CI Script Folder
+        shell: bash
+        run: |
+            cp -Lr ci /tmp/ci
+
+      - name: Switch Version
+        if: ${{ inputs.tag }}
+        run: |
+          git checkout ${{ inputs.tag }}
+
+      - name: Replace CI Script Folder
+        shell: bash
+        run: |
+            rm -rf ci
+            mv /tmp/ci ci
+
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Build & Release
+        shell: bash
+        run: |
+          source ci/rust-version.sh
+          brew install coreutils
+          PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+          brew install gnu-tar
+          PATH="/usr/local/opt/gnu-tar/libexec/gnubin:$PATH"
+          source ci/env.sh
+          rustup set profile default
+          ci/publish-tarball.sh
+
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "$CI_TAG"
+          prerelease: true
+          title: "$CI_TAG"
+          files: |
+            github-action-release-upload/*
+
+      - name: S3
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --acl public-read --follow-symlinks --delete
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+          AWS_REGION: 'us-west-1'
+          SOURCE_DIR: 'github-action-s3-upload'
+
+  windows:
+    runs-on: windows-2022
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Copy CI Script Folder
+        shell: bash
+        run: |
+            cp -Lr ci /tmp/ci
+
+      - name: Switch Version
+        if: ${{ inputs.tag }}
+        run: |
+          git checkout ${{ inputs.tag }}
+
+      - name: Replace CI Script Folder
+        shell: bash
+        run: |
+            rm -rf ci
+            mv /tmp/ci ci
+
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Prepare Environment
+        shell: bash
+        run: |
+          choco install openssl
+          export OPENSSL_DIR="C:\Program Files\OpenSSL-Win64"
+          source ci/rust-version.sh
+          source ci/env.sh
+          rustup set profile default
+          ci/publish-tarball.sh
+
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "$CI_TAG"
+          prerelease: true
+          title: "$CI_TAG"
+          files: |
+            github-action-release-upload/*
+
+      - name: S3
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --acl public-read --follow-symlinks --delete
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+          AWS_REGION: 'us-west-1'
+          SOURCE_DIR: 'github-action-s3-upload'
