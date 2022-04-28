@@ -1,0 +1,68 @@
+name: release-artifacts
+
+on:
+  workflow_call:
+    inputs:
+      tag:
+        required: false
+        type: string
+
+jobs:
+  osx:
+    runs-on: macos-12
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Switch Version
+        if: ${{ inputs.tag }}
+        run: |
+          git checkout ${{ inputs.tag }}
+
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Build & Release
+        shell: bash
+        run: |
+          # brew install coreutils
+          # PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+          # brew install gnu-tar
+          # PATH="/usr/local/opt/gnu-tar/libexec/gnubin:$PATH"
+          # source ci/rust-version.sh
+          source ci/env.sh
+          # rustup set profile default
+          # ci/publish-tarball.sh
+
+  windows:
+    runs-on: windows-2022
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Switch Version
+        if: ${{ inputs.tag }}
+        run: |
+          git checkout ${{ inputs.tag }}
+
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Build & Release
+        shell: bash
+        run: |
+          # choco install openssl
+          # export OPENSSL_DIR="C:\Program Files\OpenSSL-Win64"
+          # PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+          # source ci/rust-version.sh
+          source ci/env.sh
+          # rustup set profile default
+          # ci/publish-tarball.sh
