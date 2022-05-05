@@ -2,6 +2,8 @@
 title: Adjusted Staking Yield
 ---
 
+
+
 ### Token Dilution
 
 Similarly we can look at the expected _Staked Dilution_ (i.e. _Adjusted Staking Yield_) and _Un-staked Dilution_ as previously defined. Again, _dilution_ in this context is defined as the change in fractional representation (i.e. ownership) of a set of tokens within a larger set. In this sense, dilution can be a positive value: an increase in fractional ownership (staked dilution / _Adjusted Staking Yield_), or a negative value: a decrease in fractional ownership (un-staked dilution).
