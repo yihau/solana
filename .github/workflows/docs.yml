@@ -36,10 +36,11 @@ jobs:
         with:
           files: |
             docs/**
+
   build:
     needs:
       - check
-    if: ${{ needs.check.outputs.specific-file-changed }} = 'true'
+    if: ${{ needs.check.outputs.specific-file-changed }} == 'true'
     runs-on: ubuntu-20.04
     steps:
       - name: Setup Node
