@@ -14,10 +14,11 @@ on:
       - master
       - v[0-9]+.[0-9]+
 
-
 jobs:
-  main:
+  check:
     runs-on: ubuntu-20.04
+    outputs:
+      specific-file-changed: ${{ steps.changed-files-specific.outputs.any_changed }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -35,18 +36,18 @@ jobs:
         with:
           files: |
             docs/**
-
-      - name: Exit if no file changes in docs/
-        if: steps.changed-files-specific.outputs.any_changed != 'true'
-        run: |
-          exit 1
-
+  build:
+    needs:
+      - check
+    if: jobs.check.outputs.specific-file-changed = 'true'
+    runs-on: ubuntu-20.04
+    steps:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: 14
 
-      - name: Build
+      - name: Build & Deploy (if needed)
         working-directory: docs
         run: |
           npm install
