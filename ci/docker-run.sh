@@ -104,3 +104,4 @@ fi
 set -x
 # shellcheck disable=SC2086
 exec docker run "${ARGS[@]}" $CODECOV_ENVS "$IMAGE" "$@"
+
