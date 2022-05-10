@@ -43,9 +43,10 @@ jobs:
         shell: bash
         run: |
           brew install coreutils
-          PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+          PATH="$(brew --prefix)/opt/coreutils/libexec/gnubin:$PATH"
           brew install gnu-tar
-          PATH="/usr/local/opt/gnu-tar/libexec/gnubin:$PATH"
+          PATH="$(brew --prefix)opt/gnu-tar/libexec/gnubin:$PATH"
+          tar --version
           source /tmp/env.sh
           ci/publish-tarball.sh
           mkdir -p "github-action-s3-upload/${{ inputs.tag }}"
