@@ -18,6 +18,7 @@ pub struct ClusterTpuInfo {
 }
 
 impl ClusterTpuInfo {
+
     pub fn new(cluster_info: Arc<ClusterInfo>, poh_recorder: Arc<Mutex<PohRecorder>>) -> Self {
         Self {
             cluster_info,
