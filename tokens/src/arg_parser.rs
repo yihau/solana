@@ -23,6 +23,7 @@ where
     T: Into<OsString> + Clone,
 {
     let default_config_file = CONFIG_FILE.as_ref().unwrap();
+
     App::new(crate_name!())
         .about(crate_description!())
         .version(solana_version::version!())
