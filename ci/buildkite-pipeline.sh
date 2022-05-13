@@ -162,6 +162,27 @@ all_test_steps() {
   fi
   wait_step
 
+  # osx build
+  cat >> "$output_file" <<"EOF"
+  - commands:
+    - source ci/rust-version.sh stable
+    - scripts/cargo-install-all.sh stable solana-releas
+    agents:
+      - "queue=release-build-aarch64-apple-darwin"
+    timeout_in_minutes: 60
+    name: "publish tarball (aarch64-apple-darwin)"
+EOF
+
+  cat >> "$output_file" <<"EOF"
+  - commands:
+    - source ci/rust-version.sh stable
+    - scripts/cargo-install-all.sh stable solana-releas
+    agents:
+      - "queue=release-build-x86_64-apple-darwin"
+    timeout_in_minutes: 60
+    name: "publish tarball (x86_64-apple-darwin)"
+EOF
+
   # BPF test suite
   if affects \
              .rs$ \
