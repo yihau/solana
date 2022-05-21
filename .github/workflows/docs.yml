@@ -27,6 +27,7 @@ jobs:
           source ci/env.sh
           echo "::set-output name=tag::$CI_TAG"
           ci/channel_restriction.sh edge beta
+        continue-on-error: true
 
       - name: Get specific changed files
         id: changed-files-specific
