@@ -42,9 +42,10 @@ jobs:
           echo ${{ steps.check.outputs.channel }}
           echo ${{ steps.changed-files-specific.outputs.any_change }}
           echo ${{ steps.changed-files-specific.outputs.any_change}}
-          echo ${{ steps.check.outputs.tag || ((steps.check.outputs.channel == 'edge' || steps.check.outputs.channel == 'beta') && steps.changed-files-specific.outputs.any_change != '')}}
           echo "::set-output name=need_to_build::${{ steps.check.outputs.tag != '' || ((steps.check.outputs.channel == 'edge' || steps.check.outputs.channel == 'beta') && steps.changed-files-specific.outputs.any_change != '')}}"
         shell: bash
+
+      - run: echo ${{ steps.prebuild.need_to_build }}
 
       - name: Setup Node
         if: ${{ steps.prebuild.need_to_build == true }}
