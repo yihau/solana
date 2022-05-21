@@ -26,8 +26,8 @@ jobs:
         run: |
           source ci/env.sh
           echo "::set-output name=tag::$CI_TAG"
-          ci/channel_restriction.sh edge beta
-        continue-on-error: true
+          eval "$(ci/channel-info.sh)"
+          echo "::set-output name=channel::$CHANNEL"
 
       - name: Get specific changed files
         id: changed-files-specific
@@ -36,14 +36,24 @@ jobs:
           files: |
             docs/**
 
+      - name: Pre Build
+        id: prebuild
+        run: |
+          echo ${{ steps.check.outputs.channel }}
+          echo ${{ steps.changed-files-specific.outputs.any_change }}
+          echo ${{ steps.changed-files-specific.outputs.any_change}}
+          echo ${{ steps.check.outputs.tag || ((steps.check.outputs.channel == 'edge' || steps.check.outputs.channel == 'beta') && steps.changed-files-specific.outputs.any_change != '')}}
+          echo "::set-output name=need_to_build::${{ steps.check.outputs.tag || ((steps.check.outputs.channel == 'edge' || steps.check.outputs.channel == 'beta') && steps.changed-files-specific.outputs.any_change != '')}}"
+        shell: bash
+
       - name: Setup Node
-        if: ${{ steps.check.outputs.tag || steps.changed-files-specific.outputs.any_changed }}
+        if: ${{ steps.prebuild.need_to_build == true }}
         uses: actions/setup-node@v3
         with:
           node-version: 14
 
       - name: Build
-        if: ${{ steps.check.outputs.tag || steps.changed-files-specific.outputs.any_changed }}
+        if: ${{ steps.prebuild.need_to_build == true }}
         working-directory: docs
         run: |
           npm install
