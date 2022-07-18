@@ -119,9 +119,9 @@ test-stable-perf)
     export SOLANA_CUDA=1
   fi
 
-  _ "$cargo" stable build --bins ${V:+--verbose}
-  _ "$cargo" stable test --package solana-perf --package solana-ledger --package solana-core --lib ${V:+--verbose} -- --nocapture
-  _ "$cargo" stable run --manifest-path poh-bench/Cargo.toml ${V:+--verbose} -- --hashes-per-tick 10
+  # _ "$cargo" stable build --bins ${V:+--verbose}
+  # _ "$cargo" stable test --package solana-perf --package solana-ledger --package solana-core --lib ${V:+--verbose} -- --nocapture
+  # _ "$cargo" stable run --manifest-path poh-bench/Cargo.toml ${V:+--verbose} -- --hashes-per-tick 10
   ;;
 test-local-cluster)
   _ "$cargo" stable build --release --bins ${V:+--verbose}
