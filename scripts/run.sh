@@ -118,5 +118,5 @@ args=(
 # shellcheck disable=SC2086
 solana-validator "${args[@]}" $SOLANA_RUN_SH_VALIDATOR_ARGS &
 validator=$!
-
+echo "$validator"
 wait "$validator"
