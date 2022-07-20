@@ -107,6 +107,19 @@ command_step() {
 EOF
 }
 
+parallel_step() {
+  cat >> "$output_file" <<EOF
+  - name: "$1"
+    command: "$2"
+    timeout_in_minutes: $3
+    artifact_paths: "log-*.txt"
+    label: "stable %N/%t"
+    parallelism: $4
+    agents:
+      - "queue=chido"
+EOF
+}
+
 
 trigger_secondary_step() {
   cat  >> "$output_file" <<"EOF"
@@ -147,7 +160,7 @@ all_test_steps() {
   fi
 
   # Full test suite
-  command_step stable ". ci/rust-version.sh; ci/docker-run.sh \$\$rust_stable_docker_image ci/test-stable.sh" 70
+  parallel_step stable ". ci/rust-version.sh; ci/docker-run.sh \$\$rust_stable_docker_image .buildkite/steps/stable.sh" 70 5
 
   # Docs tests
   if affects \
@@ -340,6 +353,10 @@ if [[ $BUILDKITE_BRANCH =~ ^pull ]]; then
 fi
 
 start_pipeline "Push pipeline for ${BUILDKITE_BRANCH:-?unknown branch?}"
+# test
+parallel_step stable ". ci/rust-version.sh; ci/docker-run.sh \$\$rust_stable_docker_image .buildkite/steps/stable.sh" 70 5
+exit 0
+
 pull_or_push_steps
 wait_step
 trigger_secondary_step
