@@ -50,14 +50,13 @@ jobs:
           choco install openssl
           export OPENSSL_DIR="C:\Program Files\OpenSSL-Win64"
           choco install protoc
-          export PROTOC_NO_VENDOR=1
-          export PROTOC="C:\ProgramData\chocolatey\lib\protoc\tools\bin\protoc.exe"
-          echo -e 'C:\\ProgramData\\chocolatey\\lib\\protoc\\tools\\bin' >> $GITHUB_PATH
           source /tmp/env.sh
           echo "::set-output name=tag::$CI_TAG"
           eval "$(ci/channel-info.sh)"
           echo "::set-output name=channel::$CHANNEL"
           ci/publish-tarball.sh
+        env:
+          PROTOC_NO_VENDOR: 1
 
       - name: Prepare Upload Files
         if: ${{ steps.build.outputs.channel != '' || steps.build.outputs.tag != '' }}
