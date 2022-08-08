@@ -52,6 +52,7 @@ jobs:
           choco install protoc
           export PROTOC_NO_VENDOR=1
           export PROTOC="C:\ProgramData\chocolatey\lib\protoc\tools\bin\protoc.exe"
+          echo -e 'C:\\ProgramData\\chocolatey\\lib\\protoc\\tools\\bin' >> $GITHUB_PATH
           source /tmp/env.sh
           echo "::set-output name=tag::$CI_TAG"
           eval "$(ci/channel-info.sh)"
