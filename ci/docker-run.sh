@@ -45,6 +45,11 @@ if [[ -n $CI ]]; then
   # Share the real ~/.cargo between docker containers in CI for speed
   ARGS+=(--volume "$HOME:/home")
 
+  # export cargo bin path
+  #ARGS+=(
+  #  --env PATH="/home/.cargo/bin"
+  #)
+
   # sccache
   ARGS+=(
     --env "RUSTC_WRAPPER=/home/.cargo/bin/sccache"

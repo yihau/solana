@@ -29,13 +29,15 @@ else
 fi
 
 NPROC=$(nproc)
-JOBS=$((JOBS>NPROC ? NPROC : JOBS))
-
+JOBS=$((JOBS > NPROC ? NPROC : JOBS))
 
 echo "Executing $testName"
 case $testName in
 test-stable)
-  _ "$cargo" stable test --jobs "$JOBS" --all --tests --exclude solana-local-cluster ${V:+--verbose} -- --nocapture
+  _ "$cargo" stable test --jobs "$JOBS" --all --tests --exclude solana-local-cluster ${V:+--verbose} -- -Z unstable-options --format json --report-time | tee results.json
+  if [[ "${PIPESTATUS[0]}" -ne 0 ]]; then
+    exit "${PIPESTATUS[0]}"
+  fi
   ;;
 test-stable-bpf)
   # Clear the C dependency files, if dependency moves these files are not regenerated
@@ -82,9 +84,9 @@ test-stable-bpf)
   solana_program_count=$(grep -c 'solana-program v' cargo.log)
   rm -f cargo.log
   if ((solana_program_count > 10)); then
-      echo "Regression of build redundancy ${solana_program_count}."
-      echo "Review dependency features that trigger redundant rebuilds of solana-program."
-      exit 1
+    echo "Regression of build redundancy ${solana_program_count}."
+    echo "Review dependency features that trigger redundant rebuilds of solana-program."
+    exit 1
   fi
 
   # bpf-tools version
@@ -95,7 +97,7 @@ test-stable-bpf)
   _ "$cargo" stable test \
     --manifest-path programs/bpf/Cargo.toml \
     --no-default-features --features=bpf_c,bpf_rust assert_instruction_count \
-    -- --nocapture &> "${bpf_target_path}"/deploy/instuction_counts.txt
+    -- --nocapture &>"${bpf_target_path}"/deploy/instuction_counts.txt
 
   bpf_dump_archive="bpf-dumps.tar.bz2"
   rm -f "$bpf_dump_archive"
