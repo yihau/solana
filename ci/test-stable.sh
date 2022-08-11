@@ -35,8 +35,10 @@ echo "Executing $testName"
 case $testName in
 test-stable)
   _ "$cargo" stable test --jobs "$JOBS" --all --tests --exclude solana-local-cluster ${V:+--verbose} -- -Z unstable-options --format json --report-time | tee results.json
-  if [[ "${PIPESTATUS[0]}" -ne 0 ]]; then
-    exit "${PIPESTATUS[0]}"
+  test_result=${PIPESTATUS[0]}
+  echo "$test_result"
+  if [[ "$test_result" -ne 0 ]]; then
+    exit "$test_result"
   fi
   ;;
 test-stable-bpf)
