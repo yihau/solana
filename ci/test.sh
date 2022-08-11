@@ -5,6 +5,6 @@ cd "$(dirname "$0")/.."
 
 source ci/_
 
-_ exit 0 | tee test.json
+_ exit 1 | tee test.json
 
 echo "${PIPESTATUS[*]}"
