@@ -1,0 +1,49 @@
+name: test-android-target
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+      - fix-android-api-redefined
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  check_compilation:
+    name: Client compilation
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        target: [i686-linux-android, x86_64-linux-android]
+        include:
+          - target: i686-linux-android
+            platform: android
+            os: ubuntu-latest
+          - target: x86_64-linux-android
+            platform: android
+            os: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: ${{ matrix.target }}
+      - name: Install cargo-ndk
+        if: ${{ matrix.platform == 'android' }}
+        run: cargo install cargo-ndk
+      - name: Install NDK 21
+        if: ${{ matrix.platform == 'android' }}
+        run: |
+          ANDROID_ROOT=/usr/local/lib/android
+          ANDROID_SDK_ROOT=${ANDROID_ROOT}/sdk
+          SDKMANAGER=${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin/sdkmanager
+          echo "y" | $SDKMANAGER "ndk;21.4.7075529"
+      - uses: actions-rs/cargo@v1
+        if: ${{ matrix.platform == 'android' }}
+        with:
+          command: ndk
+          args: --target ${{ matrix.target }} build -p solana-client
+
