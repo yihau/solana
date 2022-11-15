@@ -34,6 +34,7 @@ jobs:
         id: changed-files-specific
         uses: tj-actions/changed-files@v34.4.0
         with:
+          fetch_depth: 200
           files: |
             .github/workflows/docs.yml
             docs/**
