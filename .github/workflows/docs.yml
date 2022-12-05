@@ -35,6 +35,7 @@ jobs:
 
       - name: Get file status
         run: |
+          exit 1
           set +e
           git diff --name-only $COMMIT_RANGE | grep \
             -e '.github/workflows/docs.yml' \
