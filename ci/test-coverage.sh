@@ -21,11 +21,13 @@ report=coverage-"${CI_COMMIT:0:9}".tar.gz
 mv target/cov/report.tar.gz "$report"
 upload-ci-artifact "$report"
 
+upload-ci-artifact target/cov/LATEST
+
 gzip -f target/cov/coverage-stderr.log
 upload-ci-artifact target/cov/coverage-stderr.log.gz
 
 annotate --style success --context lcov-report \
-  "lcov report: <a href=\"artifact://$report\">$report</a>"
+  "lcov report: <a href=\"artifact://target/cov/LATEST/index.html\">$report</a>"
 
 echo "--- codecov.io report"
 if [[ -z "$CODECOV_TOKEN" ]]; then
