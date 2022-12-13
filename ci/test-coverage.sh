@@ -21,8 +21,8 @@ report=coverage-"${CI_COMMIT:0:9}".tar.gz
 mv target/cov/report.tar.gz "$report"
 upload-ci-artifact "$report"
 
-cp -r target/cov/"lcov-${CI_COMMIT:0:9}" "lcov-${CI_COMMIT:0:9}"
-upload-ci-artifact "lcov-${CI_COMMIT:0:9}/**/*"
+ls "target/cov/lcov-${CI_COMMIT:0:9}"
+upload-ci-artifact "target/cov/lcov-${CI_COMMIT:0:9}/**/*"
 
 gzip -f target/cov/coverage-stderr.log
 upload-ci-artifact target/cov/coverage-stderr.log.gz
