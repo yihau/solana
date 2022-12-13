@@ -26,11 +26,12 @@ cargo="$(readlink -f "./cargo")"
 : "${CI_COMMIT:=local}"
 reportName="lcov-${CI_COMMIT:0:9}"
 
-if [[ -z $1 ]]; then
-  packages=(--lib --all --exclude solana-local-cluster)
-else
-  packages=("$@")
-fi
+packages=(-p solana-version)
+# if [[ -z $1 ]]; then
+#   packages=(--lib --all --exclude solana-local-cluster)
+# else
+#   packages=("$@")
+# fi
 
 coverageFlags=()
 coverageFlags+=(-Zprofile)               # Enable coverage
