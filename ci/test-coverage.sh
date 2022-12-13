@@ -22,7 +22,7 @@ mv target/cov/report.tar.gz "$report"
 upload-ci-artifact "$report"
 
 ls "target/cov/lcov-${CI_COMMIT:0:9}"
-upload-ci-artifact "target/cov/lcov-${CI_COMMIT:0:9}/**/*"
+buildkite-agent artifact upload "target/cov/lcov-${CI_COMMIT:0:9}/**/*"
 
 gzip -f target/cov/coverage-stderr.log
 upload-ci-artifact target/cov/coverage-stderr.log.gz
