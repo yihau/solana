@@ -32,14 +32,11 @@ else
   fi
 
   if [[ -n $BUILDKITE && -f "results.json" ]]; then
-    # prepare result file
-    awk '/{ "type": .* }/' results.json > sanitized-results.json
-
     echo "~~~ Uploading test results to Buildkite Analytics"
-    buildkite-test-collector < sanitized-results.json
+    buildkite-test-collector < results.json
 
     echo "~~~ Uploading test results to Datadog"
-    cargo2junit > results.xml < sanitized-results.json || true
+    cargo2junit > results.xml < results.json || true
     if [[ -f "results.xml" ]]; then
       datadog-ci junit upload --service solana results.xml
     fi
