@@ -2,6 +2,11 @@
 
 source ci/upload-ci-artifact.sh
 
+
+echo "edge: $EDGE_CHANNEL"
+echo "beta: $BETA_CHANNEL"
+echo "stable: $STABLE_CHANNEL"
+
 #
 # Add job_stats data point
 #
