@@ -78,17 +78,17 @@ if [[ $CI_OS_NAME = windows ]]; then
   # Limit windows to end-user command-line tools.  Full validator support is not
   # yet available on windows
   BINS=(
-    cargo-build-bpf
-    cargo-build-sbf
-    cargo-test-bpf
-    cargo-test-sbf
-    solana
+    # cargo-build-bpf
+    # cargo-build-sbf
+    # cargo-test-bpf
+    # cargo-test-sbf
+    # solana
     solana-install
-    solana-install-init
-    solana-keygen
-    solana-stake-accounts
-    solana-test-validator
-    solana-tokens
+    # solana-install-init
+    # solana-keygen
+    # solana-stake-accounts
+    # solana-test-validator
+    # solana-tokens
   )
 else
   ./fetch-perf-libs.sh

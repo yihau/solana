@@ -23,6 +23,7 @@ if [[ -z $CI_BRANCH ]]; then
 fi
 
 eval "$(ci/channel-info.sh)"
+CHANNEL=edge
 
 TAG=
 if [[ -n "$CI_TAG" ]]; then
