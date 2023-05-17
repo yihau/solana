@@ -5,21 +5,6 @@ export CI_BUILD_START
 
 source ci/env.sh
 
-#
-# Kill any running docker containers, which are potentially left over from the
-# previous CI job
-#
-(
-  containers=$(docker ps -q)
-  if [[ $(hostname) != metrics-main && $(hostname) != metrics-internal && -n $containers ]]; then
-    echo "+++ Killing stale docker containers"
-    docker ps
-
-    # shellcheck disable=SC2086 # Don't want to double quote $containers
-    docker kill $containers
-  fi
-)
-
 # Processes from previously aborted CI jobs seem to loiter, unclear why as one
 # would expect the buildkite-agent to clean up all child processes of the
 # aborted CI job.
