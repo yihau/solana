@@ -4,6 +4,7 @@ cd "$(dirname "$0")/.."
 
 source ci/_
 
+_ rustup --version
 _ rustup show
 _ cargo --version
 
