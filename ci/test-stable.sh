@@ -4,6 +4,9 @@ cd "$(dirname "$0")/.."
 
 source ci/_
 
+_ rustup show
+_ cargo --version
+
 annotate() {
   ${BUILDKITE:-false} && {
     buildkite-agent annotate "$@"
