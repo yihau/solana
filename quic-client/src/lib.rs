@@ -211,7 +211,7 @@ impl ConnectionManager for QuicConnectionManager {
         let config = self.connection_config.clone();
 
         QuicConfig {
-            client_certificate: config.client_certificate,
+            maybe_staked_nodes: config.maybe_staked_nodes.clone(),
             ..QuicConfig::new().unwrap()
         }
     }
