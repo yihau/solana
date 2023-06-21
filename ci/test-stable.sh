@@ -2,8 +2,6 @@
 set -e
 cd "$(dirname "$0")/.."
 
-cargo="$(readlink -f "./cargo")"
-
 source ci/_
 
 annotate() {
