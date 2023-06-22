@@ -208,7 +208,7 @@ impl ConnectionManager for QuicConnectionManager {
         let config = self.connection_config.clone();
 
         QuicConfig {
-            maybe_staked_nodes: config.maybe_staked_nodes,
+            client_endpoint: config.client_endpoint,
             ..QuicConfig::new().unwrap()
         }
     }
