@@ -208,7 +208,7 @@ impl ConnectionManager for QuicConnectionManager {
         let config = self.connection_config.clone();
 
         QuicConfig {
-            maybe_client_pubkey: config.maybe_client_pubkey,
+            client_certificate: config.client_certificate,
             ..QuicConfig::new().unwrap()
         }
     }
