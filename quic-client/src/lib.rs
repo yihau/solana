@@ -205,7 +205,12 @@ impl ConnectionManager for QuicConnectionManager {
     }
 
     fn new_connection_config(&self) -> QuicConfig {
-        self.connection_config.clone()
+        let config = self.connection_config.clone();
+
+        QuicConfig {
+            maybe_staked_nodes: config.maybe_staked_nodes,
+            ..QuicConfig::new().unwrap()
+        }
     }
 }
 
