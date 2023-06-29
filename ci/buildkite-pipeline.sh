@@ -140,7 +140,7 @@ wait_step() {
 }
 
 all_test_steps() {
-  command_step checks ". ci/rust-version.sh; ci/docker-run.sh \$\$rust_nightly_docker_image ci/test-checks.sh" 20 check
+  command_step checks "ci/test-checks.sh" 20 check
   wait_step
 
   # Full test suite
@@ -249,7 +249,7 @@ EOF
              ^ci/test-stable.sh \
              ^sdk/ \
       ; then
-    command_step wasm ". ci/rust-version.sh; ci/docker-run.sh \$\$rust_stable_docker_image ci/test-wasm.sh" 20
+    command_step wasm "ci/test-wasm.sh" 20
   else
     annotate --style info \
       "wasm skipped as no relevant files were modified"
@@ -279,7 +279,7 @@ EOF
              ^ci/test-coverage.sh \
              ^scripts/coverage.sh \
       ; then
-    command_step coverage ". ci/rust-version.sh; ci/docker-run.sh \$\$rust_nightly_docker_image ci/test-coverage.sh" 80
+    command_step coverage "ci/test-coverage.sh" 80
   else
     annotate --style info --context test-coverage \
       "Coverage skipped as no .rs files were modified"
@@ -317,7 +317,7 @@ pull_or_push_steps() {
 
     if [ -z "$diff_other_than_version_bump" ]; then
       echo "Diff only contains version bump."
-      command_step checks ". ci/rust-version.sh; ci/docker-run.sh \$\$rust_nightly_docker_image ci/test-checks.sh" 20
+      command_step checks "ci/test-checks.sh" 20
       exit 0
     fi
   fi
