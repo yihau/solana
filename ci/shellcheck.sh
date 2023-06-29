@@ -7,6 +7,7 @@ cd "$(dirname "$0")/.."
 (
   set -x
   git ls-files -- '.buildkite/hooks' '*.sh' ':(exclude)ci/semver_bash' \
-    | xargs ci/docker-run.sh koalaman/shellcheck:v0.8.0 --color=always --external-sources --shell=bash
+    | xargs docker run -v "$PWD":/workspace -w /workspace \
+    koalaman/shellcheck:v0.8.0 --color=always --external-sources --shell=bash
 )
 echo --- ok
