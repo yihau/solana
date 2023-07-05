@@ -2,7 +2,7 @@
 #
 # Start the bootstrap validator node
 #
-set -e
+set -ex
 
 here=$(dirname "$0")
 # shellcheck source=multinode-demo/common.sh

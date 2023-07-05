@@ -4,7 +4,7 @@ here=$(dirname "$0")
 # shellcheck source=multinode-demo/common.sh
 source "$here"/common.sh
 
-set -e
+set -ex
 
 rm -rf "$SOLANA_CONFIG_DIR"/bootstrap-validator
 mkdir -p "$SOLANA_CONFIG_DIR"/bootstrap-validator

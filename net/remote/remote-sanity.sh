@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -e
+set -ex
 #
 # This script is to be run on the bootstrap validator
 #
