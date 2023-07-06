@@ -150,6 +150,7 @@ args+=(
   --no-wait-for-vote-to-start-leader
   --full-rpc-api
   --allow-private-addr
+  --block-production-method central-scheduler-multi-iterator
 )
 default_arg --gossip-port 8001
 default_arg --log -
