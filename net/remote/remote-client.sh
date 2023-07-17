@@ -81,6 +81,7 @@ solana-bench-tps)
   fi
 
   clientCommand="\
+    RUST_LOG=debug \
     solana-bench-tps \
       --duration 7500 \
       --sustained \
