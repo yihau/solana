@@ -9,6 +9,7 @@ for a in "$@"; do
   fi
 done
 
+
 export CARGO_BUILD_BPF="$here"/cargo-build-bpf
 set -x
 if [[ ! -f "$here"/target/debug/cargo-build-sbf ]]; then
