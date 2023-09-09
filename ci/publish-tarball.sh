@@ -24,18 +24,21 @@ fi
 
 eval "$(ci/channel-info.sh)"
 
-TAG=
-if [[ -n "$CI_TAG" ]]; then
-  CHANNEL_OR_TAG=$CI_TAG
-  TAG="$CI_TAG"
-else
-  CHANNEL_OR_TAG=$CHANNEL
-fi
+# DRYRUN="echo"
+# CHANNEL=unknown
 
-if [[ -z $CHANNEL_OR_TAG ]]; then
-  echo +++ Unable to determine channel or tag to publish into, exiting.
-  exit 0
-fi
+# TAG=
+# if [[ -n "$CI_TAG" ]]; then
+#   CHANNEL_OR_TAG=$CI_TAG
+#   TAG="$CI_TAG"
+# else
+#   CHANNEL_OR_TAG=$CHANNEL
+# fi
+
+# if [[ -z $CHANNEL_OR_TAG ]]; then
+#   echo +++ Unable to determine channel or tag to publish into, exiting.
+#   exit 0
+# fi
 
 case "$CI_OS_NAME" in
 osx)
@@ -81,7 +84,7 @@ echo --- Creating release tarball
     echo "channel: $CHANNEL_OR_TAG"
     echo "commit: $COMMIT"
     echo "target: $TARGET"
-  ) > "${RELEASE_BASENAME}"/version.yml
+  ) >"${RELEASE_BASENAME}"/version.yml
 
   # Make CHANNEL available to include in the software version information
   export CHANNEL
