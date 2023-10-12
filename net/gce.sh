@@ -542,7 +542,7 @@ EOF
     (
       set +e
       fetchPrivateKey || exit 1
-      for i in $(seq 1 60); do
+      for i in $(seq 1 300); do
         (
           set -x
           timeout --preserve-status --foreground 20s ssh "${sshOptions[@]}" "$publicIp" "ls -l /solana-scratch/.instance-startup-complete"
