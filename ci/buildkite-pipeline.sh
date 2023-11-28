@@ -121,8 +121,8 @@ EOF
 
 trigger_secondary_step() {
   cat  >> "$output_file" <<"EOF"
-  - name: "Trigger Build on solana-secondary"
-    trigger: "solana-secondary"
+  - name: "Trigger Build on agave-secondary"
+    trigger: "agave-secondary"
     branches: "!pull/*"
     async: true
     soft_fail: true
