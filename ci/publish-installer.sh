@@ -33,7 +33,7 @@ SOLANA_DOWNLOAD_ROOT=https://release.solana.com
 EOF
 cat install/solana-install-init.sh >>release.solana.com-install
 
-echo --- AWS S3 Store: "install"
-upload-s3-artifact "/solana/release.solana.com-install" "s3://release.solana.com/$CHANNEL_OR_TAG/install"
+echo --- GCS: "install"
+upload-gcs-artifact "/solana/release.solana.com-install" "gs://anza-release/$CHANNEL_OR_TAG/install"
 echo Published to:
 ci/format-url.sh https://release.solana.com/"$CHANNEL_OR_TAG"/install
