@@ -14,6 +14,8 @@ pub enum BanksClientError {
     #[error("client error: {0}")]
     ClientError(&'static str),
 
+    // test
+
     #[error(transparent)]
     Io(#[from] io::Error),
 
