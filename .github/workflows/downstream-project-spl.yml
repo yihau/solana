@@ -136,23 +136,6 @@ jobs:
           - [single-pool/program]
 
     steps:
-      - uses: actions/checkout@v3
-
       - shell: bash
         run: |
-          .github/scripts/purge-ubuntu-runner.sh
-
-      - uses: mozilla-actions/sccache-action@v0.0.3
-        with:
-          version: "v0.5.4"
-
-      - shell: bash
-        run: |
-          source .github/scripts/downstream-project-spl-common.sh
-
-          programStr="${{ tojson(matrix.programs) }}"
-          IFS=', ' read -ra programs <<<"${programStr//[\[\]$'\n'$'\r' ]/}"
-
-          for program in "${programs[@]}"; do
-            $CARGO_TEST_SBF --manifest-path "$program"/Cargo.toml
-          done
+          echo "SPL repository has updated its minimum version to 1.18.x. Ignore this build."
