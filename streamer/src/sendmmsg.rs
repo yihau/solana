@@ -1,9 +1,6 @@
 //! The `sendmmsg` module provides sendmmsg() API implementation
 
 #[cfg(target_os = "linux")]
-#[allow(deprecated)]
-use nix::sys::socket::InetAddr;
-#[cfg(target_os = "linux")]
 use {
     itertools::izip,
     libc::{iovec, mmsghdr, sockaddr_in, sockaddr_in6, sockaddr_storage},
@@ -76,21 +73,19 @@ fn mmsghdr_for_packet(
     hdr.msg_hdr.msg_iovlen = 1;
     hdr.msg_hdr.msg_name = addr as *mut _ as *mut _;
 
-    #[allow(deprecated)]
-    match InetAddr::from_std(dest) {
-        InetAddr::V4(dest) => {
-            unsafe {
-                std::ptr::write(addr as *mut _ as *mut _, dest);
-            }
-            hdr.msg_hdr.msg_namelen = SIZE_OF_SOCKADDR_IN as u32;
+    if dest.is_ipv4() {
+        unsafe {
+            std::ptr::write(addr as *mut _ as *mut _, dest);
         }
-        InetAddr::V6(dest) => {
-            unsafe {
-                std::ptr::write(addr as *mut _ as *mut _, dest);
-            }
-            hdr.msg_hdr.msg_namelen = SIZE_OF_SOCKADDR_IN6 as u32;
+        hdr.msg_hdr.msg_namelen = SIZE_OF_SOCKADDR_IN as u32;
+    } else if dest.is_ipv6() {
+        unsafe {
+            std::ptr::write(addr as *mut _ as *mut _, dest);
         }
-    };
+        hdr.msg_hdr.msg_namelen = SIZE_OF_SOCKADDR_IN6 as u32;
+    } else {
+        error!("mmsghdr_for_packet unexpected SocketAddr: {:?}", dest);
+    }
 }
 
 #[cfg(target_os = "linux")]
