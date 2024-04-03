@@ -4,7 +4,7 @@
 use {
     itertools::izip,
     libc::{iovec, mmsghdr, sockaddr_in, sockaddr_in6, sockaddr_storage},
-    std::os::unix::io::AsRawFd,
+    std::os::unix::io::{AsFd, AsRawFd},
 };
 use {
     solana_sdk::transport::TransportError,
@@ -90,7 +90,7 @@ fn mmsghdr_for_packet(
 
 #[cfg(target_os = "linux")]
 fn sendmmsg_retry(sock: &UdpSocket, hdrs: &mut [mmsghdr]) -> Result<(), SendPktsError> {
-    let sock_fd = sock.as_raw_fd();
+    let sock_fd = sock.as_fd().as_raw_fd();
     let mut total_sent = 0;
     let mut erropt = None;
 
