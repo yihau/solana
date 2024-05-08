@@ -501,7 +501,6 @@ impl<O: BucketOccupied> BucketStorage<O> {
     }
 
     /// allocate a new bucket, copying data from 'bucket'
-    #[allow(clippy::map_clone)] // https://github.com/rust-lang/rust-clippy/issues/12560
     pub fn new_resized(
         drives: &Arc<Vec<PathBuf>>,
         max_search: MaxSearch,
@@ -518,6 +517,7 @@ impl<O: BucketOccupied> BucketStorage<O> {
             capacity,
             max_search,
             Arc::clone(stats),
+            #[allow(clippy::map_clone)] // https://github.com/rust-lang/rust-clippy/issues/12560
             bucket
                 .map(|bucket| Arc::clone(&bucket.count))
                 .unwrap_or_default(),
