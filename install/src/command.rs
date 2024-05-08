@@ -1158,7 +1158,11 @@ pub fn init_or_update(config_file: &str, is_init: bool, check_only: bool) -> Res
     // Trigger an update to the modification time for `release_dir`
     {
         let path = &release_dir.join(".touch");
-        let _ = fs::OpenOptions::new().create(true).write(true).open(path);
+        let _ = fs::OpenOptions::new()
+            .create(true)
+            .truncate(false)
+            .write(true)
+            .open(path);
         let _ = fs::remove_file(path);
     }
 

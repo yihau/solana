@@ -179,6 +179,7 @@ impl CacheHashDataFile {
             .read(true)
             .write(true)
             .create(true)
+            .truncate(false)
             .open(file)?;
 
         // Theoretical performance optimization: write a zero to the end of

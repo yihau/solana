@@ -242,6 +242,7 @@ impl Restart {
             .read(true)
             .write(true)
             .create(true)
+            .truncate(false)
             .open(file)?;
 
         if capacity > 0 {

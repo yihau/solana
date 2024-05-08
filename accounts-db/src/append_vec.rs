@@ -923,6 +923,7 @@ pub mod tests {
             .read(true)
             .write(true)
             .create(true)
+            .truncate(false)
             .open(path)
             .expect("create a test file for mmap");
 
