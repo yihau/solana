@@ -501,6 +501,7 @@ impl<O: BucketOccupied> BucketStorage<O> {
     }
 
     /// allocate a new bucket, copying data from 'bucket'
+    #[allow(clippy::map_clone)] // https://github.com/rust-lang/rust-clippy/issues/12560
     pub fn new_resized(
         drives: &Arc<Vec<PathBuf>>,
         max_search: MaxSearch,
