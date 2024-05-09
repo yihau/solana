@@ -922,8 +922,7 @@ pub mod tests {
         let _data = OpenOptions::new()
             .read(true)
             .write(true)
-            .create(true)
-            .truncate(false)
+            .create_new(true)
             .open(path)
             .expect("create a test file for mmap");
 
