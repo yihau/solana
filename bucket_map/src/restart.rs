@@ -241,8 +241,7 @@ impl Restart {
         let mut data = OpenOptions::new()
             .read(true)
             .write(true)
-            .create(true)
-            .truncate(false)
+            .create_new(true)
             .open(file)?;
 
         if capacity > 0 {
