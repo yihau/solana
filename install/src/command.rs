@@ -1159,8 +1159,7 @@ pub fn init_or_update(config_file: &str, is_init: bool, check_only: bool) -> Res
     {
         let path = &release_dir.join(".touch");
         let _ = fs::OpenOptions::new()
-            .create(true)
-            .truncate(false)
+            .create_new(true)
             .write(true)
             .open(path);
         let _ = fs::remove_file(path);
