@@ -382,6 +382,7 @@ impl CacheHashData {
 }
 
 /// The values of each part of a cache hash data filename
+#[allow(dead_code)]
 #[derive(Debug)]
 pub struct ParsedFilename {
     pub slot_range_start: Slot,
