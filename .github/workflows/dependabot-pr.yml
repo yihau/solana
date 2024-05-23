@@ -18,7 +18,7 @@ jobs:
 
       - name: update code
         run: |
-          input=${{ github.event.pull_request.title }}
+          input="${{ github.event.pull_request.title }}"
 
           regex="[Bb]ump (.*) from (.*) to (.*)"
           if [[ ! "$input" =~ $regex ]]; then
