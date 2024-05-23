@@ -9,7 +9,7 @@ jobs:
   dependabot:
     timeout-minutes: 10
     runs-on: ubuntu-latest
-    if: github.triggering_actor == 'dependabot[bot]'
+    if: github.triggering_actor == 'yihau'
     steps:
       - name: checkout
         uses: actions/checkout@v4
