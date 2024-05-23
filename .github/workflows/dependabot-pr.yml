@@ -36,9 +36,8 @@ jobs:
 
       - name: push
         run: |
-          git config advice.addIgnoredFile false # can be removed when log-analyzer is added to repo
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
-          git add **/Cargo.toml **/Cargo.lock
+          git add .
           git commit -am "update all Cargo lock files"
           git push
