@@ -642,8 +642,7 @@ impl BankForks {
         root: Slot,
         highest_super_majority_root: Option<Slot>,
     ) -> (Vec<BankWithScheduler>, u64, u64) {
-        // Clippy doesn't like separating the two collects below,
-        // but we want to collect timing separately, and the 2nd requires
+        // We want to collect timing separately, and the 2nd collect requires
         // a unique borrow to self which is already borrowed by self.banks
         let mut prune_slots_time = Measure::start("prune_slots");
         let highest_super_majority_root = highest_super_majority_root.unwrap_or(root);
