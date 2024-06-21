@@ -3321,9 +3321,8 @@ fn execute_generated_program(prog: &[u8]) -> bool {
         SBPFVersion::V2,
         FunctionRegistry::default(),
     );
-    let mut executable = if let Ok(executable) = executable {
-        executable
-    } else {
+
+    let Ok(mut executable) = executable else {
         return false;
     };
     if executable.verify::<RequisiteVerifier>().is_err() || executable.jit_compile().is_err() {
