@@ -84,6 +84,7 @@ members = [
     "quic-client",
     "rayon-threadlimit",
     "rbpf",
+    "rbpf/fuzz",
     "rbpf/test-utils",
     "rbpf-cli",
     "remote-wallet",
@@ -254,6 +255,7 @@ jsonrpc-pubsub = "18.0.0"
 lazy-lru = "0.1.2"
 lazy_static = "1.5.0"
 libc = "0.2.155"
+libfuzzer-sys = "0.4"
 libloading = "0.7.4"
 libsecp256k1 = { version = "0.6.0", default-features = false, features = [
     "std",

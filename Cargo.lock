@@ -3199,6 +3199,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "97b3888a4aecf77e811145cadf6eef5901f4782c53886191b2f693f24761847c"
 
 [[package]]
+name = "libfuzzer-sys"
+version = "0.4.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a96cfd5557eb82f2b83fed4955246c988d331975a002961b07c81584d107e7f7"
+dependencies = [
+ "arbitrary",
+ "cc",
+ "once_cell",
+]
+
+[[package]]
 name = "libloading"
 version = "0.7.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -6982,6 +6993,18 @@ dependencies = [
  "solana-rbpf-test-utils",
  "thiserror",
  "winapi 0.3.9",
+]
+
+[[package]]
+name = "solana-rbpf-fuzz"
+version = "2.0.0"
+dependencies = [
+ "arbitrary",
+ "libfuzzer-sys",
+ "num-traits",
+ "rayon",
+ "solana-rbpf",
+ "solana-rbpf-test-utils",
 ]
 
 [[package]]
