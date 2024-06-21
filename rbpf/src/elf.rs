@@ -1617,15 +1617,15 @@ mod test {
 
         // [0..s3.sh_addr + s3.sh_size] is the valid ro memory area
         assert!(matches!(
-            ro_region.vm_to_host(ebpf::MM_PROGRAM_START, s3.sh_addr + s3.sh_size),
+            ro_region.vm_to_host(ebpf::MM_PROGRAM_START, s3.sh_addr.saturating_add(s3.sh_size)),
             ProgramResult::Ok(ptr) if ptr == owned_section.as_ptr() as u64,
         ));
 
         // one byte past the ro section is not mappable
         assert_error!(
-            ro_region.vm_to_host(ebpf::MM_PROGRAM_START + s3.sh_addr + s3.sh_size, 1),
+            ro_region.vm_to_host(ebpf::MM_PROGRAM_START.saturating_add(s3.sh_addr).saturating_add(s3.sh_size), 1),
             "InvalidVirtualAddress({})",
-            ebpf::MM_PROGRAM_START + s3.sh_addr + s3.sh_size
+            ebpf::MM_PROGRAM_START.saturating_add(s3.sh_addr).saturating_add(s3.sh_size)
         );
     }
 
@@ -1661,15 +1661,15 @@ mod test {
         // But for backwards compatibility (config.optimize_rodata=false)
         // [0..s1.sh_addr] is mappable too (and zeroed).
         assert!(matches!(
-            ro_region.vm_to_host(ebpf::MM_PROGRAM_START, s3.sh_addr + s3.sh_size),
+            ro_region.vm_to_host(ebpf::MM_PROGRAM_START, s3.sh_addr.saturating_add(s3.sh_size)),
             ProgramResult::Ok(ptr) if ptr == owned_section.as_ptr() as u64,
         ));
 
         // one byte past the ro section is not mappable
         assert_error!(
-            ro_region.vm_to_host(ebpf::MM_PROGRAM_START + s3.sh_addr + s3.sh_size, 1),
+            ro_region.vm_to_host(ebpf::MM_PROGRAM_START.saturating_add(s3.sh_addr).saturating_add(s3.sh_size), 1),
             "InvalidVirtualAddress({})",
-            ebpf::MM_PROGRAM_START + s3.sh_addr + s3.sh_size
+            ebpf::MM_PROGRAM_START.saturating_add(s3.sh_addr).saturating_add(s3.sh_size)
         );
     }
 
@@ -1708,25 +1708,25 @@ mod test {
 
         // the hi bound of the initial gap is not mappable
         assert_error!(
-            ro_region.vm_to_host(ebpf::MM_PROGRAM_START + s1.sh_addr - 1, 1),
+            ro_region.vm_to_host(ebpf::MM_PROGRAM_START.saturating_add(s1.sh_addr).saturating_sub(1), 1),
             "InvalidVirtualAddress({})",
-            ebpf::MM_PROGRAM_START + 9
+            ebpf::MM_PROGRAM_START.saturating_add(9)
         );
 
         // [s1.sh_addr..s3.sh_addr + s3.sh_size] is the valid ro memory area
         assert!(matches!(
             ro_region.vm_to_host(
-                ebpf::MM_PROGRAM_START + s1.sh_addr,
-                s3.sh_addr + s3.sh_size - s1.sh_addr
+                ebpf::MM_PROGRAM_START.saturating_add(s1.sh_addr),
+                s3.sh_addr.saturating_add(s3.sh_size).saturating_sub(s1.sh_addr)
             ),
             ProgramResult::Ok(ptr) if ptr == owned_section.as_ptr() as u64,
         ));
 
         // one byte past the ro section is not mappable
         assert_error!(
-            ro_region.vm_to_host(ebpf::MM_PROGRAM_START + s3.sh_addr + s3.sh_size, 1),
+            ro_region.vm_to_host(ebpf::MM_PROGRAM_START.saturating_add(s3.sh_addr).saturating_add(s3.sh_size), 1),
             "InvalidVirtualAddress({})",
-            ebpf::MM_PROGRAM_START + s3.sh_addr + s3.sh_size
+            ebpf::MM_PROGRAM_START.saturating_add(s3.sh_addr).saturating_add(s3.sh_size)
         );
     }
 

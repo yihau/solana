@@ -1,3 +1,4 @@
+#![allow(clippy::arithmetic_side_effects)]
 //! Debugger for the virtual machines' interpreter.
 
 use std::net::{TcpListener, TcpStream};
@@ -195,12 +196,11 @@ impl<'a, 'b, C: ContextObject> SingleThreadBase for Interpreter<'a, 'b, C> {
 
     fn read_addrs(&mut self, start_addr: u64, data: &mut [u8]) -> TargetResult<(), Self> {
         for (vm_addr, val) in (start_addr..).zip(data.iter_mut()) {
-            let host_ptr = match get_host_ptr(self, vm_addr) {
-                Ok(host_ptr) => host_ptr,
+            let Ok(host_ptr) = get_host_ptr(self, vm_addr) else {
                 // The debugger is sometimes requesting more data than we have access to, just skip these
-                _ => continue,
+                continue;
             };
-            *val = unsafe { *host_ptr as u8 };
+            *val = unsafe { *host_ptr };
         }
         Ok(())
     }

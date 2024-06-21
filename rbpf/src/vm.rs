@@ -384,7 +384,7 @@ impl<'a, C: ContextObject> EbpfVm<'a, C> {
         self.program_result = ProgramResult::Ok(0);
         if interpreted {
             #[cfg(feature = "debugger")]
-            let debug_port = self.debug_port.clone();
+            let debug_port = self.debug_port;
             let mut interpreter = Interpreter::new(self, executable, self.registers);
             #[cfg(feature = "debugger")]
             if let Some(debug_port) = debug_port {

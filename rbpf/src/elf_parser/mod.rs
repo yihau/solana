@@ -300,10 +300,7 @@ impl<'a> Elf64<'a> {
 
         // if there are neither PT_DYNAMIC nor SHT_DYNAMIC, this is a static
         // file
-        let dynamic_table = match dynamic_table {
-            Some(table) => table,
-            None => return Ok(()),
-        };
+        let Some(dynamic_table) = dynamic_table else { return Ok(()) };
 
         // expand Elf64Dyn entries into self.dynamic_table
         for dyn_info in dynamic_table {

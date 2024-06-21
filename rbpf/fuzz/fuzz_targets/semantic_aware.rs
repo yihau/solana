@@ -15,11 +15,11 @@ impl Register {
     }
 
     #[cfg(not(feature = "only-verified"))]
-    fn to_dst(&self) -> u8 {
+    fn to_dst(self) -> u8 {
         self.0 % 11 // cannot write to r10, but we'll try anyways
     }
 
-    fn to_src(&self) -> u8 {
+    fn to_src(self) -> u8 {
         self.0 % 11
     }
 }
@@ -75,7 +75,7 @@ pub enum FuzzedInstruction {
     Modulo(Arch, Register, FuzzedNonZeroSource),
     BitXor(Arch, Register, FuzzedSource),
     Mov(Arch, Register, FuzzedSource),
-    SRS(Arch, Register, FuzzedSource),
+    Srs(Arch, Register, FuzzedSource),
     SwapBytes(Register, Endian, SwapSize),
     #[cfg(feature = "only-verified")]
     // load only has lddw; there are no other variants, and it needs to be split
@@ -96,14 +96,14 @@ pub enum FuzzedInstruction {
 
 pub type FuzzProgram = Vec<FuzzedInstruction>;
 
-fn complete_alu_insn<'i>(insn: Move<'i>, dst: &Register, src: &FuzzedSource) {
+fn complete_alu_insn(insn: Move<'_>, dst: &Register, src: &FuzzedSource) {
     match src {
         FuzzedSource::Reg(r) => insn.set_dst(dst.to_dst()).set_src(r.to_src()).push(),
         FuzzedSource::Imm(imm) => insn.set_dst(dst.to_dst()).set_imm(*imm as i64).push(),
     };
 }
 
-fn complete_alu_insn_shift<'i>(insn: Move<'i>, dst: &Register, src: &FuzzedSource, max: i64) {
+fn complete_alu_insn_shift(insn: Move<'_>, dst: &Register, src: &FuzzedSource, max: i64) {
     match src {
         FuzzedSource::Reg(r) => insn.set_dst(dst.to_dst()).set_src(r.to_src()).push(),
         FuzzedSource::Imm(imm) => insn
@@ -113,7 +113,7 @@ fn complete_alu_insn_shift<'i>(insn: Move<'i>, dst: &Register, src: &FuzzedSourc
     };
 }
 
-fn complete_alu_insn_nonzero<'i>(insn: Move<'i>, dst: &Register, src: &FuzzedNonZeroSource) {
+fn complete_alu_insn_nonzero(insn: Move<'_>, dst: &Register, src: &FuzzedNonZeroSource) {
     match src {
         FuzzedNonZeroSource::Reg(r) => insn.set_dst(dst.to_dst()).set_src(r.to_src()).push(),
         FuzzedNonZeroSource::Imm(imm) => insn
@@ -155,17 +155,18 @@ fn fix_jump(_: &FuzzProgram, off: i16, _: usize, _: usize) -> i16 {
 
 // lddw is twice length
 fn calculate_length(prog: &FuzzProgram) -> usize {
-    prog.len()
-        + prog
+    prog.len().saturating_add(prog
             .iter()
             .filter(|&&insn| matches!(insn, FuzzedInstruction::Load(_, _, _)))
-            .count()
+            .count())
 }
 
 pub fn make_program(prog: &FuzzProgram) -> BpfCode {
     let mut code = BpfCode::default();
     let len = calculate_length(prog);
     let mut pos = 0;
+
+    #[allow(clippy::explicit_counter_loop)]
     for inst in prog.iter() {
         let op = if let FuzzedInstruction::JumpC(_, Cond::Abs, FuzzedSource::Reg(_), off) = inst {
             FuzzedInstruction::Jump(*off)
@@ -201,7 +202,7 @@ pub fn make_program(prog: &FuzzProgram) -> BpfCode {
                 complete_alu_insn(code.bit_xor(s.into(), *a), d, s)
             }
             FuzzedInstruction::Mov(a, d, s) => complete_alu_insn(code.mov(s.into(), *a), d, s),
-            FuzzedInstruction::SRS(a, d, s) => match a {
+            FuzzedInstruction::Srs(a, d, s) => match a {
                 Arch::X64 => {
                     complete_alu_insn_shift(code.signed_right_shift(s.into(), *a), d, s, 64)
                 }
@@ -264,7 +265,7 @@ pub fn make_program(prog: &FuzzProgram) -> BpfCode {
             }
             FuzzedInstruction::Jump(off) => {
                 code.jump_unconditional()
-                    .set_off(fix_jump(&prog, *off, pos, len))
+                    .set_off(fix_jump(prog, *off, pos, len))
                     .push();
             }
             FuzzedInstruction::JumpC(d, c, s, off) => {
@@ -273,13 +274,13 @@ pub fn make_program(prog: &FuzzProgram) -> BpfCode {
                         .jump_conditional(*c, s.into())
                         .set_dst(d.to_dst())
                         .set_src(r.to_src())
-                        .set_off(fix_jump(&prog, *off, pos, len))
+                        .set_off(fix_jump(prog, *off, pos, len))
                         .push(),
                     FuzzedSource::Imm(imm) => code
                         .jump_conditional(*c, s.into())
                         .set_dst(d.to_dst())
                         .set_imm(*imm as i64)
-                        .set_off(fix_jump(&prog, *off, pos, len))
+                        .set_off(fix_jump(prog, *off, pos, len))
                         .push(),
                 };
             }
@@ -290,7 +291,7 @@ pub fn make_program(prog: &FuzzProgram) -> BpfCode {
                 code.exit().push();
             }
         };
-        pos += 1;
+        pos = pos.saturating_add(1);
     }
     code.exit().push();
     code

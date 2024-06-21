@@ -327,17 +327,14 @@ impl<'a> UnalignedMemoryMapping<'a> {
         // guaranteed to be unique.
         let cache = unsafe { &mut *self.cache.get() };
 
-        let region = match self.find_region(cache, vm_addr) {
-            Some(res) => res,
-            None => {
-                return generate_access_violation(
-                    self.config,
-                    self.sbpf_version,
-                    access_type,
-                    vm_addr,
-                    len,
-                )
-            }
+        let Some(region) = self.find_region(cache, vm_addr) else {
+            return generate_access_violation(
+                self.config,
+                self.sbpf_version,
+                access_type,
+                vm_addr,
+                len,
+            )
         };
 
         if access_type == AccessType::Load || ensure_writable_region(region, &self.cow_cb) {

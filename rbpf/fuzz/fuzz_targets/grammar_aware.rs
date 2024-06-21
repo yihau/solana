@@ -16,7 +16,7 @@ pub enum FuzzedOp {
     Modulo(Source),
     BitXor(Source),
     Mov(Source),
-    SRS(Source),
+    Srs(Source),
     SwapBytes(Endian),
     Load(MemSize),
     LoadAbs(MemSize),
@@ -32,8 +32,8 @@ pub enum FuzzedOp {
 
 impl FuzzedOp {
     fn similarity(&self, other: &FuzzedOp) -> Option<u8> {
-        if std::mem::discriminant(self) == std::mem::discriminant(&other) {
-            if &self == &other {
+        if std::mem::discriminant(self) == std::mem::discriminant(other) {
+            if self == other {
                 Some(0)
             } else {
                 Some(8)
@@ -56,10 +56,10 @@ pub struct FuzzedInstruction {
 impl FuzzedInstruction {
     pub fn similarity(&self, other: &FuzzedInstruction) -> Option<u8> {
         self.op.similarity(&other.op).map(|s| {
-            s + (self.dst == other.dst) as u8
-                + (self.src == other.src) as u8
-                + (self.off == other.off) as u8
-                + (self.imm == other.imm) as u8
+            s.saturating_add((self.dst == other.dst) as u8)
+                .saturating_add((self.src == other.src) as u8)
+                .saturating_add((self.off == other.off) as u8)
+                .saturating_add((self.imm == other.imm) as u8)
         })
     }
 }
@@ -154,7 +154,7 @@ pub fn make_program(prog: &FuzzProgram, arch: Arch) -> BpfCode {
                 .set_off(inst.off)
                 .set_imm(inst.imm)
                 .push(),
-            FuzzedOp::SRS(src) => code
+            FuzzedOp::Srs(src) => code
                 .signed_right_shift(src, arch)
                 .set_dst(inst.dst)
                 .set_src(inst.src)

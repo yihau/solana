@@ -20,7 +20,7 @@ impl<'a> Arbitrary<'a> for ConfigTemplate {
     fn arbitrary(u: &mut Unstructured<'a>) -> arbitrary::Result<Self> {
         let bools = u16::arbitrary(u)?;
         Ok(ConfigTemplate {
-            max_call_depth: usize::from(u8::arbitrary(u)?) + 1, // larger is unreasonable + must be non-zero
+            max_call_depth: usize::from(u8::arbitrary(u)?).saturating_add(1), // larger is unreasonable + must be non-zero
             instruction_meter_checkpoint_distance: usize::from(u16::arbitrary(u)?), // larger is unreasonable
             noop_instruction_rate: u32::from(u16::arbitrary(u)?),
             enable_stack_frame_gaps: bools & (1 << 0) != 0,
@@ -33,7 +33,7 @@ impl<'a> Arbitrary<'a> for ConfigTemplate {
 
     fn size_hint(_: usize) -> (usize, Option<usize>) {
         (
-            size_of::<u8>() + size_of::<u16>() + size_of::<f64>() + size_of::<u16>(),
+            size_of::<u8>().saturating_add(size_of::<u16>()).saturating_add(size_of::<f64>()).saturating_add(size_of::<u16>()),
             None,
         )
     }
@@ -41,27 +41,27 @@ impl<'a> Arbitrary<'a> for ConfigTemplate {
 
 impl From<ConfigTemplate> for Config {
     fn from(template: ConfigTemplate) -> Self {
-        match template {
-            ConfigTemplate {
-                max_call_depth,
-                instruction_meter_checkpoint_distance,
-                noop_instruction_rate,
-                enable_stack_frame_gaps,
-                enable_symbol_and_section_labels,
-                sanitize_user_provided_values,
-                reject_callx_r10,
-                optimize_rodata,
-            } => Config {
-                max_call_depth,
-                enable_stack_frame_gaps,
-                instruction_meter_checkpoint_distance,
-                enable_symbol_and_section_labels,
-                noop_instruction_rate,
-                sanitize_user_provided_values,
-                reject_callx_r10,
-                optimize_rodata,
-                ..Default::default()
-            },
+        let ConfigTemplate {
+            max_call_depth,
+            instruction_meter_checkpoint_distance,
+            noop_instruction_rate,
+            enable_stack_frame_gaps,
+            enable_symbol_and_section_labels,
+            sanitize_user_provided_values,
+            reject_callx_r10,
+            optimize_rodata,
+        } = template;
+
+        Config {
+            max_call_depth,
+            enable_stack_frame_gaps,
+            instruction_meter_checkpoint_distance,
+            enable_symbol_and_section_labels,
+            noop_instruction_rate,
+            sanitize_user_provided_values,
+            reject_callx_r10,
+            optimize_rodata,
+            ..Default::default()
         }
     }
 }
