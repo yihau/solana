@@ -9,7 +9,6 @@ homepage = { workspace = true }
 license = { workspace = true }
 edition = { workspace = true }
 
-
 include = [
     "src/**",
     "tests/**",
@@ -18,14 +17,14 @@ include = [
 ]
 
 [dependencies]
-arbitrary = { workspace = true, optional = true, features = ["derive"]}
+arbitrary = { workspace = true, optional = true, features = ["derive"] }
 byteorder = { workspace = true }
 combine = { workspace = true }
-gdbstub = { workspace = true, optional = true}
+gdbstub = { workspace = true, optional = true }
 goblin = { workspace = true }
 hash32 = { workspace = true }
 log = { workspace = true }
-rand = { workspace = true, features = ["small_rng"]}
+rand = { workspace = true, features = ["small_rng"] }
 rustc-demangle = { workspace = true }
 thiserror = { workspace = true }
 
@@ -36,7 +35,7 @@ solana-rbpf-test-utils = { workspace = true }
 winapi = { workspace = true, features = ["memoryapi", "sysinfoapi", "winnt", "errhandlingapi"], optional = true }
 
 [target.'cfg(not(windows))'.dependencies]
-libc = { workspace = true, optional = true}
+libc = { workspace = true, optional = true }
 
 [features]
 default = ["jit"]
