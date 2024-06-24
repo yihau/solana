@@ -11,15 +11,17 @@ extern crate rand;
 extern crate solana_rbpf;
 extern crate test;
 
-use rand::{rngs::SmallRng, Rng, SeedableRng};
-use solana_rbpf::{
-    memory_region::{
-        AccessType, AlignedMemoryMapping, MemoryRegion, MemoryState, UnalignedMemoryMapping,
+use {
+    rand::{rngs::SmallRng, Rng, SeedableRng},
+    solana_rbpf::{
+        memory_region::{
+            AccessType, AlignedMemoryMapping, MemoryRegion, MemoryState, UnalignedMemoryMapping,
+        },
+        program::SBPFVersion,
+        vm::Config,
     },
-    program::SBPFVersion,
-    vm::Config,
+    test::Bencher,
 };
-use test::Bencher;
 
 fn generate_memory_regions(
     entries: usize,

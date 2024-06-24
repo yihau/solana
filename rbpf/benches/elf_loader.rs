@@ -7,17 +7,19 @@
 #![feature(test)]
 
 extern crate solana_rbpf;
-extern crate test;
 extern crate solana_rbpf_test_utils;
+extern crate test;
 
-use solana_rbpf::{
-    elf::Executable,
-    program::{BuiltinFunction, BuiltinProgram, FunctionRegistry},
-    syscalls,
-    vm::{Config, TestContextObject},
+use {
+    solana_rbpf::{
+        elf::Executable,
+        program::{BuiltinFunction, BuiltinProgram, FunctionRegistry},
+        syscalls,
+        vm::{Config, TestContextObject},
+    },
+    std::{fs::File, io::Read, sync::Arc},
+    test::Bencher,
 };
-use std::{fs::File, io::Read, sync::Arc};
-use test::Bencher;
 
 fn loader() -> Arc<BuiltinProgram<TestContextObject>> {
     let mut function_registry = FunctionRegistry::<BuiltinFunction<TestContextObject>>::default();

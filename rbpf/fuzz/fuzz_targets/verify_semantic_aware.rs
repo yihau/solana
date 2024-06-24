@@ -1,15 +1,15 @@
 #![no_main]
 
-use libfuzzer_sys::fuzz_target;
-
-use semantic_aware::*;
-use solana_rbpf::{
-    insn_builder::IntoBytes,
-    program::{FunctionRegistry, SBPFVersion},
-    verifier::{RequisiteVerifier, Verifier},
+use {
+    crate::common::ConfigTemplate,
+    libfuzzer_sys::fuzz_target,
+    semantic_aware::*,
+    solana_rbpf::{
+        insn_builder::IntoBytes,
+        program::{FunctionRegistry, SBPFVersion},
+        verifier::{RequisiteVerifier, Verifier},
+    },
 };
-
-use crate::common::ConfigTemplate;
 
 mod common;
 mod semantic_aware;

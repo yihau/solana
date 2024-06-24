@@ -1,8 +1,8 @@
-use std::mem::size_of;
-
-use arbitrary::{Arbitrary, Unstructured};
-
-use solana_rbpf::vm::Config;
+use {
+    arbitrary::{Arbitrary, Unstructured},
+    solana_rbpf::vm::Config,
+    std::mem::size_of,
+};
 
 #[derive(Debug)]
 pub struct ConfigTemplate {
@@ -33,7 +33,10 @@ impl<'a> Arbitrary<'a> for ConfigTemplate {
 
     fn size_hint(_: usize) -> (usize, Option<usize>) {
         (
-            size_of::<u8>().saturating_add(size_of::<u16>()).saturating_add(size_of::<f64>()).saturating_add(size_of::<u16>()),
+            size_of::<u8>()
+                .saturating_add(size_of::<u16>())
+                .saturating_add(size_of::<f64>())
+                .saturating_add(size_of::<u16>()),
             None,
         )
     }

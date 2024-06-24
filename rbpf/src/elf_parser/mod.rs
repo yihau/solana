@@ -3,10 +3,12 @@
 pub mod consts;
 pub mod types;
 
-use std::{fmt, mem, ops::Range, slice};
-
-use crate::{ArithmeticOverflow, ErrCheckedArithmetic};
-use {consts::*, types::*};
+use {
+    crate::{ArithmeticOverflow, ErrCheckedArithmetic},
+    consts::*,
+    std::{fmt, mem, ops::Range, slice},
+    types::*,
+};
 
 /// Maximum length of section name allowed.
 pub const SECTION_NAME_LENGTH_MAXIMUM: usize = 16;
@@ -300,7 +302,9 @@ impl<'a> Elf64<'a> {
 
         // if there are neither PT_DYNAMIC nor SHT_DYNAMIC, this is a static
         // file
-        let Some(dynamic_table) = dynamic_table else { return Ok(()) };
+        let Some(dynamic_table) = dynamic_table else {
+            return Ok(());
+        };
 
         // expand Elf64Dyn entries into self.dynamic_table
         for dyn_info in dynamic_table {

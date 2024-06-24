@@ -7,13 +7,15 @@
 // copied, modified, or distributed except according to those terms.
 
 extern crate solana_rbpf;
-use solana_rbpf::{
-    assembler::assemble,
-    program::{BuiltinProgram, FunctionRegistry},
-    static_analysis::Analysis,
-    vm::{Config, TestContextObject},
+use {
+    solana_rbpf::{
+        assembler::assemble,
+        program::{BuiltinProgram, FunctionRegistry},
+        static_analysis::Analysis,
+        vm::{Config, TestContextObject},
+    },
+    std::sync::Arc,
 };
-use std::sync::Arc;
 
 // Using a macro to keep actual line numbers in failure output
 macro_rules! disasm {

@@ -12,18 +12,20 @@ extern crate solana_rbpf;
 extern crate solana_rbpf_test_utils;
 extern crate thiserror;
 
-use rand::{rngs::SmallRng, RngCore, SeedableRng};
-use solana_rbpf::{
-    assembler::assemble,
-    ebpf,
-    memory_region::MemoryRegion,
-    program::{BuiltinFunction, BuiltinProgram, FunctionRegistry},
-    static_analysis::Analysis,
-    verifier::RequisiteVerifier,
-    vm::{Config, ContextObject, TestContextObject},
+use {
+    rand::{rngs::SmallRng, RngCore, SeedableRng},
+    solana_rbpf::{
+        assembler::assemble,
+        ebpf,
+        memory_region::MemoryRegion,
+        program::{BuiltinFunction, BuiltinProgram, FunctionRegistry},
+        static_analysis::Analysis,
+        verifier::RequisiteVerifier,
+        vm::{Config, ContextObject, TestContextObject},
+    },
+    solana_rbpf_test_utils::create_vm,
+    std::sync::Arc,
 };
-use std::sync::Arc;
-use solana_rbpf_test_utils::create_vm;
 
 macro_rules! test_interpreter_and_jit {
     (register, $function_registry:expr, $location:expr => $syscall_function:expr) => {

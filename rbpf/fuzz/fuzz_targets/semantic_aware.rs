@@ -1,9 +1,10 @@
 #![allow(dead_code)]
 // based on: https://sourceware.org/binutils/docs/as/BPF-Opcodes.html
 
-use std::num::NonZeroI32;
-
-use solana_rbpf::insn_builder::{Arch, BpfCode, Cond, Endian, Instruction, MemSize, Move, Source};
+use {
+    solana_rbpf::insn_builder::{Arch, BpfCode, Cond, Endian, Instruction, MemSize, Move, Source},
+    std::num::NonZeroI32,
+};
 
 #[derive(arbitrary::Arbitrary, Debug, Eq, PartialEq, Copy, Clone)]
 pub struct Register(u8);
@@ -155,10 +156,11 @@ fn fix_jump(_: &FuzzProgram, off: i16, _: usize, _: usize) -> i16 {
 
 // lddw is twice length
 fn calculate_length(prog: &FuzzProgram) -> usize {
-    prog.len().saturating_add(prog
-            .iter()
+    prog.len().saturating_add(
+        prog.iter()
             .filter(|&&insn| matches!(insn, FuzzedInstruction::Load(_, _, _)))
-            .count())
+            .count(),
+    )
 }
 
 pub fn make_program(prog: &FuzzProgram) -> BpfCode {

@@ -8,9 +8,11 @@
 extern crate solana_rbpf;
 extern crate solana_rbpf_test_utils;
 
-use solana_rbpf::{assembler::assemble, ebpf, program::BuiltinProgram, vm::TestContextObject};
-use std::sync::Arc;
-use solana_rbpf_test_utils::{TCP_SACK_ASM, TCP_SACK_BIN};
+use {
+    solana_rbpf::{assembler::assemble, ebpf, program::BuiltinProgram, vm::TestContextObject},
+    solana_rbpf_test_utils::{TCP_SACK_ASM, TCP_SACK_BIN},
+    std::sync::Arc,
+};
 
 fn asm(src: &str) -> Result<Vec<ebpf::Insn>, String> {
     let executable = assemble::<TestContextObject>(src, Arc::new(BuiltinProgram::new_mock()))?;

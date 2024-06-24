@@ -12,17 +12,19 @@
 
 //! Virtual machine for eBPF programs.
 
-use crate::{
-    ebpf,
-    elf::Executable,
-    error::{EbpfError, ProgramResult},
-    interpreter::Interpreter,
-    memory_region::MemoryMapping,
-    program::{BuiltinFunction, BuiltinProgram, FunctionRegistry, SBPFVersion},
-    static_analysis::{Analysis, TraceLogEntry},
+use {
+    crate::{
+        ebpf,
+        elf::Executable,
+        error::{EbpfError, ProgramResult},
+        interpreter::Interpreter,
+        memory_region::MemoryMapping,
+        program::{BuiltinFunction, BuiltinProgram, FunctionRegistry, SBPFVersion},
+        static_analysis::{Analysis, TraceLogEntry},
+    },
+    rand::Rng,
+    std::{collections::BTreeMap, fmt::Debug, sync::Arc},
 };
-use rand::Rng;
-use std::{collections::BTreeMap, fmt::Debug, sync::Arc};
 
 /// Shift the RUNTIME_ENVIRONMENT_KEY by this many bits to the LSB
 ///

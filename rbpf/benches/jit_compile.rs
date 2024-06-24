@@ -9,12 +9,15 @@
 extern crate solana_rbpf;
 extern crate test;
 
-use solana_rbpf::{
-    elf::Executable, program::BuiltinProgram, verifier::RequisiteVerifier, vm::TestContextObject,
+use {
+    solana_rbpf::{
+        elf::Executable, program::BuiltinProgram, verifier::RequisiteVerifier,
+        vm::TestContextObject,
+    },
+    solana_rbpf_test_utils::create_vm,
+    std::{fs::File, io::Read, sync::Arc},
+    test::Bencher,
 };
-use std::{fs::File, io::Read, sync::Arc};
-use test::Bencher;
-use solana_rbpf_test_utils::create_vm;
 
 #[bench]
 fn bench_init_vm(bencher: &mut Bencher) {
