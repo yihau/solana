@@ -13,10 +13,9 @@ extern crate test;
 use solana_rbpf::{ebpf, memory_region::MemoryRegion, program::FunctionRegistry, vm::Config};
 use {
     solana_rbpf::{
-        elf::Executable, program::BuiltinProgram, verifier::RequisiteVerifier,
+        create_vm, elf::Executable, program::BuiltinProgram, verifier::RequisiteVerifier,
         vm::TestContextObject,
     },
-    solana_rbpf_test_utils::create_vm,
     std::{fs::File, io::Read, sync::Arc},
     test::Bencher,
 };

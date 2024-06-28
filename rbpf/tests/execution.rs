@@ -9,7 +9,6 @@
 extern crate byteorder;
 extern crate libc;
 extern crate solana_rbpf;
-extern crate solana_rbpf_test_utils;
 extern crate thiserror;
 
 #[cfg(all(not(windows), target_arch = "x86_64"))]
@@ -18,18 +17,16 @@ use {
     byteorder::{ByteOrder, LittleEndian},
     solana_rbpf::{
         assembler::assemble,
-        declare_builtin_function, ebpf,
+        assert_error, create_vm, declare_builtin_function, ebpf,
         elf::Executable,
         error::{EbpfError, ProgramResult},
         memory_region::{AccessType, MemoryMapping, MemoryRegion},
         program::{BuiltinFunction, BuiltinProgram, FunctionRegistry, SBPFVersion},
         static_analysis::Analysis,
         syscalls,
+        test_utils::{PROG_TCP_PORT_80, TCP_SACK_ASM, TCP_SACK_MATCH, TCP_SACK_NOMATCH},
         verifier::RequisiteVerifier,
         vm::{Config, ContextObject, TestContextObject},
-    },
-    solana_rbpf_test_utils::{
-        assert_error, create_vm, PROG_TCP_PORT_80, TCP_SACK_ASM, TCP_SACK_MATCH, TCP_SACK_NOMATCH,
     },
     std::{fs::File, io::Read, sync::Arc},
 };

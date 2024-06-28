@@ -4,14 +4,13 @@ use {
     crate::common::ConfigTemplate,
     libfuzzer_sys::fuzz_target,
     solana_rbpf::{
-        ebpf,
+        create_vm, ebpf,
         elf::Executable,
         memory_region::MemoryRegion,
         program::{BuiltinProgram, FunctionRegistry, SBPFVersion},
         verifier::{RequisiteVerifier, Verifier},
         vm::TestContextObject,
     },
-    solana_rbpf_test_utils::create_vm,
     std::hint::black_box,
 };
 

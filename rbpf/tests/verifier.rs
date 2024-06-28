@@ -25,13 +25,12 @@ extern crate thiserror;
 use {
     solana_rbpf::{
         assembler::assemble,
-        ebpf,
+        assert_error, create_vm, ebpf,
         elf::Executable,
         program::{BuiltinProgram, FunctionRegistry, SBPFVersion},
         verifier::{RequisiteVerifier, Verifier, VerifierError},
         vm::{Config, TestContextObject},
     },
-    solana_rbpf_test_utils::{assert_error, create_vm},
     std::sync::Arc,
     thiserror::Error,
 };

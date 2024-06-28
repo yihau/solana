@@ -86,7 +86,6 @@ members = [
     "rbpf",
     "rbpf-cli",
     "rbpf/fuzz",
-    "rbpf/test-utils",
     "remote-wallet",
     "rpc",
     "rpc-client",
@@ -420,7 +419,6 @@ solana-zk-sdk = { path = "zk-sdk", version = "=2.1.0" }
 solana-zk-token-proof-program = { path = "programs/zk-token-proof", version = "=2.1.0" }
 solana-zk-token-sdk = { path = "zk-token-sdk", version = "=2.1.0" }
 solana-rbpf = { path = "rbpf", version = "=2.1.0" }
-solana-rbpf-test-utils = { path = "rbpf/test-utils", version = "=2.1.0" }
 spl-associated-token-account = "=4.0.0"
 spl-instruction-padding = "0.2"
 spl-memo = "=5.0.0"

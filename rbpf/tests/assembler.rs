@@ -6,11 +6,15 @@
 // copied, modified, or distributed except according to those terms.
 
 extern crate solana_rbpf;
-extern crate solana_rbpf_test_utils;
 
 use {
-    solana_rbpf::{assembler::assemble, ebpf, program::BuiltinProgram, vm::TestContextObject},
-    solana_rbpf_test_utils::{TCP_SACK_ASM, TCP_SACK_BIN},
+    solana_rbpf::{
+        assembler::assemble,
+        ebpf,
+        program::BuiltinProgram,
+        test_utils::{TCP_SACK_ASM, TCP_SACK_BIN},
+        vm::TestContextObject,
+    },
     std::sync::Arc,
 };
 

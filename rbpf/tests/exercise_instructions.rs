@@ -9,21 +9,19 @@
 extern crate byteorder;
 extern crate libc;
 extern crate solana_rbpf;
-extern crate solana_rbpf_test_utils;
 extern crate thiserror;
 
 use {
     rand::{rngs::SmallRng, RngCore, SeedableRng},
     solana_rbpf::{
         assembler::assemble,
-        ebpf,
+        create_vm, ebpf,
         memory_region::MemoryRegion,
         program::{BuiltinFunction, BuiltinProgram, FunctionRegistry},
         static_analysis::Analysis,
         verifier::RequisiteVerifier,
         vm::{Config, ContextObject, TestContextObject},
     },
-    solana_rbpf_test_utils::create_vm,
     std::sync::Arc,
 };
 

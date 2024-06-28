@@ -7,7 +7,6 @@
 #![feature(test)]
 
 extern crate solana_rbpf;
-extern crate solana_rbpf_test_utils;
 extern crate test;
 
 use {

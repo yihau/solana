@@ -5,7 +5,7 @@ use {
     grammar_aware::*,
     libfuzzer_sys::fuzz_target,
     solana_rbpf::{
-        ebpf,
+        create_vm, ebpf,
         elf::Executable,
         insn_builder::{Arch, Instruction, IntoBytes},
         memory_region::MemoryRegion,
@@ -13,7 +13,6 @@ use {
         verifier::{RequisiteVerifier, Verifier},
         vm::TestContextObject,
     },
-    solana_rbpf_test_utils::create_vm,
 };
 
 mod common;

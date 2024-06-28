@@ -7,8 +7,9 @@
 // copied, modified, or distributed except according to those terms.
 
 #![allow(dead_code)]
+#![allow(missing_docs)]
 
-use solana_rbpf::{
+use crate::{
     aligned_memory::AlignedMemory,
     ebpf::{self, HOST_ALIGN},
     elf::Executable,
@@ -199,7 +200,7 @@ macro_rules! create_vm {
         );
         let mut $heap = solana_rbpf::aligned_memory::AlignedMemory::with_capacity(0);
         let stack_len = $stack.len();
-        let memory_mapping = solana_rbpf_test_utils::create_memory_mapping(
+        let memory_mapping = solana_rbpf::test_utils::create_memory_mapping(
             $verified_executable,
             &mut $stack,
             &mut $heap,
