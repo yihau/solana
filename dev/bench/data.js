@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1720551341919,
+  "lastUpdate": 1720551385740,
   "repoUrl": "https://github.com/yihau/solana",
   "entries": {
     "solana-sdk": [
@@ -1979,6 +1979,38 @@ window.BENCHMARK_DATA = {
             "name": "bench_weighted_shuffle_shuffle",
             "value": 219776,
             "range": "± 2020",
+            "unit": "ns/iter"
+          }
+        ]
+      }
+    ],
+    "solana-core": [
+      {
+        "commit": {
+          "author": {
+            "email": "yihau.chen@icloud.com",
+            "name": "yihau",
+            "username": "yihau"
+          },
+          "committer": {
+            "email": "yihau.chen@icloud.com",
+            "name": "yihau",
+            "username": "yihau"
+          },
+          "distinct": true,
+          "id": "89f8aa0617019e1e8fd1dcd4c0d6c14089bce4fe",
+          "message": "ci: add deps",
+          "timestamp": "2024-07-10T02:35:42+08:00",
+          "tree_id": "1e152fe8383dc59eefc3071b0c3bb017b3df8394",
+          "url": "https://github.com/yihau/solana/commit/89f8aa0617019e1e8fd1dcd4c0d6c14089bce4fe"
+        },
+        "date": 1720551384976,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "bench_process_entries",
+            "value": 28166667,
+            "range": "± 11649572",
             "unit": "ns/iter"
           }
         ]
