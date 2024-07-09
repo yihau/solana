@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1720550691657,
+  "lastUpdate": 1720550811263,
   "repoUrl": "https://github.com/yihau/solana",
   "entries": {
     "solana-sdk": [
@@ -1303,6 +1303,54 @@ window.BENCHMARK_DATA = {
             "name": "bench_status_cache_serialize",
             "value": 449419,
             "range": "± 8803",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "yihau.chen@icloud.com",
+            "name": "yihau",
+            "username": "yihau"
+          },
+          "committer": {
+            "email": "yihau.chen@icloud.com",
+            "name": "yihau",
+            "username": "yihau"
+          },
+          "distinct": true,
+          "id": "87144a8233c9d1bdf3e26ca5349d424102ecb814",
+          "message": "ci: remove useless pipeline script",
+          "timestamp": "2024-07-10T02:39:42+08:00",
+          "tree_id": "4c55933867ede0cc30600926904a290a5af42cea",
+          "url": "https://github.com/yihau/solana/commit/87144a8233c9d1bdf3e26ca5349d424102ecb814"
+        },
+        "date": 1720550810540,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "bench_accounts_create",
+            "value": 2868337,
+            "range": "± 502861",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_accounts_squash",
+            "value": 860290,
+            "range": "± 226624",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_status_cache_root_slot_deltas",
+            "value": 6992,
+            "range": "± 68",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_status_cache_serialize",
+            "value": 449952,
+            "range": "± 6033",
             "unit": "ns/iter"
           }
         ]
