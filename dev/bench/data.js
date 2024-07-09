@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1720552547690,
+  "lastUpdate": 1720552740373,
   "repoUrl": "https://github.com/yihau/solana",
   "entries": {
     "solana-sdk": [
@@ -2309,6 +2309,102 @@ window.BENCHMARK_DATA = {
             "name": "bench_weighted_shuffle_shuffle",
             "value": 219776,
             "range": "± 2020",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "yihau.chen@icloud.com",
+            "name": "yihau",
+            "username": "yihau"
+          },
+          "committer": {
+            "email": "yihau.chen@icloud.com",
+            "name": "yihau",
+            "username": "yihau"
+          },
+          "distinct": true,
+          "id": "8c9070b2ff29611dca2ac26a680c34c22b3a09c6",
+          "message": "ci: remove solana-core",
+          "timestamp": "2024-07-10T03:03:01+08:00",
+          "tree_id": "f93be4c7dabc4b0f0342fe0bb7db8d5ccc1432ae",
+          "url": "https://github.com/yihau/solana/commit/8c9070b2ff29611dca2ac26a680c34c22b3a09c6"
+        },
+        "date": 1720552739622,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "bench_find_old_labels",
+            "value": 3641005,
+            "range": "± 1473034",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_build_crds_filters",
+            "value": 653920,
+            "range": "± 33536",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_hash_as_u64",
+            "value": 378,
+            "range": "± 5",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_crds_shards_find_0",
+            "value": 155958,
+            "range": "± 1792",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_crds_shards_find_1",
+            "value": 78016,
+            "range": "± 18029",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_crds_shards_find_3",
+            "value": 19510,
+            "range": "± 219",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_crds_shards_find_5",
+            "value": 4886,
+            "range": "± 35",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_crds_shards_find_7",
+            "value": 1230,
+            "range": "± 11",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_crds_shards_find_8",
+            "value": 251,
+            "range": "± 2",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_crds_shards_find_9",
+            "value": 1502,
+            "range": "± 18",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_weighted_shuffle_new",
+            "value": 46751,
+            "range": "± 767",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_weighted_shuffle_shuffle",
+            "value": 219007,
+            "range": "± 2834",
             "unit": "ns/iter"
           }
         ]
