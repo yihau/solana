@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1720550907164,
+  "lastUpdate": 1720551014400,
   "repoUrl": "https://github.com/yihau/solana",
   "entries": {
     "solana-sdk": [
@@ -1413,6 +1413,66 @@ window.BENCHMARK_DATA = {
             "name": "bench_poh_verify_transaction_entries",
             "value": 6136842,
             "range": "± 161081",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "yihau.chen@icloud.com",
+            "name": "yihau",
+            "username": "yihau"
+          },
+          "committer": {
+            "email": "yihau.chen@icloud.com",
+            "name": "yihau",
+            "username": "yihau"
+          },
+          "distinct": true,
+          "id": "fa271753a8f4dfc01a345c566fef9ad916264ad3",
+          "message": "ci: remove bench from buildkite-pipeline",
+          "timestamp": "2024-07-10T02:37:18+08:00",
+          "tree_id": "d485342fe66fad2e21faa9da4e98a632e7273cea",
+          "url": "https://github.com/yihau/solana/commit/fa271753a8f4dfc01a345c566fef9ad916264ad3"
+        },
+        "date": 1720551013584,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "bench_arc_mutex_poh_batched_hash",
+            "value": 1964544,
+            "range": "± 6085",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_arc_mutex_poh_hash",
+            "value": 2149695,
+            "range": "± 4849",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_poh_hash",
+            "value": 1978416,
+            "range": "± 7954",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_poh_lock_time_per_batch",
+            "value": 4219,
+            "range": "± 20",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_poh_verify_ticks",
+            "value": 6089129,
+            "range": "± 462657",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_poh_verify_transaction_entries",
+            "value": 6332822,
+            "range": "± 2103154",
             "unit": "ns/iter"
           }
         ]
