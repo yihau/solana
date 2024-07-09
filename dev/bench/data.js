@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1720551460836,
+  "lastUpdate": 1720551568277,
   "repoUrl": "https://github.com/yihau/solana",
   "entries": {
     "solana-sdk": [
@@ -2041,6 +2041,36 @@ window.BENCHMARK_DATA = {
             "name": "bench_process_entries",
             "value": 26726213,
             "range": "± 9154887",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "yihau.chen@icloud.com",
+            "name": "yihau",
+            "username": "yihau"
+          },
+          "committer": {
+            "email": "yihau.chen@icloud.com",
+            "name": "yihau",
+            "username": "yihau"
+          },
+          "distinct": true,
+          "id": "413494e07f39cce8ae49b6fc1241742d2f1350bb",
+          "message": "ci: remove bench from buildkite private pipeline",
+          "timestamp": "2024-07-10T02:37:52+08:00",
+          "tree_id": "1f8c019f7a5937eeb50014137a1df3e996a3627a",
+          "url": "https://github.com/yihau/solana/commit/413494e07f39cce8ae49b6fc1241742d2f1350bb"
+        },
+        "date": 1720551566518,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "bench_process_entries",
+            "value": 27455573,
+            "range": "± 9636007",
             "unit": "ns/iter"
           }
         ]
