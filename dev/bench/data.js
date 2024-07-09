@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1720551568277,
+  "lastUpdate": 1720551605577,
   "repoUrl": "https://github.com/yihau/solana",
   "entries": {
     "solana-sdk": [
@@ -2071,6 +2071,36 @@ window.BENCHMARK_DATA = {
             "name": "bench_process_entries",
             "value": 27455573,
             "range": "± 9636007",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "yihau.chen@icloud.com",
+            "name": "yihau",
+            "username": "yihau"
+          },
+          "committer": {
+            "email": "yihau.chen@icloud.com",
+            "name": "yihau",
+            "username": "yihau"
+          },
+          "distinct": true,
+          "id": "87144a8233c9d1bdf3e26ca5349d424102ecb814",
+          "message": "ci: remove useless pipeline script",
+          "timestamp": "2024-07-10T02:39:42+08:00",
+          "tree_id": "4c55933867ede0cc30600926904a290a5af42cea",
+          "url": "https://github.com/yihau/solana/commit/87144a8233c9d1bdf3e26ca5349d424102ecb814"
+        },
+        "date": 1720551603833,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "bench_process_entries",
+            "value": 27305105,
+            "range": "± 10830383",
             "unit": "ns/iter"
           }
         ]
