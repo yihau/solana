@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1720812239623,
+  "lastUpdate": 1720812633831,
   "repoUrl": "https://github.com/yihau/solana",
   "entries": {
     "solana-sdk": [
@@ -3049,6 +3049,36 @@ window.BENCHMARK_DATA = {
             "name": "bench_process_entries",
             "value": 27305105,
             "range": "± 10830383",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "yihau.chen@icloud.com",
+            "name": "yihau",
+            "username": "yihau"
+          },
+          "committer": {
+            "email": "yihau.chen@icloud.com",
+            "name": "yihau",
+            "username": "yihau"
+          },
+          "distinct": true,
+          "id": "279ec0a1aa8b211b4080a61b7678235e9f5ed7a8",
+          "message": "fix 3",
+          "timestamp": "2024-07-13T03:06:14+08:00",
+          "tree_id": "7fbafc9df03e222490c674e3bf2965ff059f31bf",
+          "url": "https://github.com/yihau/solana/commit/279ec0a1aa8b211b4080a61b7678235e9f5ed7a8"
+        },
+        "date": 1720812633450,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "bench_process_entries",
+            "value": 27733280,
+            "range": "± 2580476",
             "unit": "ns/iter"
           }
         ]
