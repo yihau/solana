@@ -1,8 +1,6 @@
 name: Benchmark
 on:
   push:
-    branches:
-      - master
 
 permissions:
   contents: write
@@ -34,11 +32,11 @@ jobs:
           source ci/rust-version.sh all
           cargo +$rust_nightly bench -p ${{matrix.pkg}} | tee output.txt
 
-      - name: Store benchmark result
-        uses: benchmark-action/github-action-benchmark@v1
-        with:
-          name: ${{matrix.pkg}}
-          tool: "cargo"
-          output-file-path: output.txt
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          auto-push: true
+      # - name: Store benchmark result
+      #   uses: benchmark-action/github-action-benchmark@v1
+      #   with:
+      #     name: ${{matrix.pkg}}
+      #     tool: "cargo"
+      #     output-file-path: output.txt
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     auto-push: true
