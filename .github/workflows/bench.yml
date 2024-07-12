@@ -49,7 +49,7 @@ jobs:
 
       - name: Run Command
         run: |
-          if [ -z "${{ matrix.test.before_command }}" ]; then
+          if [ -n "${{ matrix.test.before_command }}" ]; then
             ${{ matrix.test.before_command}}
           fi
           ${{ matrix.test.command }} | tee output.txt
