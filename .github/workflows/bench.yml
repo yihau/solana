@@ -49,8 +49,9 @@ jobs:
 
       - name: Run Command
         run: |
+          source ci/rust-version.sh nightly
           if [ -n "${{ matrix.test.before_command }}" ]; then
-            ${{ matrix.test.before_command}}
+            ${{ matrix.test.before_command }} || true
           fi
           ${{ matrix.test.command }} | tee output.txt
 
