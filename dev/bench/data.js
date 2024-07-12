@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1720812633831,
+  "lastUpdate": 1720812798685,
   "repoUrl": "https://github.com/yihau/solana",
   "entries": {
     "solana-sdk": [
@@ -2253,6 +2253,66 @@ window.BENCHMARK_DATA = {
             "name": "bench_poh_verify_transaction_entries",
             "value": 469149,
             "range": "± 44994",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "yihau.chen@icloud.com",
+            "name": "yihau",
+            "username": "yihau"
+          },
+          "committer": {
+            "email": "yihau.chen@icloud.com",
+            "name": "yihau",
+            "username": "yihau"
+          },
+          "distinct": true,
+          "id": "279ec0a1aa8b211b4080a61b7678235e9f5ed7a8",
+          "message": "fix 3",
+          "timestamp": "2024-07-13T03:06:14+08:00",
+          "tree_id": "7fbafc9df03e222490c674e3bf2965ff059f31bf",
+          "url": "https://github.com/yihau/solana/commit/279ec0a1aa8b211b4080a61b7678235e9f5ed7a8"
+        },
+        "date": 1720812798319,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "bench_arc_mutex_poh_batched_hash",
+            "value": 1737087,
+            "range": "± 9483",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_arc_mutex_poh_hash",
+            "value": 2039702,
+            "range": "± 8301",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_poh_hash",
+            "value": 1753504,
+            "range": "± 7314",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_poh_lock_time_per_batch",
+            "value": 3737,
+            "range": "± 12",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_poh_verify_ticks",
+            "value": 468185,
+            "range": "± 35410",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_poh_verify_transaction_entries",
+            "value": 477527,
+            "range": "± 29099",
             "unit": "ns/iter"
           }
         ]
