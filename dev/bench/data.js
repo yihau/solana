@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1720946928078,
+  "lastUpdate": 1720947009232,
   "repoUrl": "https://github.com/yihau/solana",
   "entries": {
     "solana-sdk": [
@@ -2219,6 +2219,228 @@ window.BENCHMARK_DATA = {
             "name": "bench_to_from_account",
             "value": 74128,
             "range": "± 693",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "yihau.chen@icloud.com",
+            "name": "yihau",
+            "username": "yihau"
+          },
+          "committer": {
+            "email": "yihau.chen@icloud.com",
+            "name": "yihau",
+            "username": "yihau"
+          },
+          "distinct": true,
+          "id": "7a70394009a49ea48808fae085eeec15aac1db81",
+          "message": "remove lto for bench from Cargo.toml",
+          "timestamp": "2024-07-14T16:22:14+08:00",
+          "tree_id": "921bd4686e1ccbeab105e95f49c3b2cd3432bbfa",
+          "url": "https://github.com/yihau/solana/commit/7a70394009a49ea48808fae085eeec15aac1db81"
+        },
+        "date": 1720947008887,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "bench_set_data_from_slice_changed_100k",
+            "value": 1964,
+            "range": "± 13",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_set_data_from_slice_changed_10mb",
+            "value": 476575,
+            "range": "± 2101",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_set_data_from_slice_changed_1k",
+            "value": 14,
+            "range": "± 0",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_set_data_from_slice_changed_1mb",
+            "value": 31837,
+            "range": "± 519",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_set_data_from_slice_grow_100k",
+            "value": 3128,
+            "range": "± 37",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_set_data_from_slice_grow_10mb",
+            "value": 477284,
+            "range": "± 2718",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_set_data_from_slice_grow_1k",
+            "value": 855,
+            "range": "± 2",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_set_data_from_slice_grow_1mb",
+            "value": 32722,
+            "range": "± 354",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_set_data_from_slice_shrink_100k",
+            "value": 3062,
+            "range": "± 28",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_set_data_from_slice_shrink_10mb",
+            "value": 470349,
+            "range": "± 1882",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_set_data_from_slice_shrink_1mb",
+            "value": 32695,
+            "range": "± 431",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_set_data_from_slice_unchanged_100k",
+            "value": 1797,
+            "range": "± 8",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_set_data_from_slice_unchanged_10mb",
+            "value": 324078,
+            "range": "± 2736",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_set_data_from_slice_unchanged_1k",
+            "value": 14,
+            "range": "± 0",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_set_data_from_slice_unchanged_1mb",
+            "value": 31108,
+            "range": "± 375",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_ed25519_len_032",
+            "value": 56301,
+            "range": "± 537",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_ed25519_len_128",
+            "value": 56488,
+            "range": "± 438",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_ed25519_len_32k",
+            "value": 110492,
+            "range": "± 394",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_ed25519_len_max",
+            "value": 164241,
+            "range": "± 408",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_secp256k1_len_032",
+            "value": 169529,
+            "range": "± 1021",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_secp256k1_len_256",
+            "value": 169810,
+            "range": "± 692",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_secp256k1_len_32k",
+            "value": 252950,
+            "range": "± 2562",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_secp256k1_len_max",
+            "value": 335506,
+            "range": "± 2843",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_bincode_instruction_deserialize",
+            "value": 2919,
+            "range": "± 31",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_bincode_instruction_serialize",
+            "value": 1174,
+            "range": "± 20",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_construct_instructions_data",
+            "value": 307,
+            "range": "± 2",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_manual_instruction_deserialize",
+            "value": 177,
+            "range": "± 1",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_manual_instruction_deserialize_single",
+            "value": 47,
+            "range": "± 0",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_short_vec",
+            "value": 257,
+            "range": "± 6",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_vec",
+            "value": 210,
+            "range": "± 7",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_to_from_account",
+            "value": 115541,
+            "range": "± 706",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_slot_history_add_new",
+            "value": 487688,
+            "range": "± 10792",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_to_from_account",
+            "value": 73485,
+            "range": "± 594",
             "unit": "ns/iter"
           }
         ]
