@@ -39,9 +39,9 @@ jobs:
               command: "cargo +$rust_nightly bench -p solana-accounts-db",
             }
           - {
-              name: "solana-sbf-programs",
+              name: "sbf",
               before_command: "make -C programs/sbf all",
-              command: "cargo +$rust_nightly bench -p solana-sbf-programs --features=sbf_c",
+              command: "cargo +$rust_nightly bench --manifest-path programs/sbf/Cargo.toml --features=sbf_c",
             }
 
     steps:
