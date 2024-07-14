@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1720940670067,
+  "lastUpdate": 1720940857219,
   "repoUrl": "https://github.com/yihau/solana",
   "entries": {
     "solana-sdk": [
@@ -2383,6 +2383,54 @@ window.BENCHMARK_DATA = {
             "name": "bench_status_cache_serialize",
             "value": 393354,
             "range": "± 1955",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "yihau.chen@icloud.com",
+            "name": "yihau",
+            "username": "yihau"
+          },
+          "committer": {
+            "email": "yihau.chen@icloud.com",
+            "name": "yihau",
+            "username": "yihau"
+          },
+          "distinct": true,
+          "id": "1be133441be46b25efbf12ecdd07006baa99bb1b",
+          "message": "fix programs/sbf tests",
+          "timestamp": "2024-07-14T14:44:24+08:00",
+          "tree_id": "724bd1b40c889ae5c55ca01d0e002183fc04d60c",
+          "url": "https://github.com/yihau/solana/commit/1be133441be46b25efbf12ecdd07006baa99bb1b"
+        },
+        "date": 1720940856860,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "bench_accounts_create",
+            "value": 3143299,
+            "range": "± 1270855",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_accounts_squash",
+            "value": 711203,
+            "range": "± 79465",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_status_cache_root_slot_deltas",
+            "value": 6150,
+            "range": "± 39",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_status_cache_serialize",
+            "value": 394688,
+            "range": "± 2269",
             "unit": "ns/iter"
           }
         ]
