@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1720945047741,
+  "lastUpdate": 1720945496240,
   "repoUrl": "https://github.com/yihau/solana",
   "entries": {
     "solana-sdk": [
@@ -5255,6 +5255,60 @@ window.BENCHMARK_DATA = {
             "name": "bench_program_execute_noop",
             "value": 46001,
             "range": "± 427",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "yihau.chen@icloud.com",
+            "name": "yihau",
+            "username": "yihau"
+          },
+          "committer": {
+            "email": "yihau.chen@icloud.com",
+            "name": "yihau",
+            "username": "yihau"
+          },
+          "distinct": true,
+          "id": "7a70394009a49ea48808fae085eeec15aac1db81",
+          "message": "remove lto for bench from Cargo.toml",
+          "timestamp": "2024-07-14T16:22:14+08:00",
+          "tree_id": "921bd4686e1ccbeab105e95f49c3b2cd3432bbfa",
+          "url": "https://github.com/yihau/solana/commit/7a70394009a49ea48808fae085eeec15aac1db81"
+        },
+        "date": 1720945495858,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "bench_create_vm",
+            "value": 6847,
+            "range": "± 68",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_instruction_count_tuner",
+            "value": 0,
+            "range": "± 0",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_program_alu",
+            "value": 3642,
+            "range": "± 30",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_program_create_executable",
+            "value": 858,
+            "range": "± 9",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_program_execute_noop",
+            "value": 45163,
+            "range": "± 564",
             "unit": "ns/iter"
           }
         ]
