@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1720944181130,
+  "lastUpdate": 1720944511693,
   "repoUrl": "https://github.com/yihau/solana",
   "entries": {
     "solana-sdk": [
@@ -4087,6 +4087,258 @@ window.BENCHMARK_DATA = {
             "name": "bsv_90",
             "value": 8147024,
             "range": "± 77130",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "yihau.chen@icloud.com",
+            "name": "yihau",
+            "username": "yihau"
+          },
+          "committer": {
+            "email": "yihau.chen@icloud.com",
+            "name": "yihau",
+            "username": "yihau"
+          },
+          "distinct": true,
+          "id": "d873886c7e12b1512c6fc3cf49ae630878eb62b8",
+          "message": "remove",
+          "timestamp": "2024-07-14T15:50:43+08:00",
+          "tree_id": "f1d148325d5339760727398ef72eefe2c7ce09a2",
+          "url": "https://github.com/yihau/solana/commit/d873886c7e12b1512c6fc3cf49ae630878eb62b8"
+        },
+        "date": 1720944511323,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "bench_banking_stage_multi_accounts",
+            "value": 10575845,
+            "range": "± 1483115",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_banking_stage_multi_accounts_with_voting",
+            "value": 10065686,
+            "range": "± 696523",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_banking_stage_multi_programs",
+            "value": 19109300,
+            "range": "± 346468",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_banking_stage_multi_programs_with_voting",
+            "value": 19139437,
+            "range": "± 1716851",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_consume_buffered",
+            "value": 6179,
+            "range": "± 188",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_process_entries",
+            "value": 28294213,
+            "range": "± 1893525",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_banking_tracer_background_thread_throughput",
+            "value": 25840966,
+            "range": "± 40280482",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_banking_tracer_main_thread_overhead_noop_baseline",
+            "value": 42,
+            "range": "± 1",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_banking_tracer_main_thread_overhead_under_peak_write",
+            "value": 368,
+            "range": "± 14",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_banking_tracer_main_thread_overhead_under_sustained_write",
+            "value": 435,
+            "range": "± 11",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_save_tower",
+            "value": 1668661,
+            "range": "± 13819",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_process_and_record_transactions_full_batch",
+            "value": 718131,
+            "range": "± 20059",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_process_and_record_transactions_half_batch",
+            "value": 708637,
+            "range": "± 40180",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_process_and_record_transactions_unbatched",
+            "value": 2041681,
+            "range": "± 47862",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_forwarder_handle_forwading_contentious_transaction",
+            "value": 8282669,
+            "range": "± 37008",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_forwarder_handle_forwading_parallel_transactions",
+            "value": 8504095,
+            "range": "± 36577",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_gen_keys",
+            "value": 808787,
+            "range": "± 93706",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_deserialize_hdr",
+            "value": 250,
+            "range": "± 2",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_deshredder",
+            "value": 11765788,
+            "range": "± 47923",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_shredder_coding",
+            "value": 51183,
+            "range": "± 268",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_shredder_decoding",
+            "value": 55794,
+            "range": "± 711",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_shredder_large_entries",
+            "value": 7661529,
+            "range": "± 47565",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_shredder_ticks",
+            "value": 7154278,
+            "range": "± 41411",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_packet_discard_many_senders",
+            "value": 1495196,
+            "range": "± 15361",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_packet_discard_mixed_senders",
+            "value": 1108765,
+            "range": "± 14061",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_packet_discard_single_sender",
+            "value": 996148,
+            "range": "± 15054",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_sigverify_stage_with_same_tx",
+            "value": 5654958,
+            "range": "± 89629",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_sigverify_stage_without_same_tx",
+            "value": 93202095,
+            "range": "± 510354",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bsv_0",
+            "value": 27794534,
+            "range": "± 4309370",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bsv_10",
+            "value": 23313722,
+            "range": "± 1650802",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bsv_20",
+            "value": 18060066,
+            "range": "± 286474",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bsv_30",
+            "value": 17646858,
+            "range": "± 204835",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bsv_40",
+            "value": 17386936,
+            "range": "± 317354",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bsv_50",
+            "value": 17036890,
+            "range": "± 137903",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bsv_60",
+            "value": 9513196,
+            "range": "± 4970881",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bsv_70",
+            "value": 10366914,
+            "range": "± 4178027",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bsv_80",
+            "value": 10095851,
+            "range": "± 4154613",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bsv_90",
+            "value": 8546002,
+            "range": "± 2906357",
             "unit": "ns/iter"
           }
         ]
