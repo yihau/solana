@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1720945836365,
+  "lastUpdate": 1720946571449,
   "repoUrl": "https://github.com/yihau/solana",
   "entries": {
     "solana-sdk": [
@@ -5397,6 +5397,132 @@ window.BENCHMARK_DATA = {
             "name": "append_vec_sequential_read",
             "value": 113,
             "range": "± 0",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "yihau.chen@icloud.com",
+            "name": "yihau",
+            "username": "yihau"
+          },
+          "committer": {
+            "email": "yihau.chen@icloud.com",
+            "name": "yihau",
+            "username": "yihau"
+          },
+          "distinct": true,
+          "id": "7a70394009a49ea48808fae085eeec15aac1db81",
+          "message": "remove lto for bench from Cargo.toml",
+          "timestamp": "2024-07-14T16:22:14+08:00",
+          "tree_id": "921bd4686e1ccbeab105e95f49c3b2cd3432bbfa",
+          "url": "https://github.com/yihau/solana/commit/7a70394009a49ea48808fae085eeec15aac1db81"
+        },
+        "date": 1720946571079,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "bench_accounts_delta_hash",
+            "value": 40126039,
+            "range": "± 1620914",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_accounts_hash_bank_hash",
+            "value": 593677477,
+            "range": "± 32839385",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_concurrent_read_write",
+            "value": 739624,
+            "range": "± 522052",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_concurrent_scan_write",
+            "value": 794368,
+            "range": "± 411554",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_dashmap_iter",
+            "value": 202145,
+            "range": "± 1785",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_dashmap_par_iter",
+            "value": 198067,
+            "range": "± 18352",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_delete_dependencies",
+            "value": 69955,
+            "range": "± 903",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_load_largest_accounts",
+            "value": 10893926,
+            "range": "± 1480968",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_sort_and_remove_dups",
+            "value": 71738,
+            "range": "± 239",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_sort_and_remove_dups_no_dups",
+            "value": 71794,
+            "range": "± 905",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_update_accounts_hash",
+            "value": 42479188,
+            "range": "± 5941142",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_accounts_index",
+            "value": 10358268,
+            "range": "± 4903592",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "append_vec_append",
+            "value": 75,
+            "range": "± 0",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "append_vec_concurrent_append_read",
+            "value": 86,
+            "range": "± 1",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "append_vec_concurrent_read_append",
+            "value": 313,
+            "range": "± 6",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "append_vec_random_read",
+            "value": 75,
+            "range": "± 0",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "append_vec_sequential_read",
+            "value": 113,
+            "range": "± 2",
             "unit": "ns/iter"
           }
         ]
