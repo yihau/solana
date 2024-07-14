@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1720940857219,
+  "lastUpdate": 1720941653879,
   "repoUrl": "https://github.com/yihau/solana",
   "entries": {
     "solana-sdk": [
@@ -3807,6 +3807,132 @@ window.BENCHMARK_DATA = {
             "name": "append_vec_sequential_read",
             "value": 102,
             "range": "± 2",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "yihau.chen@icloud.com",
+            "name": "yihau",
+            "username": "yihau"
+          },
+          "committer": {
+            "email": "yihau.chen@icloud.com",
+            "name": "yihau",
+            "username": "yihau"
+          },
+          "distinct": true,
+          "id": "1be133441be46b25efbf12ecdd07006baa99bb1b",
+          "message": "fix programs/sbf tests",
+          "timestamp": "2024-07-14T14:44:24+08:00",
+          "tree_id": "724bd1b40c889ae5c55ca01d0e002183fc04d60c",
+          "url": "https://github.com/yihau/solana/commit/1be133441be46b25efbf12ecdd07006baa99bb1b"
+        },
+        "date": 1720941653505,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "bench_accounts_delta_hash",
+            "value": 38433174,
+            "range": "± 1107755",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_accounts_hash_bank_hash",
+            "value": 597300504,
+            "range": "± 30979303",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_concurrent_read_write",
+            "value": 728074,
+            "range": "± 440582",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_concurrent_scan_write",
+            "value": 753511,
+            "range": "± 740819",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_dashmap_iter",
+            "value": 205796,
+            "range": "± 1985",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_dashmap_par_iter",
+            "value": 187550,
+            "range": "± 15556",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_delete_dependencies",
+            "value": 74099,
+            "range": "± 1971",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_load_largest_accounts",
+            "value": 7167436,
+            "range": "± 169069",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_sort_and_remove_dups",
+            "value": 72467,
+            "range": "± 631",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_sort_and_remove_dups_no_dups",
+            "value": 71885,
+            "range": "± 569",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_update_accounts_hash",
+            "value": 33774396,
+            "range": "± 7621047",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench_accounts_index",
+            "value": 11065450,
+            "range": "± 5470457",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "append_vec_append",
+            "value": 57,
+            "range": "± 0",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "append_vec_concurrent_append_read",
+            "value": 69,
+            "range": "± 0",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "append_vec_concurrent_read_append",
+            "value": 311,
+            "range": "± 5",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "append_vec_random_read",
+            "value": 60,
+            "range": "± 0",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "append_vec_sequential_read",
+            "value": 100,
+            "range": "± 0",
             "unit": "ns/iter"
           }
         ]
