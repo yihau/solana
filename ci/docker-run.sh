@@ -80,6 +80,9 @@ if [[ -n $CI ]]; then
         )
       fi
     fi
+
+    # volume ssh folder
+    ARGS+=(--volume /var/lib/buildkite-agent/.ssh:/var/lib/buildkite-agent/.ssh)
   fi
 fi
 
