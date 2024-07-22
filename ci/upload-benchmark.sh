@@ -72,7 +72,7 @@ while IFS= read -r line; do
     median=$(echo "$line" | jq -r '.median')
     deviation=$(echo "$line" | jq -r '.deviation')
 
-    datapoint="${INFLUX_MEASUREMENT},commit=${COMMIT_HASH},test_suite=${TEST_SUITE} name=\"$name\",median=${median}i,deviation=${deviation}i"
+    datapoint="${INFLUX_MEASUREMENT},commit=${COMMIT_HASH},test_suite=${TEST_SUITE},name=${name} median=${median}i,deviation=${deviation}i"
     echo "datapoint: $datapoint"
 
     curl -s -X POST "${INFLUX_HOST}/write?db=${INFLUX_DB}" --data-binary "$datapoint"
