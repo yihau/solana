@@ -75,6 +75,6 @@ while IFS= read -r line; do
     datapoint="${INFLUX_MEASUREMENT},commit=${COMMIT_HASH},test_suite=${TEST_SUITE} name=\"$name\",median=${median}i,deviation=${deviation}i"
     echo "datapoint: $datapoint"
 
-    curl -X POST "${INFLUX_HOST}/write?db=${INFLUX_DB}" --data-binary "$datapoint"
+    curl -s -X POST "${INFLUX_HOST}/write?db=${INFLUX_DB}" --data-binary "$datapoint"
   fi
 done <"$filepath"
