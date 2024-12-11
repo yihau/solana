@@ -31,7 +31,7 @@ cp -f ../../fetch-spl.sh usr/bin/
 )
 
 docker build \
-  --build-arg "BASE_IMAGE=${BASE_IMAGE}" \
+  --build-arg "BASE_IMAGE=${CI_DOCKER_ARG_BASE_IMAGE}" \
   -t anzaxyz/agave:"$CHANNEL_OR_TAG" .
 
 maybeEcho=
