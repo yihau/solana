@@ -1706,40 +1706,7 @@ pub fn app<'a>(version: &'a str, default_args: &'a DefaultArgs) -> App<'a, 'a> {
         )
         .subcommand(commands::monitor::command(default_args))
         .subcommand(SubCommand::with_name("run").about("Run the validator"))
-        .subcommand(
-            SubCommand::with_name("plugin")
-                .about("Manage and view geyser plugins")
-                .setting(AppSettings::SubcommandRequiredElseHelp)
-                .setting(AppSettings::InferSubcommands)
-                .subcommand(
-                    SubCommand::with_name("list").about("List all current running gesyer plugins"),
-                )
-                .subcommand(
-                    SubCommand::with_name("unload")
-                        .about(
-                            "Unload a particular gesyer plugin. You must specify the gesyer \
-                             plugin name",
-                        )
-                        .arg(Arg::with_name("name").required(true).takes_value(true)),
-                )
-                .subcommand(
-                    SubCommand::with_name("reload")
-                        .about(
-                            "Reload a particular gesyer plugin. You must specify the gesyer \
-                             plugin name and the new config path",
-                        )
-                        .arg(Arg::with_name("name").required(true).takes_value(true))
-                        .arg(Arg::with_name("config").required(true).takes_value(true)),
-                )
-                .subcommand(
-                    SubCommand::with_name("load")
-                        .about(
-                            "Load a new gesyer plugin. You must specify the config path. Fails if \
-                             overwriting (use reload)",
-                        )
-                        .arg(Arg::with_name("config").required(true).takes_value(true)),
-                ),
-        )
+        .subcommand(commands::plugin::command(default_args))
         .subcommand(commands::set_identity::command(default_args))
         .subcommand(commands::set_log_filter::command(default_args))
         .subcommand(commands::staked_nodes_overrides::command(default_args))
