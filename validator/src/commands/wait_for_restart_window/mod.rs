@@ -20,6 +20,25 @@ use {
         time::{Duration, SystemTime},
     },
 };
+pub struct WaitForRestartWindowArg {
+    pub min_idle_time: usize,
+    pub identity: Option<Pubkey>,
+    pub max_delinquent_stake: u8,
+    pub skip_new_snapshot_check: bool,
+    pub skip_health_check: bool,
+}
+
+impl WaitForRestartWindowArg {
+    pub fn new(matches: &ArgMatches) -> Self {
+        WaitForRestartWindowArg {
+            min_idle_time: value_t_or_exit!(matches, "min_idle_time", usize),
+            identity: pubkey_of(matches, "identity"),
+            max_delinquent_stake: value_t_or_exit!(matches, "max_delinquent_stake", u8),
+            skip_new_snapshot_check: matches.is_present("skip_new_snapshot_check"),
+            skip_health_check: matches.is_present("skip_health_check"),
+        }
+    }
+}
 
 pub fn command<'a>(default_args: &'a DefaultArgs) -> App<'a, 'a> {
     SubCommand::with_name("wait-for-restart-window")
@@ -70,19 +89,15 @@ pub fn command<'a>(default_args: &'a DefaultArgs) -> App<'a, 'a> {
 }
 
 pub fn execute(matches: &ArgMatches, ledger_path: &PathBuf) {
-    let min_idle_time = value_t_or_exit!(matches, "min_idle_time", usize);
-    let identity = pubkey_of(matches, "identity");
-    let max_delinquent_stake = value_t_or_exit!(matches, "max_delinquent_stake", u8);
-    let skip_new_snapshot_check = matches.is_present("skip_new_snapshot_check");
-    let skip_health_check = matches.is_present("skip_health_check");
+    let wait_for_restart_window_arg = WaitForRestartWindowArg::new(matches);
 
     wait_for_restart_window(
         &ledger_path,
-        identity,
-        min_idle_time,
-        max_delinquent_stake,
-        skip_new_snapshot_check,
-        skip_health_check,
+        wait_for_restart_window_arg.identity,
+        wait_for_restart_window_arg.min_idle_time,
+        wait_for_restart_window_arg.max_delinquent_stake,
+        wait_for_restart_window_arg.skip_new_snapshot_check,
+        wait_for_restart_window_arg.skip_health_check,
     )
     .unwrap_or_else(|err| {
         println!("{err}");
@@ -342,4 +357,36 @@ pub fn wait_for_restart_window(
     drop(progress_bar);
     println!("{}", style("Ready to restart").green());
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use {super::*, std::str::FromStr};
+
+    #[test]
+    fn test_wait_for_restart_window_arg() {
+        let default_args = DefaultArgs::default();
+
+        let app = command(&default_args);
+        let matches = app.get_matches_from(vec![
+            "wait-for-restart-window",
+            "--min-idle-time",
+            "10",
+            "--identity",
+            "11111111111111111111111111111111",
+            "--max-delinquent-stake",
+            "10",
+            "--skip-new-snapshot-check",
+            "--skip-health-check",
+        ]);
+        let arg = WaitForRestartWindowArg::new(&matches);
+        assert_eq!(arg.min_idle_time, 10);
+        assert_eq!(
+            arg.identity,
+            Some(Pubkey::from_str("11111111111111111111111111111111").unwrap())
+        );
+        assert_eq!(arg.max_delinquent_stake, 10);
+        assert!(arg.skip_new_snapshot_check);
+        assert!(arg.skip_health_check);
+    }
 }
