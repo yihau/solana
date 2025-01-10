@@ -16,7 +16,7 @@ partitions=$(
   "timeout_in_minutes": 30,
   "agent": "$agent",
   "parallelism": 5,
-  "retry": 2
+  "retry": 3
 }
 EOF
 )
