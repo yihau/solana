@@ -15,7 +15,7 @@ partitions=$(
   "command": "ci/docker-run-default-image.sh ci/stable/run-partition.sh",
   "timeout_in_minutes": 30,
   "agent": "$agent",
-  "parallelism": 2,
+  "parallelism": 4,
   "retry": 3
 }
 EOF
