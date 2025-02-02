@@ -11,7 +11,7 @@ use {
         bpf_loader, bpf_loader_deprecated, bpf_loader_upgradeable, loader_v4, native_loader,
     },
     solana_type_overrides::{
-        rand::{rng, Rng},
+        rand::{thread_rng, Rng},
         sync::{
             atomic::{AtomicU64, Ordering},
             Arc, Condvar, Mutex, RwLock,
@@ -1264,8 +1264,8 @@ impl<FG: ForkGraph> ProgramCache<FG> {
             candidates: &[(Pubkey, Arc<ProgramCacheEntry>)],
             now: Slot,
         ) -> (usize, u64) {
-            let mut rng = rng();
-            let index = rng.random_range(0..candidates.len());
+            let mut rng = thread_rng();
+            let index = rng.gen_range(0..candidates.len());
             let usage_counter = candidates
                 .get(index)
                 .expect("Failed to get cached entry")
@@ -1823,7 +1823,7 @@ mod tests {
         use rand::prelude::SliceRandom;
         const EXPECTED_ENTRIES: [(u64, u64); 7] =
             [(1, 2), (5, 5), (5, 6), (5, 10), (9, 10), (10, 10), (3, 12)];
-        let mut rng = rand::rng();
+        let mut rng = rand::thread_rng();
         let program_id = Pubkey::new_unique();
         for _ in 0..1000 {
             let mut entries = EXPECTED_ENTRIES.to_vec();
