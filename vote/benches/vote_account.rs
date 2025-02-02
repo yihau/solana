@@ -39,7 +39,7 @@ fn new_rand_vote_account<R: Rng>(
 
 #[bench]
 fn bench_vote_account_try_from(b: &mut Bencher) {
-    let mut rng = rand::thread_rng();
+    let mut rng = rand::rng();
     let (account, vote_state) = new_rand_vote_account(&mut rng, None);
 
     b.iter(|| {

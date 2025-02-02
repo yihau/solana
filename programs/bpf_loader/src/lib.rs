@@ -3784,7 +3784,7 @@ mod tests {
     ) where
         F: Fn(&mut [u8]),
     {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         for _ in 0..outer_iters {
             let mut mangled_bytes = bytes.to_vec();
             for _ in 0..inner_iters {

@@ -182,7 +182,7 @@ mod tests {
 
     #[test]
     fn test_serde_varint_rand() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         for _ in 0..100_000 {
             let dummy = Dummy {
                 a: rng.gen::<u32>() >> rng.gen_range(0..u32::BITS),
@@ -240,7 +240,7 @@ mod tests {
 
     #[test]
     fn test_serde_varint_fuzz() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let mut buffer = [0u8; 36];
         let mut num_errors = 0;
         for _ in 0..200_000 {
@@ -265,7 +265,7 @@ mod tests {
     fn test_serde_varint_cross_fuzz() {
         #[derive(Serialize, Deserialize)]
         struct U16(#[serde(with = "super")] u16);
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let mut buffer = [0u8; 16];
         let mut num_errors = 0;
         for _ in 0..200_000 {

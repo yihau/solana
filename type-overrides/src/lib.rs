@@ -32,7 +32,7 @@ pub mod lazy_static {
 pub mod rand {
     pub use rand::*;
     #[cfg(feature = "shuttle-test")]
-    pub use shuttle::rand::{thread_rng, Rng, RngCore};
+    pub use shuttle::rand::{rng, Rng, RngCore};
 }
 
 pub mod sync {

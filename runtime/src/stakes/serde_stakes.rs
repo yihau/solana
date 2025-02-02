@@ -305,7 +305,7 @@ mod tests {
             stakes: Arc<StakesEnum>,
             tail: String,
         }
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let stakes_cache = StakesCache::new(Stakes {
             unused: rng.gen(),
             epoch: rng.gen(),

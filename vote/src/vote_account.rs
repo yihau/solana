@@ -100,7 +100,7 @@ impl VoteAccount {
             solana_vote_interface::state::{VoteInit, VoteStateVersions},
         };
 
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
 
         let vote_init = VoteInit {
             node_pubkey: Pubkey::new_unique(),
@@ -548,7 +548,7 @@ mod tests {
 
     #[test]
     fn test_vote_account_try_from() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let (account, vote_state) = new_rand_vote_account(&mut rng, None);
         let lamports = account.lamports();
         let vote_account = VoteAccount::try_from(account.clone()).unwrap();
@@ -560,7 +560,7 @@ mod tests {
     #[test]
     #[should_panic(expected = "InvalidOwner")]
     fn test_vote_account_try_from_invalid_owner() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let (mut account, _) = new_rand_vote_account(&mut rng, None);
         account.set_owner(Pubkey::new_unique());
         VoteAccount::try_from(account).unwrap();
@@ -576,7 +576,7 @@ mod tests {
 
     #[test]
     fn test_vote_account_serialize() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let (account, vote_state) = new_rand_vote_account(&mut rng, None);
         let vote_account = VoteAccount::try_from(account.clone()).unwrap();
         assert_eq!(vote_state, *vote_account.vote_state());
@@ -589,7 +589,7 @@ mod tests {
 
     #[test]
     fn test_vote_accounts_serialize() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let vote_accounts_hash_map: VoteAccountsHashMap =
             new_rand_vote_accounts(&mut rng, 64).take(1024).collect();
         let vote_accounts = VoteAccounts::from(Arc::new(vote_accounts_hash_map.clone()));
@@ -608,7 +608,7 @@ mod tests {
 
     #[test]
     fn test_vote_accounts_deserialize() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let vote_accounts_hash_map: VoteAccountsHashMap =
             new_rand_vote_accounts(&mut rng, 64).take(1024).collect();
         let data = bincode::serialize(&vote_accounts_hash_map).unwrap();
@@ -624,7 +624,7 @@ mod tests {
 
     #[test]
     fn test_vote_accounts_deserialize_invalid_account() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         // we'll populate the map with 1 valid and 2 invalid accounts, then ensure that we only get
         // the valid one after deserialiation
         let mut vote_accounts_hash_map = HashMap::<Pubkey, (u64, AccountSharedData)>::new();
@@ -657,7 +657,7 @@ mod tests {
 
     #[test]
     fn test_staked_nodes() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let mut accounts: Vec<_> = new_rand_vote_accounts(&mut rng, 64).take(1024).collect();
         let mut vote_accounts = VoteAccounts::default();
         // Add vote accounts.
@@ -710,7 +710,7 @@ mod tests {
     fn test_staked_nodes_update() {
         let mut vote_accounts = VoteAccounts::default();
 
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let pubkey = Pubkey::new_unique();
         let node_pubkey = Pubkey::new_unique();
         let (account1, _) = new_rand_vote_account(&mut rng, Some(node_pubkey));
@@ -763,7 +763,7 @@ mod tests {
     fn test_staked_nodes_zero_stake() {
         let mut vote_accounts = VoteAccounts::default();
 
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let pubkey = Pubkey::new_unique();
         let node_pubkey = Pubkey::new_unique();
         let (account1, _) = new_rand_vote_account(&mut rng, Some(node_pubkey));
@@ -793,7 +793,7 @@ mod tests {
     // Asserts that returned staked-nodes are copy-on-write references.
     #[test]
     fn test_staked_nodes_cow() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let mut accounts = new_rand_vote_accounts(&mut rng, 64);
         // Add vote accounts.
         let mut vote_accounts = VoteAccounts::default();
@@ -825,7 +825,7 @@ mod tests {
     // Asserts that returned vote-accounts are copy-on-write references.
     #[test]
     fn test_vote_accounts_cow() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let mut accounts = new_rand_vote_accounts(&mut rng, 64);
         // Add vote accounts.
         let mut vote_accounts = VoteAccounts::default();

@@ -68,7 +68,7 @@ fn bench_counter_submission(bencher: &mut Bencher) {
 fn bench_random_submission(bencher: &mut Bencher) {
     let writer = Arc::new(MockMetricsWriter::new());
     let agent = MetricsAgent::new(writer, Duration::from_secs(10), 1000);
-    let mut rng = rand::thread_rng();
+    let mut rng = rand::rng();
     let die = Uniform::new(1, 7).expect("Unable to create range");
 
     bencher.iter(|| {

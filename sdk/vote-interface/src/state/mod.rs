@@ -1284,7 +1284,7 @@ mod tests {
 
         // variant
         let serialized_len_x4 = serialized_size(&VoteState::default()).unwrap() * 4;
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         for _ in 0..1000 {
             let raw_data_length = rng.gen_range(1..serialized_len_x4);
             let mut raw_data: Vec<u8> = (0..raw_data_length).map(|_| rng.gen::<u8>()).collect();
@@ -1792,7 +1792,7 @@ mod tests {
 
     #[test]
     fn test_serde_compact_vote_state_update() {
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         for _ in 0..5000 {
             run_serde_compact_vote_state_update(&mut rng);
         }

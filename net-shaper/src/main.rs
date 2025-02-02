@@ -1,7 +1,7 @@
 #![allow(clippy::arithmetic_side_effects)]
 use {
     clap::{crate_description, crate_name, crate_version, Arg, ArgMatches, Command},
-    rand::{thread_rng, Rng},
+    rand::{rng, Rng},
     serde_derive::{Deserialize, Serialize},
     std::{fs, io, path::PathBuf},
 };
@@ -97,7 +97,7 @@ impl NetworkTopology {
     }
 
     fn new_random(max_partitions: usize, max_packet_drop: u8, max_packet_delay: u32) -> Self {
-        let mut rng = thread_rng();
+        let mut rng = rng();
         let num_partitions = rng.gen_range(0..max_partitions + 1);
 
         if num_partitions == 0 {

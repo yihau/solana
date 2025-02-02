@@ -7,7 +7,7 @@ use {
     crossbeam_channel::{Receiver, RecvError, Sender},
     indexmap::map::IndexMap,
     log::*,
-    rand::{thread_rng, Rng},
+    rand::{rng, Rng},
     solana_keypair::Keypair,
     solana_measure::measure::Measure,
     solana_time_utils::AtomicInterval,
@@ -217,7 +217,7 @@ where
             Measure::start("get_connection_cache_eviction_measure");
         let existing_index = map.get_index_of(addr);
         while map.len() >= MAX_CONNECTIONS {
-            let mut rng = thread_rng();
+            let mut rng = rng();
             let n = rng.gen_range(0..MAX_CONNECTIONS);
             if let Some(index) = existing_index {
                 if n == index {
@@ -443,7 +443,7 @@ pub trait ConnectionPool: Send + Sync + 'static {
     /// Get a connection from the pool. It must have at least one connection in the pool.
     /// This randomly picks a connection in the pool.
     fn borrow_connection(&self) -> Arc<Self::BaseClientConnection> {
-        let mut rng = thread_rng();
+        let mut rng = rng();
         let n = rng.gen_range(0..self.num_connections());
         self.get(n).expect("index is within num_connections")
     }
