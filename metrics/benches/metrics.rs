@@ -4,7 +4,7 @@ extern crate test;
 
 use {
     log::*,
-    rand::distributions::{Distribution, Uniform},
+    rand::distr::{Distribution, Uniform},
     solana_metrics::{
         counter::CounterPoint,
         datapoint::DataPoint,

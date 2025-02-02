@@ -9,7 +9,7 @@ use {
     },
     chrono::Utc,
     log::*,
-    rand::distributions::{Distribution, Uniform},
+    rand::distr::{Distribution, Uniform},
     rayon::prelude::*,
     solana_client::nonce_utils,
     solana_metrics::{self, datapoint_info},
