@@ -1,7 +1,7 @@
 use {
     itertools::Itertools,
     log::*,
-    rand::{seq::SliceRandom, rng, Rng},
+    rand::{rng, seq::SliceRandom, Rng},
     rayon::prelude::*,
     solana_core::validator::{ValidatorConfig, ValidatorStartProgress},
     solana_download_utils::{download_snapshot_archive, DownloadProgressRecord},

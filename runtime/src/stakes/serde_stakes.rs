@@ -315,7 +315,7 @@ mod tests {
             let vote_pubkey = solana_pubkey::new_rand();
             let vote_account = vote_state::create_account(
                 &vote_pubkey,
-                &solana_pubkey::new_rand(),  // node_pubkey
+                &solana_pubkey::new_rand(),     // node_pubkey
                 rng.random_range(0..101),       // commission
                 rng.random_range(0..1_000_000), // lamports
             );

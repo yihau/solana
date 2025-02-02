@@ -48,7 +48,7 @@ mod tests {
     #![allow(deprecated)]
     use {
         super::*,
-        rand::{seq::SliceRandom, rng},
+        rand::{rng, seq::SliceRandom},
         solana_sdk::{
             account::{from_account, DUMMY_INHERITABLE_ACCOUNT_FIELDS},
             hash::{Hash, HASH_BYTES},

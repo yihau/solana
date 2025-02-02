@@ -6533,13 +6533,12 @@ fn test_fuzz_instructions() {
             rng().random_range(0..max)
         };
 
-        let num_readonly_unsigned_accounts = if rng().random_ratio(1, 5)
-            || (num_required_signatures as usize) >= account_keys_len
-        {
-            rng().random_range(0..account_keys_len) as u8
-        } else {
-            rng().random_range(0..account_keys_len - num_required_signatures as usize) as u8
-        };
+        let num_readonly_unsigned_accounts =
+            if rng().random_ratio(1, 5) || (num_required_signatures as usize) >= account_keys_len {
+                rng().random_range(0..account_keys_len) as u8
+            } else {
+                rng().random_range(0..account_keys_len - num_required_signatures as usize) as u8
+            };
 
         let header = MessageHeader {
             num_required_signatures,
