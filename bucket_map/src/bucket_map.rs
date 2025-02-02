@@ -405,7 +405,7 @@ mod tests {
             let gen_rand_value = || {
                 let count = rng().random_range(0..max_slot_list_len);
                 let v = (0..count)
-                    .map(|x| (x as usize, x as usize /*rng().gen::<usize>()*/))
+                    .map(|x| (x as usize, x as usize /*rng().random::<usize>()*/))
                     .collect::<Vec<_>>();
                 let range = rng().random_range(0..100);
                 // pick ref counts that are useful and common

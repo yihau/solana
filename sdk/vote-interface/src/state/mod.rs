@@ -1287,11 +1287,11 @@ mod tests {
         let mut rng = rand::rng();
         for _ in 0..1000 {
             let raw_data_length = rng.random_range(1..serialized_len_x4);
-            let mut raw_data: Vec<u8> = (0..raw_data_length).map(|_| rng.gen::<u8>()).collect();
+            let mut raw_data: Vec<u8> = (0..raw_data_length).map(|_| rng.random::<u8>()).collect();
 
             // pure random data will ~never have a valid enum tag, so lets help it out
-            if raw_data_length >= 4 && rng.gen::<bool>() {
-                let tag = rng.gen::<u8>() % 3;
+            if raw_data_length >= 4 && rng.random::<bool>() {
+                let tag = rng.random::<u8>() % 3;
                 raw_data[0] = tag;
                 raw_data[1] = 0;
                 raw_data[2] = 0;
@@ -1813,8 +1813,8 @@ mod tests {
                 .checked_sub(rng.random_range(0..1_000))
                 .expect("All slots should be greater than 1_000")
         });
-        let timestamp = rng.gen_ratio(1, 2).then(|| rng.gen());
-        let hash = Hash::from(rng.gen::<[u8; 32]>());
+        let timestamp = rng.gen_ratio(1, 2).then(|| rng.random());
+        let hash = Hash::from(rng.random::<[u8; 32]>());
         let vote_state_update = VoteStateUpdate {
             lockouts,
             root,
@@ -1833,7 +1833,7 @@ mod tests {
         let vote = VoteInstruction::UpdateVoteState(vote_state_update.clone());
         let bytes = bincode::serialize(&vote).unwrap();
         assert_eq!(vote, bincode::deserialize(&bytes).unwrap());
-        let hash = Hash::from(rng.gen::<[u8; 32]>());
+        let hash = Hash::from(rng.random::<[u8; 32]>());
         let vote = VoteInstruction::UpdateVoteStateSwitch(vote_state_update, hash);
         let bytes = bincode::serialize(&vote).unwrap();
         assert_eq!(vote, bincode::deserialize(&bytes).unwrap());

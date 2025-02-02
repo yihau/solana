@@ -86,7 +86,7 @@ impl<T: BloomHashIndex> Bloom<T> {
         let m = Self::num_bits(num_items as f64, false_rate);
         let num_bits = cmp::max(1, cmp::min(m as usize, max_bits));
         let num_keys = Self::num_keys(num_bits as f64, num_items as f64) as usize;
-        let keys: Vec<u64> = (0..num_keys).map(|_| rand::rng().gen()).collect();
+        let keys: Vec<u64> = (0..num_keys).map(|_| rand::rng().random()).collect();
         Self::new(num_bits, keys)
     }
     fn num_bits(num_items: f64, false_rate: f64) -> f64 {
@@ -386,7 +386,7 @@ mod test {
     #[test]
     fn test_atomic_bloom_round_trip() {
         let mut rng = rand::rng();
-        let keys: Vec<_> = std::iter::repeat_with(|| rng.gen()).take(5).collect();
+        let keys: Vec<_> = std::iter::repeat_with(|| rng.random()).take(5).collect();
         let mut bloom = Bloom::<Hash>::new(9731, keys.clone());
         let hash_values: Vec<_> = std::iter::repeat_with(generate_random_hash)
             .take(1000)

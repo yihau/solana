@@ -307,8 +307,8 @@ mod tests {
         }
         let mut rng = rand::rng();
         let stakes_cache = StakesCache::new(Stakes {
-            unused: rng.gen(),
-            epoch: rng.gen(),
+            unused: rng.random(),
+            epoch: rng.random(),
             ..Stakes::default()
         });
         for _ in 0..rng.random_range(5usize..10) {
@@ -322,7 +322,7 @@ mod tests {
             stakes_cache.check_and_store(&vote_pubkey, &vote_account, None);
             for _ in 0..rng.random_range(10usize..20) {
                 let stake_pubkey = solana_pubkey::new_rand();
-                let rent = Rent::with_slots_per_epoch(rng.gen());
+                let rent = Rent::with_slots_per_epoch(rng.random());
                 let stake_account = stake_state::create_account(
                     &stake_pubkey, // authorized
                     &vote_pubkey,

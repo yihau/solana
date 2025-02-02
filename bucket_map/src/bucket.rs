@@ -158,7 +158,7 @@ impl<'b, T: Clone + Copy + PartialEq + std::fmt::Debug + 'static> Bucket<T> {
                     Arc::clone(&stats.index),
                     count,
                 );
-                let random = rng().gen();
+                let random = rng().random();
                 restartable_bucket.set_file(file_name, random);
                 (index, random, false /* true = reused file */)
             });
