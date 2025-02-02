@@ -607,7 +607,7 @@ pub fn find_available_port_in_range(ip_addr: IpAddr, range: PortRange) -> io::Re
     let mut next_port_to_try = range
         .clone()
         .cycle() // loop over the end of the range
-        .skip(rng().gen_range(range.clone()) as usize) // skip to random position
+        .skip(rng().random_range(range.clone()) as usize) // skip to random position
         .take(range.len()) // never take the same value twice
         .peekable();
     loop {

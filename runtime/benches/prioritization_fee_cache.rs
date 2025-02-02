@@ -86,7 +86,7 @@ fn process_transactions_multiple_slots(banks: &[Arc<Bank>], num_slots: usize, nu
                 })
                 .collect();
 
-            let index = rng().gen_range(0..num_slots);
+            let index = rng().random_range(0..num_slots);
 
             prioritization_fee_cache.update(&banks[index], transactions.iter());
         })

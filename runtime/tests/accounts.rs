@@ -52,7 +52,7 @@ fn test_shrink_and_clean() {
             while alive_accounts.len() <= 10 {
                 alive_accounts.push((
                     solana_pubkey::new_rand(),
-                    AccountSharedData::new(rng().gen_range(0..50), 0, &owner),
+                    AccountSharedData::new(rng().random_range(0..50), 0, &owner),
                 ));
             }
 
@@ -93,8 +93,8 @@ fn test_bad_bank_hash() {
         .into_par_iter()
         .map(|_| {
             let key = solana_pubkey::new_rand();
-            let lamports = rng().gen_range(0..100);
-            let some_data_len = rng().gen_range(0..1000);
+            let lamports = rng().random_range(0..100);
+            let some_data_len = rng().random_range(0..1000);
             let account = AccountSharedData::new(lamports, some_data_len, &key);
             (key, account)
         })
@@ -110,11 +110,11 @@ fn test_bad_bank_hash() {
             info!("i: {}", i);
             last_print = Instant::now();
         }
-        let num_accounts = rng().gen_range(0..100);
+        let num_accounts = rng().random_range(0..100);
         (0..num_accounts).for_each(|_| {
             let mut idx;
             loop {
-                idx = rng().gen_range(0..max_accounts);
+                idx = rng().random_range(0..max_accounts);
                 if existing.contains(&idx) {
                     continue;
                 }
@@ -123,7 +123,7 @@ fn test_bad_bank_hash() {
             }
             accounts_keys[idx]
                 .1
-                .set_lamports(rng().gen_range(0..1000));
+                .set_lamports(rng().random_range(0..1000));
         });
 
         let account_refs: Vec<_> = existing

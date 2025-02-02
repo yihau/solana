@@ -1265,7 +1265,7 @@ impl<FG: ForkGraph> ProgramCache<FG> {
             now: Slot,
         ) -> (usize, u64) {
             let mut rng = rng();
-            let index = rng.gen_range(0..candidates.len());
+            let index = rng.random_range(0..candidates.len());
             let usage_counter = candidates
                 .get(index)
                 .expect("Failed to get cached entry")

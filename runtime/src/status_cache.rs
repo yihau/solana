@@ -187,7 +187,7 @@ impl<T: Serialize + Clone> StatusCache<T> {
         // Get the cache entry for this blockhash.
         let (max_slot, key_index, hash_map) =
             self.cache.entry(*transaction_blockhash).or_insert_with(|| {
-                let key_index = rng().gen_range(0..max_key_index + 1);
+                let key_index = rng().random_range(0..max_key_index + 1);
                 (slot, key_index, HashMap::new())
             });
 

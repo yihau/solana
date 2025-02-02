@@ -1286,7 +1286,7 @@ mod tests {
         let serialized_len_x4 = serialized_size(&VoteState::default()).unwrap() * 4;
         let mut rng = rand::rng();
         for _ in 0..1000 {
-            let raw_data_length = rng.gen_range(1..serialized_len_x4);
+            let raw_data_length = rng.random_range(1..serialized_len_x4);
             let mut raw_data: Vec<u8> = (0..raw_data_length).map(|_| rng.gen::<u8>()).collect();
 
             // pure random data will ~never have a valid enum tag, so lets help it out
@@ -1800,8 +1800,8 @@ mod tests {
 
     fn run_serde_compact_vote_state_update<R: Rng>(rng: &mut R) {
         let lockouts: VecDeque<_> = std::iter::repeat_with(|| {
-            let slot = 149_303_885_u64.saturating_add(rng.gen_range(0..10_000));
-            let confirmation_count = rng.gen_range(0..33);
+            let slot = 149_303_885_u64.saturating_add(rng.random_range(0..10_000));
+            let confirmation_count = rng.random_range(0..33);
             Lockout::new_with_confirmation_count(slot, confirmation_count)
         })
         .take(32)
@@ -1810,7 +1810,7 @@ mod tests {
         let root = rng.gen_ratio(1, 2).then(|| {
             lockouts[0]
                 .slot()
-                .checked_sub(rng.gen_range(0..1_000))
+                .checked_sub(rng.random_range(0..1_000))
                 .expect("All slots should be greater than 1_000")
         });
         let timestamp = rng.gen_ratio(1, 2).then(|| rng.gen());

@@ -1412,7 +1412,7 @@ impl ConnectionTable {
             .filter(|&size| size > 0)
             .flat_map(|size| {
                 let mut rng = rng();
-                repeat_with(move || rng.gen_range(0..size))
+                repeat_with(move || rng.random_range(0..size))
             })
             .map(|index| {
                 let connection = self.table[index].first();

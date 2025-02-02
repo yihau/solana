@@ -168,7 +168,7 @@ impl TransactionSignatureTracker {
         if signatures.is_empty() {
             None
         } else {
-            let random_index = rng().gen_range(0..signatures.len());
+            let random_index = rng().random_range(0..signatures.len());
             let random_signature = signatures.get(random_index);
             random_signature.cloned()
         }
@@ -200,7 +200,7 @@ fn make_create_message(
     let space = if mint.is_some() {
         Account::get_packed_len() as u64
     } else {
-        maybe_space.unwrap_or_else(|| rng().gen_range(0..1000))
+        maybe_space.unwrap_or_else(|| rng().random_range(0..1000))
     };
 
     let instructions: Vec<_> = (0..num_instructions)
@@ -500,7 +500,7 @@ fn run_rpc_bench_loop(
                     info!("get_account_info: No accounts have yet been created; skipping");
                     continue;
                 }
-                let seed = rng().gen_range(seed_range).to_string();
+                let seed = rng().random_range(seed_range).to_string();
                 let account_pubkey =
                     Pubkey::create_with_seed(base_keypair_pubkey, &seed, program_id).unwrap();
                 let mut rpc_time = Measure::start("rpc-get-account-info");

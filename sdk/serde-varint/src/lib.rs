@@ -185,10 +185,10 @@ mod tests {
         let mut rng = rand::rng();
         for _ in 0..100_000 {
             let dummy = Dummy {
-                a: rng.gen::<u32>() >> rng.gen_range(0..u32::BITS),
-                b: rng.gen::<u64>() >> rng.gen_range(0..u64::BITS),
-                c: rng.gen::<u64>() >> rng.gen_range(0..u64::BITS),
-                d: rng.gen::<u32>() >> rng.gen_range(0..u32::BITS),
+                a: rng.gen::<u32>() >> rng.random_range(0..u32::BITS),
+                b: rng.gen::<u64>() >> rng.random_range(0..u64::BITS),
+                c: rng.gen::<u64>() >> rng.random_range(0..u64::BITS),
+                d: rng.gen::<u32>() >> rng.random_range(0..u32::BITS),
             };
             let bytes = bincode::serialize(&dummy).unwrap();
             let other: Dummy = bincode::deserialize(&bytes).unwrap();

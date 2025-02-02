@@ -521,9 +521,9 @@ mod tests {
     ) -> impl Iterator<Item = (Pubkey, (/*stake:*/ u64, VoteAccount))> + '_ {
         let nodes: Vec<_> = repeat_with(Pubkey::new_unique).take(num_nodes).collect();
         repeat_with(move || {
-            let node = nodes[rng.gen_range(0..nodes.len())];
+            let node = nodes[rng.random_range(0..nodes.len())];
             let (account, _) = new_rand_vote_account(rng, Some(node));
-            let stake = rng.gen_range(0..997);
+            let stake = rng.random_range(0..997);
             let vote_account = VoteAccount::try_from(account).unwrap();
             (Pubkey::new_unique(), (stake, vote_account))
         })
@@ -672,7 +672,7 @@ mod tests {
         }
         // Remove some of the vote accounts.
         for k in 0..256 {
-            let index = rng.gen_range(0..accounts.len());
+            let index = rng.random_range(0..accounts.len());
             let (pubkey, (_, _)) = accounts.swap_remove(index);
             vote_accounts.remove(&pubkey);
             if (k + 1) % 32 == 0 {
@@ -681,9 +681,9 @@ mod tests {
         }
         // Modify the stakes for some of the accounts.
         for k in 0..2048 {
-            let index = rng.gen_range(0..accounts.len());
+            let index = rng.random_range(0..accounts.len());
             let (pubkey, (stake, _)) = &mut accounts[index];
-            let new_stake = rng.gen_range(0..997);
+            let new_stake = rng.random_range(0..997);
             if new_stake < *stake {
                 vote_accounts.sub_stake(pubkey, *stake - new_stake);
             } else {
@@ -696,7 +696,7 @@ mod tests {
         }
         // Remove everything.
         while !accounts.is_empty() {
-            let index = rng.gen_range(0..accounts.len());
+            let index = rng.random_range(0..accounts.len());
             let (pubkey, (_, _)) = accounts.swap_remove(index);
             vote_accounts.remove(&pubkey);
             if accounts.len() % 32 == 0 {

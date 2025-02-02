@@ -218,7 +218,7 @@ where
         let existing_index = map.get_index_of(addr);
         while map.len() >= MAX_CONNECTIONS {
             let mut rng = rng();
-            let n = rng.gen_range(0..MAX_CONNECTIONS);
+            let n = rng.random_range(0..MAX_CONNECTIONS);
             if let Some(index) = existing_index {
                 if n == index {
                     continue;
@@ -444,7 +444,7 @@ pub trait ConnectionPool: Send + Sync + 'static {
     /// This randomly picks a connection in the pool.
     fn borrow_connection(&self) -> Arc<Self::BaseClientConnection> {
         let mut rng = rng();
-        let n = rng.gen_range(0..self.num_connections());
+        let n = rng.random_range(0..self.num_connections());
         self.get(n).expect("index is within num_connections")
     }
 
@@ -685,10 +685,10 @@ mod tests {
     }
 
     fn get_addr(rng: &mut ChaChaRng) -> SocketAddr {
-        let a = rng.gen_range(1..255);
-        let b = rng.gen_range(1..255);
-        let c = rng.gen_range(1..255);
-        let d = rng.gen_range(1..255);
+        let a = rng.random_range(1..255);
+        let b = rng.random_range(1..255);
+        let c = rng.random_range(1..255);
+        let d = rng.random_range(1..255);
 
         let addr_str = format!("{a}.{b}.{c}.{d}:80");
 

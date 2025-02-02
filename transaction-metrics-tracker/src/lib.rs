@@ -7,7 +7,7 @@ use {
 // The mask is 12 bits long (1<<12 = 4096), it means the probability of matching
 // the transaction is 1/4096 assuming the portion being matched is random.
 lazy_static! {
-    static ref TXN_MASK: u16 = rand::rng().gen_range(0..4096);
+    static ref TXN_MASK: u16 = rand::rng().random_range(0..4096);
 }
 
 /// Check if a transaction given its signature matches the randomly selected mask.
@@ -94,7 +94,7 @@ mod tests {
         // signature's 61 and 62 u8 are used for matching.
         // We generate a random one
         let mut rng = rand::rng();
-        let random_number: u8 = rng.gen_range(0..=15);
+        let random_number: u8 = rng.random_range(0..=15);
         sig[61] = ((*TXN_MASK & 0xf_u16) << 4) as u8 | random_number;
         sig[62] = (*TXN_MASK >> 4) as u8;
 
