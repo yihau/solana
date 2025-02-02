@@ -6441,8 +6441,8 @@ fn test_fuzz_instructions() {
         .enumerate()
         .map(|_| {
             let key = solana_pubkey::new_rand();
-            let balance = if rng().gen_ratio(9, 10) {
-                let lamports = if rng().gen_ratio(1, 5) {
+            let balance = if rng().random_ratio(9, 10) {
+                let lamports = if rng().random_ratio(1, 5) {
                     rng().random_range(0..10)
                 } else {
                     rng().random_range(20..100)
@@ -6460,14 +6460,14 @@ fn test_fuzz_instructions() {
         .collect();
     let mut results = HashMap::new();
     for _ in 0..2_000 {
-        let num_keys = if rng().gen_ratio(1, 5) {
+        let num_keys = if rng().random_ratio(1, 5) {
             rng().random_range(0..max_keys)
         } else {
             rng().random_range(1..4)
         };
         let num_instructions = rng().random_range(0..max_keys - num_keys);
 
-        let mut account_keys: Vec<_> = if rng().gen_ratio(1, 5) {
+        let mut account_keys: Vec<_> = if rng().random_ratio(1, 5) {
             (0..num_keys)
                 .map(|_| {
                     let idx = rng().random_range(0..keys.len());
@@ -6499,7 +6499,7 @@ fn test_fuzz_instructions() {
                         .map(|_| rng().random_range(0..num_keys))
                         .collect();
                     let program_index: u8 = rng().random_range(0..num_keys);
-                    if rng().gen_ratio(4, 5) {
+                    if rng().random_ratio(4, 5) {
                         let programs_index = rng().random_range(0..program_keys.len());
                         account_keys[program_index as usize] = program_keys[programs_index].0;
                     }
@@ -6511,18 +6511,18 @@ fn test_fuzz_instructions() {
         };
 
         let account_keys_len = std::cmp::max(account_keys.len(), 2);
-        let num_signatures = if rng().gen_ratio(1, 5) {
+        let num_signatures = if rng().random_ratio(1, 5) {
             rng().random_range(0..account_keys_len + 10)
         } else {
             rng().random_range(1..account_keys_len)
         };
 
-        let num_required_signatures = if rng().gen_ratio(1, 5) {
+        let num_required_signatures = if rng().random_ratio(1, 5) {
             rng().random_range(0..account_keys_len + 10) as u8
         } else {
             rng().random_range(1..std::cmp::max(2, num_signatures)) as u8
         };
-        let num_readonly_signed_accounts = if rng().gen_ratio(1, 5) {
+        let num_readonly_signed_accounts = if rng().random_ratio(1, 5) {
             rng().random_range(0..account_keys_len) as u8
         } else {
             let max = if num_required_signatures > 1 {
@@ -6533,7 +6533,7 @@ fn test_fuzz_instructions() {
             rng().random_range(0..max)
         };
 
-        let num_readonly_unsigned_accounts = if rng().gen_ratio(1, 5)
+        let num_readonly_unsigned_accounts = if rng().random_ratio(1, 5)
             || (num_required_signatures as usize) >= account_keys_len
         {
             rng().random_range(0..account_keys_len) as u8

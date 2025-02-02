@@ -375,7 +375,7 @@ fn process_get_multiple_accounts(
             Ok(accounts) => {
                 rpc_time.stop();
                 for account in accounts.into_iter().flatten() {
-                    if rng().gen_ratio(1, 10_000) {
+                    if rng().random_ratio(1, 10_000) {
                         info!(
                             "account: lamports {:?} size: {} owner: {:?}",
                             account.lamports,
@@ -646,7 +646,7 @@ fn run_rpc_bench_loop(
                         rpc_time.stop();
                         stats.success += 1;
                         stats.total_success_time_us += rpc_time.as_us();
-                        if rng().gen_ratio(1, 100) {
+                        if rng().random_ratio(1, 100) {
                             info!("accounts: {} first: {:?}", accounts.len(), accounts.first());
                         }
                     }

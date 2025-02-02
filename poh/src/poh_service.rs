@@ -461,7 +461,7 @@ mod tests {
                         time.stop();
                         total_us += time.as_us();
                         total_times += 1;
-                        if is_test_run && rng().gen_ratio(1, 4) {
+                        if is_test_run && rng().random_ratio(1, 4) {
                             sleep(Duration::from_millis(200));
                         }
 

@@ -1414,7 +1414,7 @@ mod tests {
             time.stop();
 
             let mut modified = false;
-            if rng().gen_ratio(1, 2) {
+            if rng().random_ratio(1, 2) {
                 modified = true;
                 let modify_idx = rng().random_range(0..num_ticks) as usize;
                 entries[modify_idx].hash = hash(&[1, 2, 3]);
