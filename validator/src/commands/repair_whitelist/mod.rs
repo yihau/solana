@@ -220,7 +220,8 @@ mod tests {
             "ch1do11111111111111111111111111111111111112",
         ]);
         let subcommand_matches = matches.subcommand_matches("set").unwrap();
-        let args = RepairWhitelistSetArgs::from_clap_arg_match(subcommand_matches);
+        let mut args = RepairWhitelistSetArgs::from_clap_arg_match(subcommand_matches);
+        args.whitelist.sort(); // the order of the whitelist is not guaranteed. sort it before asserting
         assert_eq!(
             args,
             RepairWhitelistSetArgs {
