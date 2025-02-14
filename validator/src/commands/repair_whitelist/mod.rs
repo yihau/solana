@@ -9,13 +9,13 @@ use {
 const COMMAND: &str = "repair-whitelist";
 
 #[derive(Debug, PartialEq)]
-pub struct RepairWhitelistGetArg {
+pub struct RepairWhitelistGetArgs {
     pub output: Option<String>,
 }
 
-impl FromClapArgMatches for RepairWhitelistGetArg {
+impl FromClapArgMatches for RepairWhitelistGetArgs {
     fn from_clap_arg_match(matches: &ArgMatches) -> Self {
-        RepairWhitelistGetArg {
+        RepairWhitelistGetArgs {
             output: value_of::<String>(matches, "output"),
         }
     }
@@ -86,7 +86,7 @@ pub fn command(_default_args: &DefaultArgs) -> App<'_, '_> {
 pub fn execute(matches: &ArgMatches, ledger_path: &Path) {
     match matches.subcommand() {
         ("get", Some(subcommand_matches)) => {
-            let arg = RepairWhitelistGetArg::from_clap_arg_match(subcommand_matches);
+            let args = RepairWhitelistGetArgs::from_clap_arg_match(subcommand_matches);
 
             let admin_client = admin_rpc_service::connect(ledger_path);
             let repair_whitelist = admin_rpc_service::runtime()
@@ -95,7 +95,7 @@ pub fn execute(matches: &ArgMatches, ledger_path: &Path) {
                     eprintln!("Repair whitelist query failed: {err}");
                     exit(1);
                 });
-            if let Some(mode) = arg.output {
+            if let Some(mode) = args.output {
                 match mode.as_str() {
                     "json" => println!(
                         "{}",
@@ -157,8 +157,8 @@ mod tests {
         let app = command(&default_args);
         let matches = app.get_matches_from(vec![COMMAND, "get"]);
         let subcommand_matches = matches.subcommand_matches("get").unwrap();
-        let arg = RepairWhitelistGetArg::from_clap_arg_match(subcommand_matches);
-        assert_eq!(arg, RepairWhitelistGetArg { output: None });
+        let args = RepairWhitelistGetArgs::from_clap_arg_match(subcommand_matches);
+        assert_eq!(args, RepairWhitelistGetArgs { output: None });
     }
 
     #[test]
@@ -167,10 +167,10 @@ mod tests {
         let app = command(&default_args);
         let matches = app.get_matches_from(vec![COMMAND, "get", "--output", "json"]);
         let subcommand_matches = matches.subcommand_matches("get").unwrap();
-        let arg = RepairWhitelistGetArg::from_clap_arg_match(subcommand_matches);
+        let args = RepairWhitelistGetArgs::from_clap_arg_match(subcommand_matches);
         assert_eq!(
-            arg,
-            RepairWhitelistGetArg {
+            args,
+            RepairWhitelistGetArgs {
                 output: Some("json".to_string())
             }
         );
