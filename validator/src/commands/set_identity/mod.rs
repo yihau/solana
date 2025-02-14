@@ -9,14 +9,14 @@ use {
 const COMMAND: &str = "set-identity";
 
 #[derive(Debug, PartialEq)]
-pub struct SetIdentityArg {
+pub struct SetIdentityArgs {
     pub identity: Option<String>,
     pub require_tower: bool,
 }
 
-impl FromClapArgMatches for SetIdentityArg {
+impl FromClapArgMatches for SetIdentityArgs {
     fn from_clap_arg_match(matches: &ArgMatches) -> Self {
-        SetIdentityArg {
+        SetIdentityArgs {
             identity: value_t!(matches, "identity", String).ok(),
             require_tower: matches.is_present("require_tower"),
         }
@@ -46,10 +46,10 @@ pub fn command(_default_args: &DefaultArgs) -> App<'_, '_> {
 }
 
 pub fn execute(matches: &ArgMatches, ledger_path: &Path) {
-    let set_identity_arg = SetIdentityArg::from_clap_arg_match(matches);
-    let require_tower = set_identity_arg.require_tower;
+    let set_identity_args = SetIdentityArgs::from_clap_arg_match(matches);
+    let require_tower = set_identity_args.require_tower;
 
-    if let Some(identity_keypair) = set_identity_arg.identity {
+    if let Some(identity_keypair) = set_identity_args.identity {
         let identity_keypair = fs::canonicalize(&identity_keypair).unwrap_or_else(|err| {
             println!("Unable to access path: {identity_keypair}: {err:?}");
             exit(1);
@@ -103,7 +103,7 @@ mod tests {
         verify_args_struct_by_command(
             command(&DefaultArgs::default()),
             vec![COMMAND],
-            SetIdentityArg {
+            SetIdentityArgs {
                 identity: None,
                 require_tower: false,
             },
@@ -121,7 +121,7 @@ mod tests {
         verify_args_struct_by_command(
             command(&DefaultArgs::default()),
             vec![COMMAND, tmp_path.to_str().unwrap()],
-            SetIdentityArg {
+            SetIdentityArgs {
                 identity: Some(tmp_path.to_str().unwrap().to_string()),
                 require_tower: false,
             },
@@ -133,7 +133,7 @@ mod tests {
         verify_args_struct_by_command(
             command(&DefaultArgs::default()),
             vec![COMMAND, "--require-tower"],
-            SetIdentityArg {
+            SetIdentityArgs {
                 identity: None,
                 require_tower: true,
             },
