@@ -22,11 +22,11 @@ impl FromClapArgMatches for RepairWhitelistGetArgs {
 }
 
 #[derive(Debug, PartialEq)]
-pub struct RepairWhitelistSetArg {
+pub struct RepairWhitelistSetArgs {
     pub whitelist: Vec<Pubkey>,
 }
 
-impl FromClapArgMatches for RepairWhitelistSetArg {
+impl FromClapArgMatches for RepairWhitelistSetArgs {
     fn from_clap_arg_match(matches: &ArgMatches) -> Self {
         let whitelist = if matches.is_present("whitelist") {
             let validators_set: HashSet<_> = values_t_or_exit!(matches, "whitelist", Pubkey)
@@ -36,7 +36,7 @@ impl FromClapArgMatches for RepairWhitelistSetArg {
         } else {
             Vec::default()
         };
-        RepairWhitelistSetArg { whitelist }
+        RepairWhitelistSetArgs { whitelist }
     }
 }
 
@@ -111,12 +111,12 @@ pub fn execute(matches: &ArgMatches, ledger_path: &Path) {
             }
         }
         ("set", Some(subcommand_matches)) => {
-            let arg = RepairWhitelistSetArg::from_clap_arg_match(subcommand_matches);
-            if arg.whitelist.is_empty() {
+            let args = RepairWhitelistSetArgs::from_clap_arg_match(subcommand_matches);
+            if args.whitelist.is_empty() {
                 return;
             }
 
-            set_repair_whitelist(ledger_path, arg.whitelist).unwrap_or_else(|err| {
+            set_repair_whitelist(ledger_path, args.whitelist).unwrap_or_else(|err| {
                 eprintln!("{err}");
                 exit(1);
             });
@@ -196,10 +196,10 @@ mod tests {
             "ch1do11111111111111111111111111111111111111",
         ]);
         let subcommand_matches = matches.subcommand_matches("set").unwrap();
-        let arg = RepairWhitelistSetArg::from_clap_arg_match(subcommand_matches);
+        let args = RepairWhitelistSetArgs::from_clap_arg_match(subcommand_matches);
         assert_eq!(
-            arg,
-            RepairWhitelistSetArg {
+            args,
+            RepairWhitelistSetArgs {
                 whitelist: vec![
                     Pubkey::from_str("ch1do11111111111111111111111111111111111111").unwrap(),
                 ]
@@ -220,10 +220,10 @@ mod tests {
             "ch1do11111111111111111111111111111111111112",
         ]);
         let subcommand_matches = matches.subcommand_matches("set").unwrap();
-        let arg = RepairWhitelistSetArg::from_clap_arg_match(subcommand_matches);
+        let args = RepairWhitelistSetArgs::from_clap_arg_match(subcommand_matches);
         assert_eq!(
-            arg,
-            RepairWhitelistSetArg {
+            args,
+            RepairWhitelistSetArgs {
                 whitelist: vec![
                     Pubkey::from_str("ch1do11111111111111111111111111111111111111").unwrap(),
                     Pubkey::from_str("ch1do11111111111111111111111111111111111112").unwrap(),
