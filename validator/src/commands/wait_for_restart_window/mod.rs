@@ -27,7 +27,7 @@ use {
 const COMMAND: &str = "wait-for-restart-window";
 
 #[derive(Debug, PartialEq)]
-pub struct WaitForRestartWindowArg {
+pub struct WaitForRestartWindowArgs {
     pub min_idle_time: usize,
     pub identity: Option<Pubkey>,
     pub max_delinquent_stake: u8,
@@ -35,9 +35,9 @@ pub struct WaitForRestartWindowArg {
     pub skip_health_check: bool,
 }
 
-impl FromClapArgMatches for WaitForRestartWindowArg {
+impl FromClapArgMatches for WaitForRestartWindowArgs {
     fn from_clap_arg_match(matches: &ArgMatches) -> Self {
-        WaitForRestartWindowArg {
+        WaitForRestartWindowArgs {
             min_idle_time: value_t_or_exit!(matches, "min_idle_time", usize),
             identity: pubkey_of(matches, "identity"),
             max_delinquent_stake: value_t_or_exit!(matches, "max_delinquent_stake", u8),
@@ -94,7 +94,7 @@ pub(crate) fn command(default_args: &DefaultArgs) -> App<'_, '_> {
 }
 
 pub fn execute(matches: &ArgMatches, ledger_path: &Path) {
-    let wait_for_restart_window_arg = WaitForRestartWindowArg::from_clap_arg_match(matches);
+    let wait_for_restart_window_arg = WaitForRestartWindowArgs::from_clap_arg_match(matches);
 
     wait_for_restart_window(
         ledger_path,
@@ -373,7 +373,7 @@ mod tests {
         verify_args_struct_by_command(
             command(&DefaultArgs::default()),
             vec![COMMAND],
-            WaitForRestartWindowArg {
+            WaitForRestartWindowArgs {
                 min_idle_time: 10,
                 identity: None,
                 max_delinquent_stake: 5,
@@ -388,7 +388,7 @@ mod tests {
         verify_args_struct_by_command(
             command(&DefaultArgs::default()),
             vec![COMMAND, "--skip-new-snapshot-check"],
-            WaitForRestartWindowArg {
+            WaitForRestartWindowArgs {
                 min_idle_time: 10,
                 identity: None,
                 max_delinquent_stake: 5,
@@ -403,7 +403,7 @@ mod tests {
         verify_args_struct_by_command(
             command(&DefaultArgs::default()),
             vec![COMMAND, "--skip-health-check"],
-            WaitForRestartWindowArg {
+            WaitForRestartWindowArgs {
                 min_idle_time: 10,
                 identity: None,
                 max_delinquent_stake: 5,
@@ -418,7 +418,7 @@ mod tests {
         verify_args_struct_by_command(
             command(&DefaultArgs::default()),
             vec![COMMAND, "--min-idle-time", "60"],
-            WaitForRestartWindowArg {
+            WaitForRestartWindowArgs {
                 min_idle_time: 60,
                 identity: None,
                 max_delinquent_stake: 5,
@@ -437,7 +437,7 @@ mod tests {
                 "--identity",
                 "ch1do11111111111111111111111111111111111111",
             ],
-            WaitForRestartWindowArg {
+            WaitForRestartWindowArgs {
                 min_idle_time: 10,
                 identity: Some(
                     Pubkey::from_str("ch1do11111111111111111111111111111111111111").unwrap(),
@@ -454,7 +454,7 @@ mod tests {
         verify_args_struct_by_command(
             command(&DefaultArgs::default()),
             vec![COMMAND, "--max-delinquent-stake", "10"],
-            WaitForRestartWindowArg {
+            WaitForRestartWindowArgs {
                 min_idle_time: 10,
                 identity: None,
                 max_delinquent_stake: 10,
