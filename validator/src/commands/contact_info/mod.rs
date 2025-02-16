@@ -12,10 +12,10 @@ pub struct ContactInfoArgs {
 }
 
 impl FromClapArgMatches for ContactInfoArgs {
-    fn from_clap_arg_match(matches: &ArgMatches) -> Self {
-        ContactInfoArgs {
+    fn from_clap_arg_match(matches: &ArgMatches) -> Result<Self, Box<dyn std::error::Error>> {
+        Ok(ContactInfoArgs {
             output: matches.value_of("output").map(String::from),
-        }
+        })
     }
 }
 
@@ -33,7 +33,13 @@ pub fn command(_default_args: &DefaultArgs) -> App<'_, '_> {
 }
 
 pub fn execute(matches: &ArgMatches, ledger_path: &Path) {
-    let contact_info_args = ContactInfoArgs::from_clap_arg_match(matches);
+    let contact_info_args = match ContactInfoArgs::from_clap_arg_match(matches) {
+        Ok(args) => args,
+        Err(e) => {
+            eprintln!("Error parsing contact info args: {e}");
+            exit(1);
+        }
+    };
 
     let admin_client = admin_rpc_service::connect(ledger_path);
     let contact_info = admin_rpc_service::runtime()
