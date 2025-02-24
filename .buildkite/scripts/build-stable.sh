@@ -28,7 +28,7 @@ local_cluster_partitions=$(
   "command": "ci/docker-run-default-image.sh ci/stable/run-local-cluster-partially.sh",
   "timeout_in_minutes": 15,
   "agent": "$agent",
-  "parallelism": 11,
+  "parallelism": 12,
   "retry": 3
 }
 EOF
