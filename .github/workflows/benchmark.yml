@@ -47,7 +47,7 @@ jobs:
             }
           - {
               name: "sbf",
-              before_command: "make -C programs/sbf all",
+              before_command: "make -C programs/sbf test-v0",
               commands:
                 [
                   "cargo +$rust_nightly bench --manifest-path programs/sbf/Cargo.toml --features=sbf_c",
