@@ -1,5 +1,5 @@
 use {
-    crate::admin_rpc_service,
+    crate::{admin_rpc_service, commands::FromClapArgMatches},
     clap::{values_t_or_exit, App, AppSettings, Arg, ArgMatches, SubCommand},
     solana_clap_utils::input_validators::is_pubkey,
     solana_cli_output::OutputFormat,
@@ -8,6 +8,19 @@ use {
 };
 
 pub const COMMAND: &str = "repair-whitelist";
+
+#[derive(Debug, PartialEq)]
+pub struct RepairWhitelistGetArgs {
+    pub output: OutputFormat,
+}
+
+impl FromClapArgMatches for RepairWhitelistGetArgs {
+    fn from_clap_arg_match(matches: &ArgMatches) -> Result<Self, String> {
+        Ok(RepairWhitelistGetArgs {
+            output: OutputFormat::from_matches(matches, "output", false),
+        })
+    }
+}
 
 pub fn command<'a>() -> App<'a, 'a> {
     SubCommand::with_name(COMMAND)
@@ -55,13 +68,20 @@ pub fn command<'a>() -> App<'a, 'a> {
 pub fn execute(matches: &ArgMatches, ledger_path: &Path) -> Result<(), String> {
     match matches.subcommand() {
         ("get", Some(subcommand_matches)) => {
-            let output = OutputFormat::from_matches(subcommand_matches, "output", false);
+            let repair_whitelist_get_args =
+                RepairWhitelistGetArgs::from_clap_arg_match(subcommand_matches)?;
+
             let admin_client = admin_rpc_service::connect(ledger_path);
             let repair_whitelist = admin_rpc_service::runtime()
                 .block_on(async move { admin_client.await?.repair_whitelist().await })
                 .map_err(|err| format!("get repair whitelist request failed: {err}"))?;
 
-            println!("{}", output.formatted_string(&repair_whitelist));
+            println!(
+                "{}",
+                repair_whitelist_get_args
+                    .output
+                    .formatted_string(&repair_whitelist)
+            );
         }
         ("set", Some(subcommand_matches)) => {
             let whitelist = if subcommand_matches.is_present("whitelist") {
@@ -89,4 +109,37 @@ fn set_repair_whitelist(ledger_path: &Path, whitelist: Vec<Pubkey>) -> Result<()
     admin_rpc_service::runtime()
         .block_on(async move { admin_client.await?.set_repair_whitelist(whitelist).await })
         .map_err(|err| format!("set repair whitelist request failed: {err}"))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn verify_args_struct_by_command_repair_whitelist_get_default() {
+        let app = command();
+        let matches = app.get_matches_from(vec![COMMAND, "get"]);
+        let subcommand_matches = matches.subcommand_matches("get").unwrap();
+        let args = RepairWhitelistGetArgs::from_clap_arg_match(subcommand_matches).unwrap();
+        assert_eq!(
+            args,
+            RepairWhitelistGetArgs {
+                output: OutputFormat::Display
+            }
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_repair_whitelist_get_with_output() {
+        let app = command();
+        let matches = app.get_matches_from(vec![COMMAND, "get", "--output", "json"]);
+        let subcommand_matches = matches.subcommand_matches("get").unwrap();
+        let args = RepairWhitelistGetArgs::from_clap_arg_match(subcommand_matches).unwrap();
+        assert_eq!(
+            args,
+            RepairWhitelistGetArgs {
+                output: OutputFormat::Json
+            }
+        );
+    }
 }
