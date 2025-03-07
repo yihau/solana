@@ -1,5 +1,5 @@
 use {
-    crate::{admin_rpc_service, cli::DefaultArgs},
+    crate::admin_rpc_service,
     clap::{values_t_or_exit, App, AppSettings, Arg, ArgMatches, SubCommand},
     solana_clap_utils::input_validators::is_pubkey,
     solana_cli_output::OutputFormat,
@@ -9,7 +9,7 @@ use {
 
 pub const COMMAND: &str = "repair-whitelist";
 
-pub fn command(_default_args: &DefaultArgs) -> App<'_, '_> {
+pub fn command<'a>() -> App<'a, 'a> {
     SubCommand::with_name(COMMAND)
         .about("Manage the validator's repair protocol whitelist")
         .setting(AppSettings::SubcommandRequiredElseHelp)
