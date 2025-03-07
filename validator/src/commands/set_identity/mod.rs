@@ -90,7 +90,10 @@ pub fn execute(matches: &ArgMatches, ledger_path: &Path) -> Result<(), String> {
 
 #[cfg(test)]
 mod tests {
-    use {super::*, crate::commands::tests::verify_args_struct_by_command};
+    use {
+        super::*, crate::commands::tests::verify_args_struct_by_command,
+        solana_sdk::signature::Keypair,
+    };
 
     #[test]
     fn verify_args_struct_by_command_set_identity_default() {
@@ -108,15 +111,15 @@ mod tests {
     fn verify_args_struct_by_command_set_identity_with_identity_file() {
         // generate a keypair
         let tmp_dir = tempfile::tempdir().unwrap();
-        let tmp_path = tmp_dir.path().join("id.json");
-        let keypair_string = "[99,66,147,169,175,95,166,214,27,255,19,64,81,255,101,39,10,24,205,48,226,191,98,234,210,86,174,34,2,121,173,223,9,36,145,159,1,95,129,252,249,189,217,191,13,169,231,216,4,181,124,105,193,20,61,251,197,68,44,240,205,70,115,226]";
-        std::fs::write(&tmp_path, keypair_string).unwrap();
+        let file = tmp_dir.path().join("id.json");
+        let keypair = Keypair::new();
+        solana_sdk::signature::write_keypair_file(&keypair, &file).unwrap();
 
         verify_args_struct_by_command(
             command(&DefaultArgs::default()),
-            vec![COMMAND, tmp_path.to_str().unwrap()],
+            vec![COMMAND, file.to_str().unwrap()],
             SetIdentityArgs {
-                identity: Some(tmp_path.to_str().unwrap().to_string()),
+                identity: Some(file.to_str().unwrap().to_string()),
                 require_tower: false,
             },
         );
