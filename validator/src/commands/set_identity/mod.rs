@@ -1,5 +1,5 @@
 use {
-    crate::{admin_rpc_service, cli::DefaultArgs, commands::FromClapArgMatches},
+    crate::{admin_rpc_service, commands::FromClapArgMatches},
     clap::{value_t, App, Arg, ArgMatches, SubCommand},
     solana_clap_utils::input_validators::is_keypair,
     solana_sdk::signature::{read_keypair, Signer},
@@ -22,7 +22,7 @@ impl FromClapArgMatches for SetIdentityArgs {
         })
     }
 }
-pub fn command(_default_args: &DefaultArgs) -> App<'_, '_> {
+pub fn command<'a>() -> App<'a, 'a> {
     SubCommand::with_name(COMMAND)
         .about("Set the validator identity")
         .arg(
@@ -98,7 +98,7 @@ mod tests {
     #[test]
     fn verify_args_struct_by_command_set_identity_default() {
         verify_args_struct_by_command(
-            command(&DefaultArgs::default()),
+            command(),
             vec![COMMAND],
             SetIdentityArgs {
                 identity: None,
@@ -116,7 +116,7 @@ mod tests {
         solana_sdk::signature::write_keypair_file(&keypair, &file).unwrap();
 
         verify_args_struct_by_command(
-            command(&DefaultArgs::default()),
+            command(),
             vec![COMMAND, file.to_str().unwrap()],
             SetIdentityArgs {
                 identity: Some(file.to_str().unwrap().to_string()),
@@ -128,7 +128,7 @@ mod tests {
     #[test]
     fn verify_args_struct_by_command_set_identity_with_require_tower() {
         verify_args_struct_by_command(
-            command(&DefaultArgs::default()),
+            command(),
             vec![COMMAND, "--require-tower"],
             SetIdentityArgs {
                 identity: None,
