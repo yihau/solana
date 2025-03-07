@@ -46,10 +46,12 @@ pub fn command(_default_args: &DefaultArgs) -> App<'_, '_> {
 }
 
 pub fn execute(matches: &ArgMatches, ledger_path: &Path) -> Result<(), String> {
-    let set_identity_args = SetIdentityArgs::from_clap_arg_match(matches)?;
-    let require_tower = set_identity_args.require_tower;
+    let SetIdentityArgs {
+        identity,
+        require_tower,
+    } = SetIdentityArgs::from_clap_arg_match(matches)?;
 
-    if let Some(identity_keypair) = set_identity_args.identity {
+    if let Some(identity_keypair) = identity {
         let identity_keypair = fs::canonicalize(&identity_keypair)
             .map_err(|err| format!("unable to access path {identity_keypair}: {err:?}"))?;
 
