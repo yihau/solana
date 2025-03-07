@@ -7,8 +7,10 @@ use {
     std::{collections::HashSet, path::Path},
 };
 
+pub const COMMAND: &str = "repair-whitelist";
+
 pub fn command(_default_args: &DefaultArgs) -> App<'_, '_> {
-    SubCommand::with_name("repair-whitelist")
+    SubCommand::with_name(COMMAND)
         .about("Manage the validator's repair protocol whitelist")
         .setting(AppSettings::SubcommandRequiredElseHelp)
         .setting(AppSettings::InferSubcommands)
