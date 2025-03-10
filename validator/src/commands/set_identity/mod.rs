@@ -9,6 +9,7 @@ use {
 const COMMAND: &str = "set-identity";
 
 #[derive(Debug, PartialEq)]
+#[cfg_attr(test, derive(Default))]
 pub struct SetIdentityArgs {
     pub identity: Option<String>,
     pub require_tower: bool,
@@ -97,14 +98,7 @@ mod tests {
 
     #[test]
     fn verify_args_struct_by_command_set_identity_default() {
-        verify_args_struct_by_command(
-            command(),
-            vec![COMMAND],
-            SetIdentityArgs {
-                identity: None,
-                require_tower: false,
-            },
-        );
+        verify_args_struct_by_command(command(), vec![COMMAND], SetIdentityArgs::default());
     }
 
     #[test]
@@ -120,7 +114,7 @@ mod tests {
             vec![COMMAND, file.to_str().unwrap()],
             SetIdentityArgs {
                 identity: Some(file.to_str().unwrap().to_string()),
-                require_tower: false,
+                ..SetIdentityArgs::default()
             },
         );
     }
@@ -131,8 +125,8 @@ mod tests {
             command(),
             vec![COMMAND, "--require-tower"],
             SetIdentityArgs {
-                identity: None,
                 require_tower: true,
+                ..SetIdentityArgs::default()
             },
         );
     }
