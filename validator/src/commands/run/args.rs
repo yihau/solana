@@ -35,6 +35,7 @@ const INCLUDE_KEY: &str = "account-index-include-key";
 pub struct RunArgs {
     pub identity: Keypair,
     pub logfile: String,
+    pub cuda: bool,
 }
 
 impl FromClapArgMatches for RunArgs {
@@ -52,6 +53,7 @@ impl FromClapArgMatches for RunArgs {
         Ok(RunArgs {
             identity: identity,
             logfile: logfile,
+            cuda: matches.is_present("cuda"),
         })
     }
 }
@@ -1684,6 +1686,7 @@ mod tests {
             RunArgs {
                 identity: identity,
                 logfile: logfile,
+                cuda: false,
             }
         }
     }
@@ -1693,6 +1696,7 @@ mod tests {
             RunArgs {
                 identity: self.identity.insecure_clone(),
                 logfile: self.logfile.clone(),
+                cuda: self.cuda,
             }
         }
     }
@@ -1794,5 +1798,15 @@ mod tests {
             default_run_args,
             expected_args,
         );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_cuda_long_arg() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            cuda: true,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(vec!["--cuda"], default_run_args, expected_args);
     }
 }
