@@ -129,7 +129,7 @@ pub fn execute(
     info!("{} {}", crate_name!(), solana_version);
     info!("Starting validator with: {:#?}", std::env::args_os());
 
-    let cuda = matches.is_present("cuda");
+    let cuda = run_args.cuda;
     if cuda {
         solana_perf::perf_libs::init_cuda();
         enable_recycler_warming();
