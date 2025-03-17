@@ -116,21 +116,11 @@ pub fn execute(
 
     let identity_keypair = run_args.identity;
 
-    let logfile = {
-        let logfile = matches
-            .value_of("logfile")
-            .map(|s| s.into())
-            .unwrap_or_else(|| format!("agave-validator-{}.log", identity_keypair.pubkey()));
+    let logfile = run_args.logfile;
+    println!("log file: {logfile}");
 
-        if logfile == "-" {
-            None
-        } else {
-            println!("log file: {logfile}");
-            Some(logfile)
-        }
-    };
-    let use_progress_bar = logfile.is_none();
-    let _logger_thread = redirect_stderr_to_file(logfile);
+    let use_progress_bar = logfile == "-";
+    let _logger_thread = redirect_stderr_to_file(Some(logfile));
 
     info!("{} {}", crate_name!(), solana_version);
     info!("Starting validator with: {:#?}", std::env::args_os());
