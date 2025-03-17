@@ -3,7 +3,7 @@ use {
         cli::{hash_validator, port_range_validator, port_validator, DefaultArgs},
         commands::{FromClapArgMatches, Result},
     },
-    clap::{value_t, App, Arg, ArgMatches},
+    clap::{value_t, values_t, App, Arg, ArgMatches},
     solana_clap_utils::{
         hidden_unless_forced,
         input_parsers::keypair_of,
@@ -25,7 +25,7 @@ use {
         MAX_BATCH_SEND_RATE_MS, MAX_TRANSACTION_BATCH_SIZE,
     },
     solana_unified_scheduler_pool::DefaultSchedulerPool,
-    std::{path::PathBuf, str::FromStr},
+    std::{collections::HashSet, net::SocketAddr, path::PathBuf, str::FromStr},
 };
 
 const EXCLUDE_KEY: &str = "account-index-exclude-key";
@@ -37,6 +37,7 @@ pub struct RunArgs {
     pub logfile: String,
     pub cuda: bool,
     pub init_complete_file: Option<PathBuf>,
+    pub entrypoints: Vec<SocketAddr>,
 
     // bootstrap rpc config
     pub no_genesis_fetch: bool,
@@ -55,11 +56,23 @@ impl FromClapArgMatches for RunArgs {
             .map(|s| s.into())
             .unwrap_or_else(|| format!("agave-validator-{}.log", identity.pubkey()));
 
+        let entrypoints = values_t!(matches, "entrypoint", String).unwrap_or_default();
+        let mut parsed_entrypoints = HashSet::new();
+        for entrypoint in entrypoints {
+            let parsed = solana_net_utils::parse_host_port(&entrypoint).map_err(|err| {
+                Box::<dyn std::error::Error>::from(format!(
+                    "failed to parse entrypoint address: {err}"
+                ))
+            })?;
+            parsed_entrypoints.insert(parsed);
+        }
+
         Ok(RunArgs {
             identity: identity,
             logfile: logfile,
             cuda: matches.is_present("cuda"),
             init_complete_file: value_t!(matches, "init_complete_file", PathBuf).ok(),
+            entrypoints: parsed_entrypoints.into_iter().collect(),
             no_genesis_fetch: matches.is_present("no_genesis_fetch"),
             no_snapshot_fetch: matches.is_present("no_snapshot_fetch"),
         })
@@ -1684,7 +1697,10 @@ pub fn add_args<'a>(app: App<'a, 'a>, default_args: &'a DefaultArgs) -> App<'a, 
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use {
+        super::*,
+        std::net::{IpAddr, Ipv4Addr},
+    };
 
     impl Default for RunArgs {
         fn default() -> Self {
@@ -1698,6 +1714,7 @@ mod tests {
                 init_complete_file: None,
                 no_genesis_fetch: false,
                 no_snapshot_fetch: false,
+                entrypoints: vec![],
             }
         }
     }
@@ -1711,6 +1728,7 @@ mod tests {
                 init_complete_file: self.init_complete_file.clone(),
                 no_genesis_fetch: self.no_genesis_fetch,
                 no_snapshot_fetch: self.no_snapshot_fetch,
+                entrypoints: self.entrypoints.clone(),
             }
         }
     }
@@ -1786,7 +1804,11 @@ mod tests {
 
         let args = [&["--identity", file.to_str().unwrap()], &args[..]].concat();
         let matches = get_run_command_matches(&default_args, args);
-        let args = RunArgs::from_clap_arg_match(&matches).unwrap();
+        let mut args = RunArgs::from_clap_arg_match(&matches).unwrap();
+
+        // clap doesn't ensure elements order, sort them
+        args.entrypoints.sort();
+
         assert_eq!(args, expected_args);
     }
 
@@ -1861,6 +1883,67 @@ mod tests {
         };
         test_run_command_with_identity_setup(
             vec!["--no-snapshot-fetch"],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_entrypoint_single() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            entrypoints: vec![SocketAddr::new(
+                IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1)),
+                8000,
+            )],
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec!["--entrypoint", "127.0.0.1:8000"],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_entrypoint_multiple() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            entrypoints: vec![
+                SocketAddr::new(IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1)), 8000),
+                SocketAddr::new(IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1)), 8001),
+            ],
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec![
+                "--entrypoint",
+                "127.0.0.1:8000",
+                "--entrypoint",
+                "127.0.0.1:8001",
+            ],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_entrypoint_duplicate_address() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            entrypoints: vec![SocketAddr::new(
+                IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1)),
+                8000,
+            )],
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec![
+                "--entrypoint",
+                "127.0.0.1:8000",
+                "--entrypoint",
+                "127.0.0.1:8000",
+            ],
             default_run_args,
             expected_args,
         );
