@@ -138,9 +138,7 @@ pub fn execute(
         &identity_keypair,
     );
 
-    let staked_nodes_overrides_path = matches
-        .value_of("staked_nodes_overrides")
-        .map(str::to_string);
+    let staked_nodes_overrides_path = run_args.staked_nodes_overrides;
     let staked_nodes_overrides = Arc::new(RwLock::new(
         match &staked_nodes_overrides_path {
             None => StakedNodesOverrides::default(),

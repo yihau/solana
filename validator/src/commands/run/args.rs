@@ -45,6 +45,7 @@ pub struct RunArgs {
     pub no_voting: bool,
     pub vote_account: Option<Pubkey>,
     pub authorized_voter_keypairs: Vec<Keypair>,
+    pub staked_nodes_overrides: Option<String>,
 
     // bootstrap rpc config
     pub no_genesis_fetch: bool,
@@ -85,6 +86,7 @@ impl FromClapArgMatches for RunArgs {
             vote_account: value_t!(matches, "vote_account", Pubkey).ok(),
             authorized_voter_keypairs: keypairs_of(matches, "authorized_voter_keypairs")
                 .unwrap_or_default(),
+            staked_nodes_overrides: value_t!(matches, "staked_nodes_overrides", String).ok(),
             no_genesis_fetch: matches.is_present("no_genesis_fetch"),
             no_snapshot_fetch: matches.is_present("no_snapshot_fetch"),
         })
@@ -1732,6 +1734,7 @@ mod tests {
                 no_voting: false,
                 vote_account: None,
                 authorized_voter_keypairs: vec![],
+                staked_nodes_overrides: None,
             }
         }
     }
@@ -1754,6 +1757,7 @@ mod tests {
                     .iter()
                     .map(|keypair| keypair.insecure_clone())
                     .collect(),
+                staked_nodes_overrides: self.staked_nodes_overrides.clone(),
             }
         }
     }
@@ -2108,5 +2112,23 @@ mod tests {
             .sort_by_key(|keypair| keypair.to_bytes());
 
         assert_eq!(args, expected_args);
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_staked_nodes_overrides_long_arg() {
+        let default_run_args = RunArgs::default();
+        let staked_nodes_overrides_yaml_path = "staked_nodes_overrides.yaml";
+        let expected_args = RunArgs {
+            staked_nodes_overrides: Some(staked_nodes_overrides_yaml_path.to_string()),
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec![
+                "--staked-nodes-overrides",
+                &staked_nodes_overrides_yaml_path,
+            ],
+            default_run_args,
+            expected_args,
+        );
     }
 }
