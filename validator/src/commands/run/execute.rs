@@ -22,7 +22,7 @@ use {
             create_and_canonicalize_directory,
         },
     },
-    solana_clap_utils::input_parsers::{keypair_of, keypairs_of, value_of, values_of},
+    solana_clap_utils::input_parsers::{value_of, values_of},
     solana_core::{
         banking_trace::DISABLED_BAKING_TRACE_DIR,
         consensus::tower_storage,
@@ -114,7 +114,7 @@ pub fn execute(
         tvu_sigverify_threads,
     } = cli::thread_args::parse_num_threads_args(matches);
 
-    let identity_keypair = run_args.identity;
+    let identity_keypair = Arc::new(run_args.identity);
 
     let logfile = run_args.logfile;
     println!("log file: {logfile}");
@@ -133,10 +133,10 @@ pub fn execute(
 
     solana_core::validator::report_target_features();
 
-    let authorized_voter_keypairs = keypairs_of(matches, "authorized_voter_keypairs")
-        .map(|keypairs| keypairs.into_iter().map(Arc::new).collect())
-        .unwrap_or_else(|| vec![Arc::new(keypair_of(matches, "identity").expect("identity"))]);
-    let authorized_voter_keypairs = Arc::new(RwLock::new(authorized_voter_keypairs));
+    let authorized_voter_keypairs = create_shared_authorized_voter_keypairs(
+        run_args.authorized_voter_keypairs,
+        &identity_keypair,
+    );
 
     let staked_nodes_overrides_path = matches
         .value_of("staked_nodes_overrides")
@@ -1199,8 +1199,6 @@ pub fn execute(
     snapshot_utils::remove_tmp_snapshot_archives(&full_snapshot_archives_dir);
     snapshot_utils::remove_tmp_snapshot_archives(&incremental_snapshot_archives_dir);
 
-    let identity_keypair = Arc::new(identity_keypair);
-
     let should_check_duplicate_instance = true;
     if !cluster_entrypoints.is_empty() {
         bootstrap::rpc_bootstrap(
@@ -1427,5 +1425,55 @@ fn process_account_indexes(matches: &ArgMatches) -> AccountSecondaryIndexes {
     AccountSecondaryIndexes {
         keys,
         indexes: account_indexes,
+    }
+}
+
+fn create_shared_authorized_voter_keypairs(
+    authorized_voter_keypairs: Vec<Keypair>,
+    identity_keypair: &Arc<Keypair>,
+) -> Arc<RwLock<Vec<Arc<Keypair>>>> {
+    let mut arc_authorized_voter_keypairs =
+        Vec::<Arc<Keypair>>::with_capacity(authorized_voter_keypairs.len());
+    for keypair in authorized_voter_keypairs {
+        arc_authorized_voter_keypairs.push(Arc::new(keypair));
+    }
+    if arc_authorized_voter_keypairs.is_empty() {
+        arc_authorized_voter_keypairs.push(identity_keypair.clone());
+    }
+
+    Arc::new(RwLock::new(arc_authorized_voter_keypairs))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_create_shared_authorized_voter_keypairs() {
+        let identity_keypair = Arc::new(Keypair::new());
+        let authorized_voter_keypair = Keypair::new();
+        let authorized_voter_keypairs = vec![authorized_voter_keypair.insecure_clone()];
+        let authorized_voter_keypairs =
+            create_shared_authorized_voter_keypairs(authorized_voter_keypairs, &identity_keypair);
+
+        assert_eq!(authorized_voter_keypairs.read().unwrap().len(), 1);
+        assert_eq!(
+            authorized_voter_keypairs.read().unwrap()[0],
+            Arc::new(authorized_voter_keypair)
+        );
+    }
+
+    #[test]
+    fn test_create_shared_authorized_voter_keypairs_empty() {
+        let identity_keypair = Arc::new(Keypair::new());
+        let authorized_voter_keypairs = vec![];
+        let authorized_voter_keypairs =
+            create_shared_authorized_voter_keypairs(authorized_voter_keypairs, &identity_keypair);
+
+        assert_eq!(authorized_voter_keypairs.read().unwrap().len(), 1);
+        assert_eq!(
+            authorized_voter_keypairs.read().unwrap()[0],
+            identity_keypair,
+        );
     }
 }

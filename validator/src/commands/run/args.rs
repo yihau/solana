@@ -6,7 +6,7 @@ use {
     clap::{value_t, values_t, App, Arg, ArgMatches},
     solana_clap_utils::{
         hidden_unless_forced,
-        input_parsers::keypair_of,
+        input_parsers::{keypair_of, keypairs_of},
         input_validators::{
             is_keypair_or_ask_keyword, is_parsable, is_pow2, is_pubkey, is_pubkey_or_keypair,
             is_slot, is_within_range, validate_maximum_full_snapshot_archives_to_retain,
@@ -44,6 +44,7 @@ pub struct RunArgs {
     pub restricted_repair_only_mode: bool,
     pub no_voting: bool,
     pub vote_account: Option<Pubkey>,
+    pub authorized_voter_keypairs: Vec<Keypair>,
 
     // bootstrap rpc config
     pub no_genesis_fetch: bool,
@@ -82,6 +83,8 @@ impl FromClapArgMatches for RunArgs {
             restricted_repair_only_mode: matches.is_present("restricted_repair_only_mode"),
             no_voting: matches.is_present("no_voting"),
             vote_account: value_t!(matches, "vote_account", Pubkey).ok(),
+            authorized_voter_keypairs: keypairs_of(matches, "authorized_voter_keypairs")
+                .unwrap_or_default(),
             no_genesis_fetch: matches.is_present("no_genesis_fetch"),
             no_snapshot_fetch: matches.is_present("no_snapshot_fetch"),
         })
@@ -1708,6 +1711,7 @@ pub fn add_args<'a>(app: App<'a, 'a>, default_args: &'a DefaultArgs) -> App<'a, 
 mod tests {
     use {
         super::*,
+        pretty_assertions::assert_eq,
         std::net::{IpAddr, Ipv4Addr},
     };
 
@@ -1727,6 +1731,7 @@ mod tests {
                 restricted_repair_only_mode: false,
                 no_voting: false,
                 vote_account: None,
+                authorized_voter_keypairs: vec![],
             }
         }
     }
@@ -1744,6 +1749,11 @@ mod tests {
                 restricted_repair_only_mode: self.restricted_repair_only_mode,
                 no_voting: self.no_voting,
                 vote_account: self.vote_account.clone(),
+                authorized_voter_keypairs: self
+                    .authorized_voter_keypairs
+                    .iter()
+                    .map(|keypair| keypair.insecure_clone())
+                    .collect(),
             }
         }
     }
@@ -2001,5 +2011,102 @@ mod tests {
             default_run_args,
             expected_args,
         );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_authorized_voter_keypairs_single_file() {
+        let default_args = DefaultArgs::default();
+        let default_run_args = RunArgs::default();
+
+        let vote_account = Pubkey::new_unique();
+
+        // generate a keypair
+        let tmp_dir = tempfile::tempdir().unwrap();
+        let file = tmp_dir.path().join("id.json");
+        let id_keypair = default_run_args.identity.insecure_clone();
+        solana_sdk::signature::write_keypair_file(&id_keypair, &file).unwrap();
+
+        // generate a vote authority keypair
+        let tmp_dir = tempfile::tempdir().unwrap();
+        let file = tmp_dir.path().join("vote_authority.json");
+        let vote_authority_keypair = default_run_args.identity.insecure_clone();
+        solana_sdk::signature::write_keypair_file(&vote_authority_keypair, &file).unwrap();
+
+        let expected_args = RunArgs {
+            identity: id_keypair,
+            vote_account: Some(vote_account),
+            authorized_voter_keypairs: vec![vote_authority_keypair],
+            ..default_run_args.clone()
+        };
+
+        let matches = get_run_command_matches(
+            &default_args,
+            vec![
+                "--identity",
+                &file.to_str().unwrap(),
+                "--vote-account",
+                &vote_account.to_string(),
+                "--authorized-voter",
+                &file.to_str().unwrap(),
+            ],
+        );
+        let args = RunArgs::from_clap_arg_match(&matches).unwrap();
+        assert_eq!(args, expected_args);
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_authorized_voter_keypairs_multiple_files() {
+        let default_args = DefaultArgs::default();
+        let default_run_args = RunArgs::default();
+
+        let vote_account = Pubkey::new_unique();
+
+        // generate a keypair
+        let tmp_dir = tempfile::tempdir().unwrap();
+        let file = tmp_dir.path().join("id.json");
+        let id_keypair = default_run_args.identity.insecure_clone();
+        solana_sdk::signature::write_keypair_file(&id_keypair, &file).unwrap();
+
+        // generate a vote authority keypair
+        let tmp_dir = tempfile::tempdir().unwrap();
+        let file = tmp_dir.path().join("vote_authority_1.json");
+        let vote_authority_keypair_1 = default_run_args.identity.insecure_clone();
+        solana_sdk::signature::write_keypair_file(&vote_authority_keypair_1, &file).unwrap();
+
+        // generate a vote authority keypair
+        let tmp_dir = tempfile::tempdir().unwrap();
+        let file = tmp_dir.path().join("vote_authority_2.json");
+        let vote_authority_keypair_2 = default_run_args.identity.insecure_clone();
+        solana_sdk::signature::write_keypair_file(&vote_authority_keypair_2, &file).unwrap();
+
+        let mut expected_authorized_voter_keypairs =
+            vec![vote_authority_keypair_1, vote_authority_keypair_2];
+        expected_authorized_voter_keypairs.sort_by_key(|keypair| keypair.to_bytes());
+
+        let expected_args = RunArgs {
+            identity: id_keypair,
+            vote_account: Some(vote_account),
+            authorized_voter_keypairs: expected_authorized_voter_keypairs,
+            ..default_run_args.clone()
+        };
+
+        let matches = get_run_command_matches(
+            &default_args,
+            vec![
+                "--identity",
+                &file.to_str().unwrap(),
+                "--vote-account",
+                &vote_account.to_string(),
+                "--authorized-voter",
+                &file.to_str().unwrap(),
+                "--authorized-voter",
+                &file.to_str().unwrap(),
+            ],
+        );
+        let mut args = RunArgs::from_clap_arg_match(&matches).unwrap();
+        args.authorized_voter_keypairs
+            .sort_by_key(|keypair| keypair.to_bytes());
+
+        assert_eq!(args, expected_args);
     }
 }
