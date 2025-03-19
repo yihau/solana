@@ -55,6 +55,7 @@ pub struct RunArgs {
     pub no_genesis_fetch: bool,
     pub no_snapshot_fetch: bool,
     pub check_vote_account: Option<String>,
+    pub only_known_rpc: bool,
 }
 
 impl FromClapArgMatches for RunArgs {
@@ -107,6 +108,7 @@ impl FromClapArgMatches for RunArgs {
             repair_whitelist: values_t!(matches, "repair_whitelist", Pubkey)
                 .ok()
                 .map(|validators| validators.into_iter().collect()),
+            only_known_rpc: matches.is_present("only_known_rpc"),
         })
     }
 }
@@ -1758,6 +1760,7 @@ mod tests {
                 repair_validators: None,
                 gossip_validators: None,
                 repair_whitelist: None,
+                only_known_rpc: false,
             }
         }
     }
@@ -1786,6 +1789,7 @@ mod tests {
                 repair_validators: self.repair_validators.clone(),
                 gossip_validators: self.gossip_validators.clone(),
                 repair_whitelist: self.repair_whitelist.clone(),
+                only_known_rpc: self.only_known_rpc,
             }
         }
     }
@@ -2427,6 +2431,27 @@ mod tests {
                 &repair_whitelist_pubkey.to_string(),
                 "--repair-whitelist",
                 &repair_whitelist_pubkey.to_string(),
+            ],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_only_known_rpc_long_arg() {
+        let default_run_args = RunArgs::default();
+        let known_validators_pubkey = Pubkey::new_unique();
+        let known_validators = Some(HashSet::from([known_validators_pubkey]));
+        let expected_args = RunArgs {
+            known_validators,
+            only_known_rpc: true,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec![
+                "--known-validator",
+                &known_validators_pubkey.to_string(),
+                "--only-known-rpc",
             ],
             default_run_args,
             expected_args,
