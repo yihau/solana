@@ -681,7 +681,7 @@ pub fn execute(
                 .ok()
                 .and_then(NonZeroUsize::new),
         },
-        voting_disabled: matches.is_present("no_voting") || restricted_repair_only_mode,
+        voting_disabled: run_args.no_voting || restricted_repair_only_mode,
         wait_for_supermajority: value_t!(matches, "wait_for_supermajority", Slot).ok(),
         known_validators,
         repair_validators,

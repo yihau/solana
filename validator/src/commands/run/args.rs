@@ -39,6 +39,7 @@ pub struct RunArgs {
     pub init_complete_file: Option<PathBuf>,
     pub entrypoints: Vec<SocketAddr>,
     pub restricted_repair_only_mode: bool,
+    pub no_voting: bool,
 
     // bootstrap rpc config
     pub no_genesis_fetch: bool,
@@ -75,6 +76,7 @@ impl FromClapArgMatches for RunArgs {
             init_complete_file: value_t!(matches, "init_complete_file", PathBuf).ok(),
             entrypoints: parsed_entrypoints.into_iter().collect(),
             restricted_repair_only_mode: matches.is_present("restricted_repair_only_mode"),
+            no_voting: matches.is_present("no_voting"),
             no_genesis_fetch: matches.is_present("no_genesis_fetch"),
             no_snapshot_fetch: matches.is_present("no_snapshot_fetch"),
         })
@@ -1718,6 +1720,7 @@ mod tests {
                 no_snapshot_fetch: false,
                 entrypoints: vec![],
                 restricted_repair_only_mode: false,
+                no_voting: false,
             }
         }
     }
@@ -1733,6 +1736,7 @@ mod tests {
                 no_snapshot_fetch: self.no_snapshot_fetch,
                 entrypoints: self.entrypoints.clone(),
                 restricted_repair_only_mode: self.restricted_repair_only_mode,
+                no_voting: self.no_voting,
             }
         }
     }
@@ -1953,7 +1957,6 @@ mod tests {
         );
     }
 
-
     #[test]
     fn verify_args_struct_by_command_run_with_restricted_repair_only_mode_long_arg() {
         let default_run_args = RunArgs::default();
@@ -1966,5 +1969,15 @@ mod tests {
             default_run_args,
             expected_args,
         );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_no_voting_long_arg() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            no_voting: true,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(vec!["--no-voting"], default_run_args, expected_args);
     }
 }
