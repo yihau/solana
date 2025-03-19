@@ -46,6 +46,10 @@ pub struct RunArgs {
     pub vote_account: Option<Pubkey>,
     pub authorized_voter_keypairs: Vec<Keypair>,
     pub staked_nodes_overrides: Option<String>,
+    pub known_validators: Option<HashSet<Pubkey>>,
+    pub repair_validators: Option<HashSet<Pubkey>>,
+    pub gossip_validators: Option<HashSet<Pubkey>>,
+    pub repair_whitelist: Option<HashSet<Pubkey>>,
 
     // bootstrap rpc config
     pub no_genesis_fetch: bool,
@@ -91,6 +95,18 @@ impl FromClapArgMatches for RunArgs {
             no_genesis_fetch: matches.is_present("no_genesis_fetch"),
             no_snapshot_fetch: matches.is_present("no_snapshot_fetch"),
             check_vote_account: value_t!(matches, "check_vote_account", String).ok(),
+            known_validators: values_t!(matches, "known_validators", Pubkey)
+                .ok()
+                .map(|validators| validators.into_iter().collect()),
+            repair_validators: values_t!(matches, "repair_validators", Pubkey)
+                .ok()
+                .map(|validators| validators.into_iter().collect()),
+            gossip_validators: values_t!(matches, "gossip_validators", Pubkey)
+                .ok()
+                .map(|validators| validators.into_iter().collect()),
+            repair_whitelist: values_t!(matches, "repair_whitelist", Pubkey)
+                .ok()
+                .map(|validators| validators.into_iter().collect()),
         })
     }
 }
@@ -1738,6 +1754,10 @@ mod tests {
                 authorized_voter_keypairs: vec![],
                 staked_nodes_overrides: None,
                 check_vote_account: None,
+                known_validators: None,
+                repair_validators: None,
+                gossip_validators: None,
+                repair_whitelist: None,
             }
         }
     }
@@ -1762,6 +1782,10 @@ mod tests {
                     .collect(),
                 staked_nodes_overrides: self.staked_nodes_overrides.clone(),
                 check_vote_account: self.check_vote_account.clone(),
+                known_validators: self.known_validators.clone(),
+                repair_validators: self.repair_validators.clone(),
+                gossip_validators: self.gossip_validators.clone(),
+                repair_whitelist: self.repair_whitelist.clone(),
             }
         }
     }
@@ -2155,6 +2179,254 @@ mod tests {
                 "127.0.0.1:8000",
                 "--check-vote-account",
                 &check_vote_account,
+            ],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_known_validators_single() {
+        let default_run_args = RunArgs::default();
+        let known_validators_pubkey = Pubkey::new_unique();
+        let known_validators = Some(HashSet::from([known_validators_pubkey]));
+        let expected_args = RunArgs {
+            known_validators,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec!["--known-validator", &known_validators_pubkey.to_string()],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_known_validators_multiple() {
+        let default_run_args = RunArgs::default();
+        let known_validators_pubkey_1 = Pubkey::new_unique();
+        let known_validators_pubkey_2 = Pubkey::new_unique();
+        let known_validators = Some(HashSet::from([
+            known_validators_pubkey_1,
+            known_validators_pubkey_2,
+        ]));
+        let expected_args = RunArgs {
+            known_validators,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec![
+                "--known-validator",
+                &known_validators_pubkey_1.to_string(),
+                "--known-validator",
+                &known_validators_pubkey_2.to_string(),
+            ],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_known_validators_duplicate() {
+        let default_run_args = RunArgs::default();
+        let known_validators_pubkey_1 = Pubkey::new_unique();
+        let known_validators = Some(HashSet::from([known_validators_pubkey_1]));
+        let expected_args = RunArgs {
+            known_validators,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec![
+                "--known-validator",
+                &known_validators_pubkey_1.to_string(),
+                "--known-validator",
+                &known_validators_pubkey_1.to_string(),
+            ],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_repair_validators_single() {
+        let default_run_args = RunArgs::default();
+        let repair_validators_pubkey = Pubkey::new_unique();
+        let repair_validators = Some(HashSet::from([repair_validators_pubkey]));
+        let expected_args = RunArgs {
+            repair_validators,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec!["--repair-validator", &repair_validators_pubkey.to_string()],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_repair_validators_multiple() {
+        let default_run_args = RunArgs::default();
+        let repair_validators_pubkey_1 = Pubkey::new_unique();
+        let repair_validators_pubkey_2 = Pubkey::new_unique();
+        let repair_validators = Some(HashSet::from([
+            repair_validators_pubkey_1,
+            repair_validators_pubkey_2,
+        ]));
+        let expected_args = RunArgs {
+            repair_validators,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec![
+                "--repair-validator",
+                &repair_validators_pubkey_1.to_string(),
+                "--repair-validator",
+                &repair_validators_pubkey_2.to_string(),
+            ],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_repair_validators_duplicate() {
+        let default_run_args = RunArgs::default();
+        let repair_validators_pubkey = Pubkey::new_unique();
+        let repair_validators = Some(HashSet::from([repair_validators_pubkey]));
+        let expected_args = RunArgs {
+            repair_validators,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec![
+                "--repair-validator",
+                &repair_validators_pubkey.to_string(),
+                "--repair-validator",
+                &repair_validators_pubkey.to_string(),
+            ],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_gossip_validators_single() {
+        let default_run_args = RunArgs::default();
+        let gossip_validators_pubkey = Pubkey::new_unique();
+        let gossip_validators = Some(HashSet::from([gossip_validators_pubkey]));
+        let expected_args = RunArgs {
+            gossip_validators,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec!["--gossip-validator", &gossip_validators_pubkey.to_string()],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_gossip_validators_multiple() {
+        let default_run_args = RunArgs::default();
+        let gossip_validators_pubkey_1 = Pubkey::new_unique();
+        let gossip_validators_pubkey_2 = Pubkey::new_unique();
+        let gossip_validators = Some(HashSet::from([
+            gossip_validators_pubkey_1,
+            gossip_validators_pubkey_2,
+        ]));
+        let expected_args = RunArgs {
+            gossip_validators,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec![
+                "--gossip-validator",
+                &gossip_validators_pubkey_1.to_string(),
+                "--gossip-validator",
+                &gossip_validators_pubkey_2.to_string(),
+            ],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_gossip_validators_duplicate() {
+        let default_run_args = RunArgs::default();
+        let gossip_validators_pubkey = Pubkey::new_unique();
+        let gossip_validators = Some(HashSet::from([gossip_validators_pubkey]));
+        let expected_args = RunArgs {
+            gossip_validators,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec![
+                "--gossip-validator",
+                &gossip_validators_pubkey.to_string(),
+                "--gossip-validator",
+                &gossip_validators_pubkey.to_string(),
+            ],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_repair_whitelist_single() {
+        let default_run_args = RunArgs::default();
+        let repair_whitelist_pubkey = Pubkey::new_unique();
+        let repair_whitelist = Some(HashSet::from([repair_whitelist_pubkey]));
+        let expected_args = RunArgs {
+            repair_whitelist,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec!["--repair-whitelist", &repair_whitelist_pubkey.to_string()],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_repair_whitelist_multiple() {
+        let default_run_args = RunArgs::default();
+        let repair_whitelist_pubkey_1 = Pubkey::new_unique();
+        let repair_whitelist_pubkey_2 = Pubkey::new_unique();
+        let repair_whitelist = Some(HashSet::from([
+            repair_whitelist_pubkey_1,
+            repair_whitelist_pubkey_2,
+        ]));
+        let expected_args = RunArgs {
+            repair_whitelist,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec![
+                "--repair-whitelist",
+                &repair_whitelist_pubkey_1.to_string(),
+                "--repair-whitelist",
+                &repair_whitelist_pubkey_2.to_string(),
+            ],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_repair_whitelist_duplicate() {
+        let default_run_args = RunArgs::default();
+        let repair_whitelist_pubkey = Pubkey::new_unique();
+        let repair_whitelist = Some(HashSet::from([repair_whitelist_pubkey]));
+        let expected_args = RunArgs {
+            repair_whitelist,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec![
+                "--repair-whitelist",
+                &repair_whitelist_pubkey.to_string(),
+                "--repair-whitelist",
+                &repair_whitelist_pubkey.to_string(),
             ],
             default_run_args,
             expected_args,
