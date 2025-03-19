@@ -38,6 +38,7 @@ pub struct RunArgs {
     pub cuda: bool,
     pub init_complete_file: Option<PathBuf>,
     pub entrypoints: Vec<SocketAddr>,
+    pub restricted_repair_only_mode: bool,
 
     // bootstrap rpc config
     pub no_genesis_fetch: bool,
@@ -73,6 +74,7 @@ impl FromClapArgMatches for RunArgs {
             cuda: matches.is_present("cuda"),
             init_complete_file: value_t!(matches, "init_complete_file", PathBuf).ok(),
             entrypoints: parsed_entrypoints.into_iter().collect(),
+            restricted_repair_only_mode: matches.is_present("restricted_repair_only_mode"),
             no_genesis_fetch: matches.is_present("no_genesis_fetch"),
             no_snapshot_fetch: matches.is_present("no_snapshot_fetch"),
         })
@@ -1715,6 +1717,7 @@ mod tests {
                 no_genesis_fetch: false,
                 no_snapshot_fetch: false,
                 entrypoints: vec![],
+                restricted_repair_only_mode: false,
             }
         }
     }
@@ -1729,6 +1732,7 @@ mod tests {
                 no_genesis_fetch: self.no_genesis_fetch,
                 no_snapshot_fetch: self.no_snapshot_fetch,
                 entrypoints: self.entrypoints.clone(),
+                restricted_repair_only_mode: self.restricted_repair_only_mode,
             }
         }
     }
@@ -1944,6 +1948,21 @@ mod tests {
                 "--entrypoint",
                 "127.0.0.1:8000",
             ],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_restricted_repair_only_mode_long_arg() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            restricted_repair_only_mode: true,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec!["--restricted-repair-only-mode"],
             default_run_args,
             expected_args,
         );

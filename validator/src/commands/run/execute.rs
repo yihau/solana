@@ -300,7 +300,7 @@ pub fn execute(
 
     let account_indexes = process_account_indexes(matches);
 
-    let restricted_repair_only_mode = matches.is_present("restricted_repair_only_mode");
+    let restricted_repair_only_mode = run_args.restricted_repair_only_mode;
     let accounts_shrink_optimize_total_space =
         value_t_or_exit!(matches, "accounts_shrink_optimize_total_space", bool);
     let tpu_use_quic = !matches.is_present("tpu_disable_quic");
