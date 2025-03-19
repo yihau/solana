@@ -50,6 +50,7 @@ pub struct RunArgs {
     // bootstrap rpc config
     pub no_genesis_fetch: bool,
     pub no_snapshot_fetch: bool,
+    pub check_vote_account: Option<String>,
 }
 
 impl FromClapArgMatches for RunArgs {
@@ -89,6 +90,7 @@ impl FromClapArgMatches for RunArgs {
             staked_nodes_overrides: value_t!(matches, "staked_nodes_overrides", String).ok(),
             no_genesis_fetch: matches.is_present("no_genesis_fetch"),
             no_snapshot_fetch: matches.is_present("no_snapshot_fetch"),
+            check_vote_account: value_t!(matches, "check_vote_account", String).ok(),
         })
     }
 }
@@ -1735,6 +1737,7 @@ mod tests {
                 vote_account: None,
                 authorized_voter_keypairs: vec![],
                 staked_nodes_overrides: None,
+                check_vote_account: None,
             }
         }
     }
@@ -1758,6 +1761,7 @@ mod tests {
                     .map(|keypair| keypair.insecure_clone())
                     .collect(),
                 staked_nodes_overrides: self.staked_nodes_overrides.clone(),
+                check_vote_account: self.check_vote_account.clone(),
             }
         }
     }
@@ -2126,6 +2130,31 @@ mod tests {
             vec![
                 "--staked-nodes-overrides",
                 &staked_nodes_overrides_yaml_path,
+            ],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_check_vote_account_long_arg() {
+        let default_run_args = RunArgs::default();
+        let check_vote_account = "rpc_url";
+        let entrypoints = vec![SocketAddr::new(
+            IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1)),
+            8000,
+        )];
+        let expected_args = RunArgs {
+            check_vote_account: Some(check_vote_account.to_string()),
+            entrypoints,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec![
+                "--entrypoint",
+                "127.0.0.1:8000",
+                "--check-vote-account",
+                &check_vote_account,
             ],
             default_run_args,
             expected_args,
