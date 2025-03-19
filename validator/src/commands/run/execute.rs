@@ -22,7 +22,7 @@ use {
             create_and_canonicalize_directory,
         },
     },
-    solana_clap_utils::input_parsers::{keypair_of, keypairs_of, pubkey_of, value_of, values_of},
+    solana_clap_utils::input_parsers::{keypair_of, keypairs_of, value_of, values_of},
     solana_core::{
         banking_trace::DISABLED_BAKING_TRACE_DIR,
         consensus::tower_storage,
@@ -754,7 +754,7 @@ pub fn execute(
         ..ValidatorConfig::default()
     };
 
-    let vote_account = pubkey_of(matches, "vote_account").unwrap_or_else(|| {
+    let vote_account = run_args.vote_account.unwrap_or_else(|| {
         if !validator_config.voting_disabled {
             warn!("--vote-account not specified, validator will not vote");
             validator_config.voting_disabled = true;

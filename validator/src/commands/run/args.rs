@@ -20,7 +20,10 @@ use {
     },
     solana_ledger::use_snapshot_archives_at_startup,
     solana_runtime::snapshot_utils::{SnapshotVersion, SUPPORTED_ARCHIVE_COMPRESSION},
-    solana_sdk::signature::{Keypair, Signer},
+    solana_sdk::{
+        pubkey::Pubkey,
+        signature::{Keypair, Signer},
+    },
     solana_send_transaction_service::send_transaction_service::{
         MAX_BATCH_SEND_RATE_MS, MAX_TRANSACTION_BATCH_SIZE,
     },
@@ -40,6 +43,7 @@ pub struct RunArgs {
     pub entrypoints: Vec<SocketAddr>,
     pub restricted_repair_only_mode: bool,
     pub no_voting: bool,
+    pub vote_account: Option<Pubkey>,
 
     // bootstrap rpc config
     pub no_genesis_fetch: bool,
@@ -77,6 +81,7 @@ impl FromClapArgMatches for RunArgs {
             entrypoints: parsed_entrypoints.into_iter().collect(),
             restricted_repair_only_mode: matches.is_present("restricted_repair_only_mode"),
             no_voting: matches.is_present("no_voting"),
+            vote_account: value_t!(matches, "vote_account", Pubkey).ok(),
             no_genesis_fetch: matches.is_present("no_genesis_fetch"),
             no_snapshot_fetch: matches.is_present("no_snapshot_fetch"),
         })
@@ -1721,6 +1726,7 @@ mod tests {
                 entrypoints: vec![],
                 restricted_repair_only_mode: false,
                 no_voting: false,
+                vote_account: None,
             }
         }
     }
@@ -1737,6 +1743,7 @@ mod tests {
                 entrypoints: self.entrypoints.clone(),
                 restricted_repair_only_mode: self.restricted_repair_only_mode,
                 no_voting: self.no_voting,
+                vote_account: self.vote_account.clone(),
             }
         }
     }
@@ -1979,5 +1986,20 @@ mod tests {
             ..default_run_args.clone()
         };
         test_run_command_with_identity_setup(vec!["--no-voting"], default_run_args, expected_args);
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_vote_account_long_arg() {
+        let default_run_args = RunArgs::default();
+        let vote_account = Pubkey::new_unique();
+        let expected_args = RunArgs {
+            vote_account: Some(vote_account),
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec!["--vote-account", &vote_account.to_string()],
+            default_run_args,
+            expected_args,
+        );
     }
 }
