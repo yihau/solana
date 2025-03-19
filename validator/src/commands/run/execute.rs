@@ -166,7 +166,7 @@ pub fn execute(
         no_genesis_fetch: run_args.no_genesis_fetch,
         no_snapshot_fetch: run_args.no_snapshot_fetch,
         check_vote_account: run_args.check_vote_account,
-        only_known_rpc: matches.is_present("only_known_rpc"),
+        only_known_rpc: run_args.only_known_rpc,
         max_genesis_archive_unpacked_size: value_t_or_exit!(
             matches,
             "max_genesis_archive_unpacked_size",
