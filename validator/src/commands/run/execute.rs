@@ -582,8 +582,6 @@ pub fn execute(
             value_t_or_exit!(matches, "rpc_send_transaction_leader_forward_count", u64)
         };
 
-    let full_api = matches.is_present("full_rpc_api");
-
     let mut validator_config = ValidatorConfig {
         require_tower: matches.is_present("require_tower"),
         tower_storage,
@@ -604,7 +602,7 @@ pub fn execute(
             faucet_addr: matches.value_of("rpc_faucet_addr").map(|address| {
                 solana_net_utils::parse_host_port(address).expect("failed to parse faucet address")
             }),
-            full_api,
+            full_api: run_args.full_rpc_api,
             max_multiple_accounts: Some(value_t_or_exit!(
                 matches,
                 "rpc_max_multiple_accounts",
