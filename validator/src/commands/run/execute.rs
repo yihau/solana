@@ -167,7 +167,8 @@ pub fn execute(
 
     let private_rpc = run_args.private_rpc;
     let do_port_check = !run_args.no_port_check;
-    let tpu_coalesce = value_t!(matches, "tpu_coalesce_ms", u64)
+    let tpu_coalesce = run_args
+        .tpu_coalesce_ms
         .map(Duration::from_millis)
         .unwrap_or(DEFAULT_TPU_COALESCE);
 
