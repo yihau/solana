@@ -58,6 +58,8 @@ pub struct RunArgs {
     pub only_known_rpc: bool,
     pub no_incremental_snapshots: bool,
     pub max_genesis_archive_unpacked_size: u64,
+
+    pub private_rpc: bool,
 }
 
 impl FromClapArgMatches for RunArgs {
@@ -120,6 +122,7 @@ impl FromClapArgMatches for RunArgs {
             only_known_rpc: matches.is_present("only_known_rpc"),
             no_incremental_snapshots: matches.is_present("no_incremental_snapshots"),
             max_genesis_archive_unpacked_size: max_genesis_archive_unpacked_size,
+            private_rpc: matches.is_present("private_rpc"),
         })
     }
 }
@@ -1779,6 +1782,7 @@ mod tests {
                     .genesis_archive_unpacked_size
                     .parse()
                     .unwrap(),
+                private_rpc: false,
             }
         }
     }
@@ -1810,6 +1814,7 @@ mod tests {
                 only_known_rpc: self.only_known_rpc,
                 no_incremental_snapshots: self.no_incremental_snapshots,
                 max_genesis_archive_unpacked_size: self.max_genesis_archive_unpacked_size,
+                private_rpc: self.private_rpc,
             }
         }
     }
@@ -2505,6 +2510,20 @@ mod tests {
                 "--max-genesis-archive-unpacked-size",
                 &max_genesis_archive_unpacked_size.to_string(),
             ],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_private_rpc_long_arg() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            private_rpc: true,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec!["--private-rpc"],
             default_run_args,
             expected_args,
         );

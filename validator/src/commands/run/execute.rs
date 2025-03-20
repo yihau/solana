@@ -165,7 +165,7 @@ pub fn execute(
         incremental_snapshot_fetch: !run_args.no_incremental_snapshots,
     };
 
-    let private_rpc = matches.is_present("private_rpc");
+    let private_rpc = run_args.private_rpc;
     let do_port_check = !matches.is_present("no_port_check");
     let tpu_coalesce = value_t!(matches, "tpu_coalesce_ms", u64)
         .map(Duration::from_millis)
