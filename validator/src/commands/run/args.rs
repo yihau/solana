@@ -59,6 +59,9 @@ pub struct RunArgs {
     pub no_incremental_snapshots: bool,
     pub max_genesis_archive_unpacked_size: u64,
 
+    // validator config
+    pub require_tower: bool,
+
     // json rpc config
     pub full_rpc_api: bool,
 
@@ -133,6 +136,7 @@ impl FromClapArgMatches for RunArgs {
             tpu_coalesce_ms: value_t!(matches, "tpu_coalesce_ms", u64).ok(),
             wal_recovery_mode: value_t!(matches, "wal_recovery_mode", String).ok(),
             full_rpc_api: matches.is_present("full_rpc_api"),
+            require_tower: matches.is_present("require_tower"),
         })
     }
 }
@@ -1797,6 +1801,7 @@ mod tests {
                 tpu_coalesce_ms: None,
                 wal_recovery_mode: None,
                 full_rpc_api: false,
+                require_tower: false,
             }
         }
     }
@@ -1833,6 +1838,7 @@ mod tests {
                 tpu_coalesce_ms: self.tpu_coalesce_ms,
                 wal_recovery_mode: self.wal_recovery_mode.clone(),
                 full_rpc_api: self.full_rpc_api,
+                require_tower: self.require_tower,
             }
         }
     }
@@ -2600,6 +2606,20 @@ mod tests {
         };
         test_run_command_with_identity_setup(
             vec!["--full-rpc-api"],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_require_tower_long_arg() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            require_tower: true,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec!["--require-tower"],
             default_run_args,
             expected_args,
         );
