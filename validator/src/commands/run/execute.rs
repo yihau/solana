@@ -166,7 +166,7 @@ pub fn execute(
             "max_genesis_archive_unpacked_size",
             u64
         ),
-        incremental_snapshot_fetch: !matches.is_present("no_incremental_snapshots"),
+        incremental_snapshot_fetch: !run_args.no_incremental_snapshots,
     };
 
     let private_rpc = matches.is_present("private_rpc");

@@ -56,6 +56,7 @@ pub struct RunArgs {
     pub no_snapshot_fetch: bool,
     pub check_vote_account: Option<String>,
     pub only_known_rpc: bool,
+    pub no_incremental_snapshots: bool,
 }
 
 impl FromClapArgMatches for RunArgs {
@@ -109,6 +110,7 @@ impl FromClapArgMatches for RunArgs {
                 .ok()
                 .map(|validators| validators.into_iter().collect()),
             only_known_rpc: matches.is_present("only_known_rpc"),
+            no_incremental_snapshots: matches.is_present("no_incremental_snapshots"),
         })
     }
 }
@@ -1761,6 +1763,7 @@ mod tests {
                 gossip_validators: None,
                 repair_whitelist: None,
                 only_known_rpc: false,
+                no_incremental_snapshots: false,
             }
         }
     }
@@ -1790,6 +1793,7 @@ mod tests {
                 gossip_validators: self.gossip_validators.clone(),
                 repair_whitelist: self.repair_whitelist.clone(),
                 only_known_rpc: self.only_known_rpc,
+                no_incremental_snapshots: self.no_incremental_snapshots,
             }
         }
     }
@@ -2453,6 +2457,20 @@ mod tests {
                 &known_validators_pubkey.to_string(),
                 "--only-known-rpc",
             ],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_incremental_snapshot_fetch_long_arg() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            no_incremental_snapshots: true,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec!["--no-incremental-snapshots"],
             default_run_args,
             expected_args,
         );
