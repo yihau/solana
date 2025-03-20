@@ -46,4 +46,4 @@ EOF
 )
 
 # shellcheck disable=SC2016
-group "stable" "$partitions" "$local_cluster_partitions" "$localnet"
+group "stable" "$partitions"
