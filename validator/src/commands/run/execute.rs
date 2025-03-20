@@ -180,8 +180,9 @@ pub fn execute(
         )
     })?;
 
-    let recovery_mode = matches
-        .value_of("wal_recovery_mode")
+    let recovery_mode = run_args
+        .wal_recovery_mode
+        .as_deref()
         .map(BlockstoreRecoveryMode::from);
 
     let max_ledger_shreds = if matches.is_present("limit_ledger_size") {

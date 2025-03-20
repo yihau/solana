@@ -62,6 +62,7 @@ pub struct RunArgs {
     pub private_rpc: bool,
     pub no_port_check: bool,
     pub tpu_coalesce_ms: Option<u64>,
+    pub wal_recovery_mode: Option<String>,
 }
 
 impl FromClapArgMatches for RunArgs {
@@ -127,6 +128,7 @@ impl FromClapArgMatches for RunArgs {
             private_rpc: matches.is_present("private_rpc"),
             no_port_check: matches.is_present("no_port_check"),
             tpu_coalesce_ms: value_t!(matches, "tpu_coalesce_ms", u64).ok(),
+            wal_recovery_mode: value_t!(matches, "wal_recovery_mode", String).ok(),
         })
     }
 }
@@ -1789,6 +1791,7 @@ mod tests {
                 private_rpc: false,
                 no_port_check: false,
                 tpu_coalesce_ms: None,
+                wal_recovery_mode: None,
             }
         }
     }
@@ -1823,6 +1826,7 @@ mod tests {
                 private_rpc: self.private_rpc,
                 no_port_check: self.no_port_check,
                 tpu_coalesce_ms: self.tpu_coalesce_ms,
+                wal_recovery_mode: self.wal_recovery_mode.clone(),
             }
         }
     }
@@ -2561,6 +2565,21 @@ mod tests {
         };
         test_run_command_with_identity_setup(
             vec!["--tpu-coalesce-ms", &tpu_coalesce_ms.to_string()],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_wal_recovery_mode_long_arg() {
+        let default_run_args = RunArgs::default();
+        let wal_recovery_mode = "tolerate_corrupted_tail_records";
+        let expected_args = RunArgs {
+            wal_recovery_mode: Some(wal_recovery_mode.to_string()),
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec!["--wal-recovery-mode", "tolerate_corrupted_tail_records"],
             default_run_args,
             expected_args,
         );
