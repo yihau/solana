@@ -60,6 +60,7 @@ pub struct RunArgs {
     pub max_genesis_archive_unpacked_size: u64,
 
     pub private_rpc: bool,
+    pub no_port_check: bool,
 }
 
 impl FromClapArgMatches for RunArgs {
@@ -123,6 +124,7 @@ impl FromClapArgMatches for RunArgs {
             no_incremental_snapshots: matches.is_present("no_incremental_snapshots"),
             max_genesis_archive_unpacked_size: max_genesis_archive_unpacked_size,
             private_rpc: matches.is_present("private_rpc"),
+            no_port_check: matches.is_present("no_port_check"),
         })
     }
 }
@@ -1783,6 +1785,7 @@ mod tests {
                     .parse()
                     .unwrap(),
                 private_rpc: false,
+                no_port_check: false,
             }
         }
     }
@@ -1815,6 +1818,7 @@ mod tests {
                 no_incremental_snapshots: self.no_incremental_snapshots,
                 max_genesis_archive_unpacked_size: self.max_genesis_archive_unpacked_size,
                 private_rpc: self.private_rpc,
+                no_port_check: self.no_port_check,
             }
         }
     }
@@ -2524,6 +2528,20 @@ mod tests {
         };
         test_run_command_with_identity_setup(
             vec!["--private-rpc"],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_no_port_check_long_arg() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            no_port_check: true,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec!["--no-port-check"],
             default_run_args,
             expected_args,
         );
