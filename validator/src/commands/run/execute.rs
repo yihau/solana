@@ -161,11 +161,7 @@ pub fn execute(
         no_snapshot_fetch: run_args.no_snapshot_fetch,
         check_vote_account: run_args.check_vote_account,
         only_known_rpc: run_args.only_known_rpc,
-        max_genesis_archive_unpacked_size: value_t_or_exit!(
-            matches,
-            "max_genesis_archive_unpacked_size",
-            u64
-        ),
+        max_genesis_archive_unpacked_size: run_args.max_genesis_archive_unpacked_size,
         incremental_snapshot_fetch: !run_args.no_incremental_snapshots,
     };
 

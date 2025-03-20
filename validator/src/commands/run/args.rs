@@ -57,6 +57,7 @@ pub struct RunArgs {
     pub check_vote_account: Option<String>,
     pub only_known_rpc: bool,
     pub no_incremental_snapshots: bool,
+    pub max_genesis_archive_unpacked_size: u64,
 }
 
 impl FromClapArgMatches for RunArgs {
@@ -81,6 +82,13 @@ impl FromClapArgMatches for RunArgs {
             })?;
             parsed_entrypoints.insert(parsed);
         }
+
+        let max_genesis_archive_unpacked_size =
+            value_t!(matches, "max_genesis_archive_unpacked_size", u64).map_err(|err| {
+                Box::<dyn std::error::Error>::from(format!(
+                    "failed to parse max_genesis_archive_unpacked_size: {err}"
+                ))
+            })?;
 
         Ok(RunArgs {
             identity: identity,
@@ -111,6 +119,7 @@ impl FromClapArgMatches for RunArgs {
                 .map(|validators| validators.into_iter().collect()),
             only_known_rpc: matches.is_present("only_known_rpc"),
             no_incremental_snapshots: matches.is_present("no_incremental_snapshots"),
+            max_genesis_archive_unpacked_size: max_genesis_archive_unpacked_size,
         })
     }
 }
@@ -1741,6 +1750,8 @@ mod tests {
 
     impl Default for RunArgs {
         fn default() -> Self {
+            let default_args = DefaultArgs::default();
+
             let identity = Keypair::new();
             let logfile = format!("agave-validator-{}.log", identity.pubkey());
 
@@ -1764,6 +1775,10 @@ mod tests {
                 repair_whitelist: None,
                 only_known_rpc: false,
                 no_incremental_snapshots: false,
+                max_genesis_archive_unpacked_size: default_args
+                    .genesis_archive_unpacked_size
+                    .parse()
+                    .unwrap(),
             }
         }
     }
@@ -1794,6 +1809,7 @@ mod tests {
                 repair_whitelist: self.repair_whitelist.clone(),
                 only_known_rpc: self.only_known_rpc,
                 no_incremental_snapshots: self.no_incremental_snapshots,
+                max_genesis_archive_unpacked_size: self.max_genesis_archive_unpacked_size,
             }
         }
     }
@@ -2471,6 +2487,24 @@ mod tests {
         };
         test_run_command_with_identity_setup(
             vec!["--no-incremental-snapshots"],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_max_genesis_archive_unpacked_size_long_arg() {
+        let default_run_args = RunArgs::default();
+        let max_genesis_archive_unpacked_size = 1000000000;
+        let expected_args = RunArgs {
+            max_genesis_archive_unpacked_size,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec![
+                "--max-genesis-archive-unpacked-size",
+                &max_genesis_archive_unpacked_size.to_string(),
+            ],
             default_run_args,
             expected_args,
         );
