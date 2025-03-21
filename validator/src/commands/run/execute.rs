@@ -61,7 +61,6 @@ use {
     },
     solana_sdk::{
         clock::{Slot, DEFAULT_SLOTS_PER_EPOCH},
-        hash::Hash,
         pubkey::Pubkey,
         signature::{Keypair, Signer},
     },
@@ -75,7 +74,6 @@ use {
         num::NonZeroUsize,
         path::{Path, PathBuf},
         process::exit,
-        str::FromStr,
         sync::{Arc, RwLock},
         time::Duration,
     },
@@ -586,12 +584,8 @@ pub fn execute(
         require_tower: run_args.require_tower,
         tower_storage,
         halt_at_slot: run_args.dev_halt_at_slot,
-        expected_genesis_hash: matches
-            .value_of("expected_genesis_hash")
-            .map(|s| Hash::from_str(s).unwrap()),
-        expected_bank_hash: matches
-            .value_of("expected_bank_hash")
-            .map(|s| Hash::from_str(s).unwrap()),
+        expected_genesis_hash: run_args.expected_genesis_hash,
+        expected_bank_hash: run_args.expected_bank_hash,
         expected_shred_version,
         new_hard_forks: hardforks_of(matches, "hard_forks"),
         rpc_config: JsonRpcConfig {

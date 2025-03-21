@@ -22,6 +22,7 @@ use {
     solana_runtime::snapshot_utils::{SnapshotVersion, SUPPORTED_ARCHIVE_COMPRESSION},
     solana_sdk::{
         clock::Slot,
+        hash::Hash,
         pubkey::Pubkey,
         signature::{Keypair, Signer},
     },
@@ -63,6 +64,8 @@ pub struct RunArgs {
     // validator config
     pub require_tower: bool,
     pub dev_halt_at_slot: Option<Slot>,
+    pub expected_genesis_hash: Option<Hash>,
+    pub expected_bank_hash: Option<Hash>,
 
     // json rpc config
     pub full_rpc_api: bool,
@@ -140,6 +143,12 @@ impl FromClapArgMatches for RunArgs {
             full_rpc_api: matches.is_present("full_rpc_api"),
             require_tower: matches.is_present("require_tower"),
             dev_halt_at_slot: value_t!(matches, "dev_halt_at_slot", Slot).ok(),
+            expected_genesis_hash: matches
+                .value_of("expected_genesis_hash")
+                .map(|s| Hash::from_str(s).unwrap()),
+            expected_bank_hash: matches
+                .value_of("expected_bank_hash")
+                .map(|s| Hash::from_str(s).unwrap()),
         })
     }
 }
@@ -1806,6 +1815,8 @@ mod tests {
                 full_rpc_api: false,
                 require_tower: false,
                 dev_halt_at_slot: None,
+                expected_genesis_hash: None,
+                expected_bank_hash: None,
             }
         }
     }
@@ -1844,6 +1855,8 @@ mod tests {
                 full_rpc_api: self.full_rpc_api,
                 require_tower: self.require_tower,
                 dev_halt_at_slot: self.dev_halt_at_slot,
+                expected_genesis_hash: self.expected_genesis_hash.clone(),
+                expected_bank_hash: self.expected_bank_hash.clone(),
             }
         }
     }
@@ -2640,6 +2653,39 @@ mod tests {
         };
         test_run_command_with_identity_setup(
             vec!["--dev-halt-at-slot", &halt_at_slot.to_string()],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_expected_genesis_hash_long_arg() {
+        let default_run_args = RunArgs::default();
+        let expected_genesis_hash = Hash::new_unique();
+        let expected_args = RunArgs {
+            expected_genesis_hash: Some(expected_genesis_hash),
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec![
+                "--expected-genesis-hash",
+                &expected_genesis_hash.to_string(),
+            ],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_expected_bank_hash_long_arg() {
+        let default_run_args = RunArgs::default();
+        let expected_bank_hash = Hash::new_unique();
+        let expected_args = RunArgs {
+            expected_bank_hash: Some(expected_bank_hash),
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec!["--expected-bank-hash", &expected_bank_hash.to_string()],
             default_run_args,
             expected_args,
         );
