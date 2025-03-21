@@ -21,6 +21,7 @@ use {
     solana_ledger::use_snapshot_archives_at_startup,
     solana_runtime::snapshot_utils::{SnapshotVersion, SUPPORTED_ARCHIVE_COMPRESSION},
     solana_sdk::{
+        clock::Slot,
         pubkey::Pubkey,
         signature::{Keypair, Signer},
     },
@@ -61,6 +62,7 @@ pub struct RunArgs {
 
     // validator config
     pub require_tower: bool,
+    pub dev_halt_at_slot: Option<Slot>,
 
     // json rpc config
     pub full_rpc_api: bool,
@@ -137,6 +139,7 @@ impl FromClapArgMatches for RunArgs {
             wal_recovery_mode: value_t!(matches, "wal_recovery_mode", String).ok(),
             full_rpc_api: matches.is_present("full_rpc_api"),
             require_tower: matches.is_present("require_tower"),
+            dev_halt_at_slot: value_t!(matches, "dev_halt_at_slot", Slot).ok(),
         })
     }
 }
@@ -1802,6 +1805,7 @@ mod tests {
                 wal_recovery_mode: None,
                 full_rpc_api: false,
                 require_tower: false,
+                dev_halt_at_slot: None,
             }
         }
     }
@@ -1839,6 +1843,7 @@ mod tests {
                 wal_recovery_mode: self.wal_recovery_mode.clone(),
                 full_rpc_api: self.full_rpc_api,
                 require_tower: self.require_tower,
+                dev_halt_at_slot: self.dev_halt_at_slot,
             }
         }
     }
@@ -2620,6 +2625,21 @@ mod tests {
         };
         test_run_command_with_identity_setup(
             vec!["--require-tower"],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_halt_at_slot_long_arg() {
+        let default_run_args = RunArgs::default();
+        let halt_at_slot = Slot::from_str("100").unwrap();
+        let expected_args = RunArgs {
+            dev_halt_at_slot: Some(halt_at_slot),
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec!["--dev-halt-at-slot", &halt_at_slot.to_string()],
             default_run_args,
             expected_args,
         );
