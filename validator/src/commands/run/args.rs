@@ -69,6 +69,7 @@ pub struct RunArgs {
     pub hard_forks: Option<Vec<Slot>>,
 
     // json rpc config
+    pub enable_rpc_transaction_history: bool,
     pub full_rpc_api: bool,
 
     pub private_rpc: bool,
@@ -160,6 +161,7 @@ impl FromClapArgMatches for RunArgs {
                 .value_of("expected_bank_hash")
                 .map(|s| Hash::from_str(s).unwrap()),
             hard_forks: hard_forks,
+            enable_rpc_transaction_history: matches.is_present("enable_rpc_transaction_history"),
         })
     }
 }
@@ -1829,6 +1831,7 @@ mod tests {
                 expected_genesis_hash: None,
                 expected_bank_hash: None,
                 hard_forks: None,
+                enable_rpc_transaction_history: false,
             }
         }
     }
@@ -1870,6 +1873,7 @@ mod tests {
                 expected_genesis_hash: self.expected_genesis_hash.clone(),
                 expected_bank_hash: self.expected_bank_hash.clone(),
                 hard_forks: self.hard_forks.clone(),
+                enable_rpc_transaction_history: self.enable_rpc_transaction_history,
             }
         }
     }
@@ -2730,6 +2734,20 @@ mod tests {
         };
         test_run_command_with_identity_setup(
             vec!["--hard-fork", "100", "--hard-fork", "200"],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_enable_rpc_transaction_history_long_arg() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            enable_rpc_transaction_history: true,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec!["--enable-rpc-transaction-history"],
             default_run_args,
             expected_args,
         );
