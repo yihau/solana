@@ -66,6 +66,7 @@ pub struct RunArgs {
     pub dev_halt_at_slot: Option<Slot>,
     pub expected_genesis_hash: Option<Hash>,
     pub expected_bank_hash: Option<Hash>,
+    pub hard_forks: Option<Vec<Slot>>,
 
     // json rpc config
     pub full_rpc_api: bool,
@@ -105,6 +106,15 @@ impl FromClapArgMatches for RunArgs {
                     "failed to parse max_genesis_archive_unpacked_size: {err}"
                 ))
             })?;
+
+        let hard_forks = if matches.is_present("hard_forks") {
+            let hard_forks = values_t!(matches, "hard_forks", Slot).map_err(|err| {
+                Box::<dyn std::error::Error>::from(format!("failed to parse hard_forks: {err}"))
+            })?;
+            Some(hard_forks)
+        } else {
+            None
+        };
 
         Ok(RunArgs {
             identity: identity,
@@ -149,6 +159,7 @@ impl FromClapArgMatches for RunArgs {
             expected_bank_hash: matches
                 .value_of("expected_bank_hash")
                 .map(|s| Hash::from_str(s).unwrap()),
+            hard_forks: hard_forks,
         })
     }
 }
@@ -1817,6 +1828,7 @@ mod tests {
                 dev_halt_at_slot: None,
                 expected_genesis_hash: None,
                 expected_bank_hash: None,
+                hard_forks: None,
             }
         }
     }
@@ -1857,6 +1869,7 @@ mod tests {
                 dev_halt_at_slot: self.dev_halt_at_slot,
                 expected_genesis_hash: self.expected_genesis_hash.clone(),
                 expected_bank_hash: self.expected_bank_hash.clone(),
+                hard_forks: self.hard_forks.clone(),
             }
         }
     }
@@ -1936,7 +1949,10 @@ mod tests {
 
         // clap doesn't ensure elements order, sort them
         args.entrypoints.sort();
-
+        if let Some(mut hard_forks) = args.hard_forks {
+            hard_forks.sort();
+            args.hard_forks = Some(hard_forks);
+        }
         assert_eq!(args, expected_args);
     }
 
@@ -2686,6 +2702,34 @@ mod tests {
         };
         test_run_command_with_identity_setup(
             vec!["--expected-bank-hash", &expected_bank_hash.to_string()],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_hard_forks_long_arg_single() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            hard_forks: Some(vec![100]),
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec!["--hard-fork", "100"],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_hard_forks_long_arg_multiple() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            hard_forks: Some(vec![100, 200]),
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec!["--hard-fork", "100", "--hard-fork", "200"],
             default_run_args,
             expected_args,
         );
