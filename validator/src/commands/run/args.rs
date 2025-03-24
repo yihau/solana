@@ -73,6 +73,7 @@ pub struct RunArgs {
     pub full_rpc_api: bool,
     pub enable_cpi_and_log_storage: bool, // deprecated
     pub enable_extended_tx_metadata_storage: bool,
+    pub faucet_addr: Option<SocketAddr>,
 
     pub private_rpc: bool,
     pub no_port_check: bool,
@@ -115,6 +116,15 @@ impl FromClapArgMatches for RunArgs {
                 Box::<dyn std::error::Error>::from(format!("failed to parse hard_forks: {err}"))
             })?;
             Some(hard_forks)
+        } else {
+            None
+        };
+
+        let faucet_addr = if let Some(address) = matches.value_of("rpc_faucet_addr") {
+            let parsed = solana_net_utils::parse_host_port(&address).map_err(|err| {
+                Box::<dyn std::error::Error>::from(format!("failed to parse faucet address: {err}"))
+            })?;
+            Some(parsed)
         } else {
             None
         };
@@ -167,6 +177,7 @@ impl FromClapArgMatches for RunArgs {
             enable_cpi_and_log_storage: matches.is_present("enable_cpi_and_log_storage"),
             enable_extended_tx_metadata_storage: matches
                 .is_present("enable_extended_tx_metadata_storage"),
+            faucet_addr: faucet_addr,
         })
     }
 }
@@ -1839,6 +1850,7 @@ mod tests {
                 enable_rpc_transaction_history: false,
                 enable_cpi_and_log_storage: false,
                 enable_extended_tx_metadata_storage: false,
+                faucet_addr: None,
             }
         }
     }
@@ -1883,6 +1895,7 @@ mod tests {
                 enable_rpc_transaction_history: self.enable_rpc_transaction_history,
                 enable_cpi_and_log_storage: self.enable_cpi_and_log_storage,
                 enable_extended_tx_metadata_storage: self.enable_extended_tx_metadata_storage,
+                faucet_addr: self.faucet_addr.clone(),
             }
         }
     }
@@ -2793,6 +2806,23 @@ mod tests {
                 "--enable-rpc-transaction-history",
                 "--enable-extended-tx-metadata-storage",
             ],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_faucet_addr_long_arg() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            faucet_addr: Some(SocketAddr::new(
+                IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1)),
+                9090,
+            )),
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec!["--rpc-faucet-address", "127.0.0.1:9090"],
             default_run_args,
             expected_args,
         );

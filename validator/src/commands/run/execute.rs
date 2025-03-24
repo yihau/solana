@@ -593,9 +593,7 @@ pub fn execute(
             enable_extended_tx_metadata_storage: run_args.enable_cpi_and_log_storage
                 || run_args.enable_extended_tx_metadata_storage,
             rpc_bigtable_config,
-            faucet_addr: matches.value_of("rpc_faucet_addr").map(|address| {
-                solana_net_utils::parse_host_port(address).expect("failed to parse faucet address")
-            }),
+            faucet_addr: run_args.faucet_addr,
             full_api: run_args.full_rpc_api,
             max_multiple_accounts: Some(value_t_or_exit!(
                 matches,
