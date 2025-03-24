@@ -590,8 +590,8 @@ pub fn execute(
         new_hard_forks: run_args.hard_forks,
         rpc_config: JsonRpcConfig {
             enable_rpc_transaction_history: run_args.enable_rpc_transaction_history,
-            enable_extended_tx_metadata_storage: matches.is_present("enable_cpi_and_log_storage")
-                || matches.is_present("enable_extended_tx_metadata_storage"),
+            enable_extended_tx_metadata_storage: run_args.enable_cpi_and_log_storage
+                || run_args.enable_extended_tx_metadata_storage,
             rpc_bigtable_config,
             faucet_addr: matches.value_of("rpc_faucet_addr").map(|address| {
                 solana_net_utils::parse_host_port(address).expect("failed to parse faucet address")

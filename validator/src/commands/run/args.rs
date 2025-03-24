@@ -71,6 +71,8 @@ pub struct RunArgs {
     // json rpc config
     pub enable_rpc_transaction_history: bool,
     pub full_rpc_api: bool,
+    pub enable_cpi_and_log_storage: bool, // deprecated
+    pub enable_extended_tx_metadata_storage: bool,
 
     pub private_rpc: bool,
     pub no_port_check: bool,
@@ -162,6 +164,9 @@ impl FromClapArgMatches for RunArgs {
                 .map(|s| Hash::from_str(s).unwrap()),
             hard_forks: hard_forks,
             enable_rpc_transaction_history: matches.is_present("enable_rpc_transaction_history"),
+            enable_cpi_and_log_storage: matches.is_present("enable_cpi_and_log_storage"),
+            enable_extended_tx_metadata_storage: matches
+                .is_present("enable_extended_tx_metadata_storage"),
         })
     }
 }
@@ -1832,6 +1837,8 @@ mod tests {
                 expected_bank_hash: None,
                 hard_forks: None,
                 enable_rpc_transaction_history: false,
+                enable_cpi_and_log_storage: false,
+                enable_extended_tx_metadata_storage: false,
             }
         }
     }
@@ -1874,6 +1881,8 @@ mod tests {
                 expected_bank_hash: self.expected_bank_hash.clone(),
                 hard_forks: self.hard_forks.clone(),
                 enable_rpc_transaction_history: self.enable_rpc_transaction_history,
+                enable_cpi_and_log_storage: self.enable_cpi_and_log_storage,
+                enable_extended_tx_metadata_storage: self.enable_extended_tx_metadata_storage,
             }
         }
     }
@@ -1884,7 +1893,7 @@ mod tests {
     ) -> ArgMatches<'a> {
         let app_name = "run_command";
         let app = App::new(app_name);
-        let app = add_args(app, default_args);
+        let app = add_args(app, default_args).args(&crate::cli::get_deprecated_arguments());
         let args = [&[app_name], &args[..]].concat();
         app.get_matches_from(args)
     }
@@ -2748,6 +2757,42 @@ mod tests {
         };
         test_run_command_with_identity_setup(
             vec!["--enable-rpc-transaction-history"],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_enable_cpi_and_log_storage_long_arg() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            enable_rpc_transaction_history: true, // required by enable_cpi_and_log_storage
+            enable_cpi_and_log_storage: true,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec![
+                "--enable-rpc-transaction-history",
+                "--enable-cpi-and-log-storage",
+            ],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_enable_extended_tx_metadata_storage_long_arg() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            enable_rpc_transaction_history: true, // required by enable_extended_tx_metadata_storage
+            enable_extended_tx_metadata_storage: true,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec![
+                "--enable-rpc-transaction-history",
+                "--enable-extended-tx-metadata-storage",
+            ],
             default_run_args,
             expected_args,
         );
