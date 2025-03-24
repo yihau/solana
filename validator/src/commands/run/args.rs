@@ -74,6 +74,7 @@ pub struct RunArgs {
     pub enable_cpi_and_log_storage: bool, // deprecated
     pub enable_extended_tx_metadata_storage: bool,
     pub faucet_addr: Option<SocketAddr>,
+    pub rpc_max_multiple_accounts: usize,
 
     pub private_rpc: bool,
     pub no_port_check: bool,
@@ -178,6 +179,12 @@ impl FromClapArgMatches for RunArgs {
             enable_extended_tx_metadata_storage: matches
                 .is_present("enable_extended_tx_metadata_storage"),
             faucet_addr: faucet_addr,
+            rpc_max_multiple_accounts: value_t!(matches, "rpc_max_multiple_accounts", usize)
+                .map_err(|err| {
+                    Box::<dyn std::error::Error>::from(format!(
+                        "failed to parse rpc_max_multiple_accounts: {err}"
+                    ))
+                })?,
         })
     }
 }
@@ -1851,6 +1858,7 @@ mod tests {
                 enable_cpi_and_log_storage: false,
                 enable_extended_tx_metadata_storage: false,
                 faucet_addr: None,
+                rpc_max_multiple_accounts: default_args.rpc_max_multiple_accounts.parse().unwrap(),
             }
         }
     }
@@ -1896,6 +1904,7 @@ mod tests {
                 enable_cpi_and_log_storage: self.enable_cpi_and_log_storage,
                 enable_extended_tx_metadata_storage: self.enable_extended_tx_metadata_storage,
                 faucet_addr: self.faucet_addr.clone(),
+                rpc_max_multiple_accounts: self.rpc_max_multiple_accounts,
             }
         }
     }
@@ -2823,6 +2832,20 @@ mod tests {
         };
         test_run_command_with_identity_setup(
             vec!["--rpc-faucet-address", "127.0.0.1:9090"],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_rpc_max_multiple_accounts_long_arg() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            rpc_max_multiple_accounts: 100,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec!["--rpc-max-multiple-accounts", "100"],
             default_run_args,
             expected_args,
         );
