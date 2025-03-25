@@ -75,6 +75,7 @@ pub struct RunArgs {
     pub enable_extended_tx_metadata_storage: bool,
     pub faucet_addr: Option<SocketAddr>,
     pub rpc_max_multiple_accounts: usize,
+    pub health_check_slot_distance: u64,
 
     pub private_rpc: bool,
     pub no_port_check: bool,
@@ -183,6 +184,12 @@ impl FromClapArgMatches for RunArgs {
                 .map_err(|err| {
                     Box::<dyn std::error::Error>::from(format!(
                         "failed to parse rpc_max_multiple_accounts: {err}"
+                    ))
+                })?,
+            health_check_slot_distance: value_t!(matches, "health_check_slot_distance", u64)
+                .map_err(|err| {
+                    Box::<dyn std::error::Error>::from(format!(
+                        "failed to parse health_check_slot_distance: {err}"
                     ))
                 })?,
         })
@@ -1859,6 +1866,10 @@ mod tests {
                 enable_extended_tx_metadata_storage: false,
                 faucet_addr: None,
                 rpc_max_multiple_accounts: default_args.rpc_max_multiple_accounts.parse().unwrap(),
+                health_check_slot_distance: default_args
+                    .health_check_slot_distance
+                    .parse()
+                    .unwrap(),
             }
         }
     }
@@ -1905,6 +1916,7 @@ mod tests {
                 enable_extended_tx_metadata_storage: self.enable_extended_tx_metadata_storage,
                 faucet_addr: self.faucet_addr.clone(),
                 rpc_max_multiple_accounts: self.rpc_max_multiple_accounts,
+                health_check_slot_distance: self.health_check_slot_distance,
             }
         }
     }
@@ -2846,6 +2858,20 @@ mod tests {
         };
         test_run_command_with_identity_setup(
             vec!["--rpc-max-multiple-accounts", "100"],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_health_check_slot_distance_long_arg() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            health_check_slot_distance: 100,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec!["--health-check-slot-distance", "100"],
             default_run_args,
             expected_args,
         );
