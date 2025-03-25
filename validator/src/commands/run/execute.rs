@@ -603,11 +603,7 @@ pub fn execute(
             rpc_niceness_adj: run_args.rpc_niceness_adjustment,
             account_indexes: account_indexes.clone(),
             rpc_scan_and_fix_roots: run_args.rpc_scan_and_fix_roots,
-            max_request_body_size: Some(value_t_or_exit!(
-                matches,
-                "rpc_max_request_body_size",
-                usize
-            )),
+            max_request_body_size: Some(run_args.rpc_max_request_body_size),
             skip_preflight_health_check: matches.is_present("skip_preflight_health_check"),
         },
         on_start_geyser_plugin_config_files,

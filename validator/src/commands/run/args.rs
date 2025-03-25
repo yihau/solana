@@ -80,6 +80,7 @@ pub struct RunArgs {
     pub rpc_blocking_threads: usize,
     pub rpc_niceness_adjustment: i8,
     pub rpc_scan_and_fix_roots: bool,
+    pub rpc_max_request_body_size: usize,
 
     pub private_rpc: bool,
     pub no_port_check: bool,
@@ -212,6 +213,12 @@ impl FromClapArgMatches for RunArgs {
                 ))
             })?,
             rpc_scan_and_fix_roots: matches.is_present("rpc_scan_and_fix_roots"),
+            rpc_max_request_body_size: value_t!(matches, "rpc_max_request_body_size", usize)
+                .map_err(|err| {
+                    Box::<dyn std::error::Error>::from(format!(
+                        "failed to parse rpc_max_request_body_size: {err}"
+                    ))
+                })?,
         })
     }
 }
@@ -1894,6 +1901,7 @@ mod tests {
                 rpc_blocking_threads: default_args.rpc_blocking_threads.parse().unwrap(),
                 rpc_niceness_adjustment: default_args.rpc_niceness_adjustment.parse().unwrap(),
                 rpc_scan_and_fix_roots: false,
+                rpc_max_request_body_size: default_args.rpc_max_request_body_size.parse().unwrap(),
             }
         }
     }
@@ -1945,6 +1953,7 @@ mod tests {
                 rpc_blocking_threads: self.rpc_blocking_threads,
                 rpc_niceness_adjustment: self.rpc_niceness_adjustment,
                 rpc_scan_and_fix_roots: self.rpc_scan_and_fix_roots,
+                rpc_max_request_body_size: self.rpc_max_request_body_size,
             }
         }
     }
@@ -2961,6 +2970,20 @@ mod tests {
                 "--enable-rpc-transaction-history",
                 "--rpc-scan-and-fix-roots",
             ],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_rpc_max_request_body_size_long_arg() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            rpc_max_request_body_size: 100,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec!["--rpc-max-request-body-size", "100"],
             default_run_args,
             expected_args,
         );
