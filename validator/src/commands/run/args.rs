@@ -85,6 +85,9 @@ pub struct RunArgs {
     pub rpc_max_request_body_size: usize,
     pub skip_preflight_health_check: bool,
 
+    // pubsub config
+    pub rpc_pubsub_enable_block_subscription: bool,
+
     pub private_rpc: bool,
     pub no_port_check: bool,
     pub tpu_coalesce_ms: Option<u64>,
@@ -225,6 +228,7 @@ impl FromClapArgMatches for RunArgs {
             skip_preflight_health_check: matches.is_present("skip_preflight_health_check"),
             geyser_plugin_always_enabled: matches.is_present("geyser_plugin_always_enabled"),
             rpc_port: value_t!(matches, "rpc_port", u16).ok(),
+            rpc_pubsub_enable_block_subscription: matches.is_present("rpc_pubsub_enable_block_subscription"),
         })
     }
 }
@@ -1911,6 +1915,7 @@ mod tests {
                 skip_preflight_health_check: false,
                 geyser_plugin_always_enabled: false,
                 rpc_port: None,
+                rpc_pubsub_enable_block_subscription: false,
             }
         }
     }
@@ -1966,6 +1971,7 @@ mod tests {
                 skip_preflight_health_check: self.skip_preflight_health_check,
                 geyser_plugin_always_enabled: self.geyser_plugin_always_enabled,
                 rpc_port: self.rpc_port,
+                rpc_pubsub_enable_block_subscription: self.rpc_pubsub_enable_block_subscription,
             }
         }
     }
@@ -3038,6 +3044,24 @@ mod tests {
         };
         test_run_command_with_identity_setup(
             vec!["--rpc-port", "8889"],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_enable_block_subscription_long_arg() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            enable_rpc_transaction_history: true,
+            rpc_pubsub_enable_block_subscription: true,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec![
+                "--enable-rpc-transaction-history", // required by --rpc-pubsub-enable-block-subscription
+                "--rpc-pubsub-enable-block-subscription",
+            ],
             default_run_args,
             expected_args,
         );
