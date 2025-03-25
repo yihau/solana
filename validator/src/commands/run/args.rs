@@ -87,6 +87,7 @@ pub struct RunArgs {
 
     // pubsub config
     pub rpc_pubsub_enable_block_subscription: bool,
+    pub rpc_pubsub_enable_vote_subscription: bool,
 
     pub private_rpc: bool,
     pub no_port_check: bool,
@@ -228,7 +229,10 @@ impl FromClapArgMatches for RunArgs {
             skip_preflight_health_check: matches.is_present("skip_preflight_health_check"),
             geyser_plugin_always_enabled: matches.is_present("geyser_plugin_always_enabled"),
             rpc_port: value_t!(matches, "rpc_port", u16).ok(),
-            rpc_pubsub_enable_block_subscription: matches.is_present("rpc_pubsub_enable_block_subscription"),
+            rpc_pubsub_enable_block_subscription: matches
+                .is_present("rpc_pubsub_enable_block_subscription"),
+            rpc_pubsub_enable_vote_subscription: matches
+                .is_present("rpc_pubsub_enable_vote_subscription"),
         })
     }
 }
@@ -1916,6 +1920,7 @@ mod tests {
                 geyser_plugin_always_enabled: false,
                 rpc_port: None,
                 rpc_pubsub_enable_block_subscription: false,
+                rpc_pubsub_enable_vote_subscription: false,
             }
         }
     }
@@ -1972,6 +1977,7 @@ mod tests {
                 geyser_plugin_always_enabled: self.geyser_plugin_always_enabled,
                 rpc_port: self.rpc_port,
                 rpc_pubsub_enable_block_subscription: self.rpc_pubsub_enable_block_subscription,
+                rpc_pubsub_enable_vote_subscription: self.rpc_pubsub_enable_vote_subscription,
             }
         }
     }
@@ -3062,6 +3068,20 @@ mod tests {
                 "--enable-rpc-transaction-history", // required by --rpc-pubsub-enable-block-subscription
                 "--rpc-pubsub-enable-block-subscription",
             ],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_enable_vote_subscription_long_arg() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            rpc_pubsub_enable_vote_subscription: true,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec!["--rpc-pubsub-enable-vote-subscription"],
             default_run_args,
             expected_args,
         );
