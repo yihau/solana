@@ -89,6 +89,7 @@ pub struct RunArgs {
     pub rpc_pubsub_enable_block_subscription: bool,
     pub rpc_pubsub_enable_vote_subscription: bool,
     pub rpc_pubsub_max_active_subscriptions: usize,
+    pub rpc_pubsub_queue_capacity_items: usize,
 
     pub private_rpc: bool,
     pub no_port_check: bool,
@@ -242,6 +243,16 @@ impl FromClapArgMatches for RunArgs {
             .map_err(|err| {
                 Box::<dyn std::error::Error>::from(format!(
                     "failed to parse rpc_pubsub_max_active_subscriptions: {err}"
+                ))
+            })?,
+            rpc_pubsub_queue_capacity_items: value_t!(
+                matches,
+                "rpc_pubsub_queue_capacity_items",
+                usize
+            )
+            .map_err(|err| {
+                Box::<dyn std::error::Error>::from(format!(
+                    "failed to parse rpc_pubsub_queue_capacity_items: {err}"
                 ))
             })?,
         })
@@ -1936,6 +1947,10 @@ mod tests {
                     .rpc_pubsub_max_active_subscriptions
                     .parse()
                     .unwrap(),
+                rpc_pubsub_queue_capacity_items: default_args
+                    .rpc_pubsub_queue_capacity_items
+                    .parse()
+                    .unwrap(),
             }
         }
     }
@@ -1994,6 +2009,7 @@ mod tests {
                 rpc_pubsub_enable_block_subscription: self.rpc_pubsub_enable_block_subscription,
                 rpc_pubsub_enable_vote_subscription: self.rpc_pubsub_enable_vote_subscription,
                 rpc_pubsub_max_active_subscriptions: self.rpc_pubsub_max_active_subscriptions,
+                rpc_pubsub_queue_capacity_items: self.rpc_pubsub_queue_capacity_items,
             }
         }
     }
@@ -3112,6 +3128,20 @@ mod tests {
         };
         test_run_command_with_identity_setup(
             vec!["--rpc-pubsub-max-active-subscriptions", "100"],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_rpc_pubsub_queue_capacity_items_long_arg() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            rpc_pubsub_queue_capacity_items: 100,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec!["--rpc-pubsub-queue-capacity-items", "100"],
             default_run_args,
             expected_args,
         );
