@@ -598,7 +598,7 @@ pub fn execute(
             max_multiple_accounts: Some(run_args.rpc_max_multiple_accounts),
             health_check_slot_distance: run_args.health_check_slot_distance,
             disable_health_check: false,
-            rpc_threads: value_t_or_exit!(matches, "rpc_threads", usize),
+            rpc_threads: run_args.rpc_threads,
             rpc_blocking_threads: value_t_or_exit!(matches, "rpc_blocking_threads", usize),
             rpc_niceness_adj: value_t_or_exit!(matches, "rpc_niceness_adj", i8),
             account_indexes: account_indexes.clone(),

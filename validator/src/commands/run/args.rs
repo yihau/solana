@@ -76,6 +76,7 @@ pub struct RunArgs {
     pub faucet_addr: Option<SocketAddr>,
     pub rpc_max_multiple_accounts: usize,
     pub health_check_slot_distance: u64,
+    pub rpc_threads: usize,
 
     pub private_rpc: bool,
     pub no_port_check: bool,
@@ -192,6 +193,9 @@ impl FromClapArgMatches for RunArgs {
                         "failed to parse health_check_slot_distance: {err}"
                     ))
                 })?,
+            rpc_threads: value_t!(matches, "rpc_threads", usize).map_err(|err| {
+                Box::<dyn std::error::Error>::from(format!("failed to parse rpc_threads: {err}"))
+            })?,
         })
     }
 }
@@ -1870,6 +1874,7 @@ mod tests {
                     .health_check_slot_distance
                     .parse()
                     .unwrap(),
+                rpc_threads: default_args.rpc_threads.parse().unwrap(),
             }
         }
     }
@@ -1917,6 +1922,7 @@ mod tests {
                 faucet_addr: self.faucet_addr.clone(),
                 rpc_max_multiple_accounts: self.rpc_max_multiple_accounts,
                 health_check_slot_distance: self.health_check_slot_distance,
+                rpc_threads: self.rpc_threads,
             }
         }
     }
@@ -2872,6 +2878,20 @@ mod tests {
         };
         test_run_command_with_identity_setup(
             vec!["--health-check-slot-distance", "100"],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_rpc_threads_long_arg() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            rpc_threads: 100,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec!["--rpc-threads", "100"],
             default_run_args,
             expected_args,
         );
