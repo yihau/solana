@@ -78,6 +78,7 @@ pub struct RunArgs {
     pub health_check_slot_distance: u64,
     pub rpc_threads: usize,
     pub rpc_blocking_threads: usize,
+    pub rpc_niceness_adjustment: i8,
 
     pub private_rpc: bool,
     pub no_port_check: bool,
@@ -204,6 +205,11 @@ impl FromClapArgMatches for RunArgs {
                     ))
                 },
             )?,
+            rpc_niceness_adjustment: value_t!(matches, "rpc_niceness_adj", i8).map_err(|err| {
+                Box::<dyn std::error::Error>::from(format!(
+                    "failed to parse rpc_niceness_adjustment: {err}"
+                ))
+            })?,
         })
     }
 }
@@ -1884,6 +1890,7 @@ mod tests {
                     .unwrap(),
                 rpc_threads: default_args.rpc_threads.parse().unwrap(),
                 rpc_blocking_threads: default_args.rpc_blocking_threads.parse().unwrap(),
+                rpc_niceness_adjustment: default_args.rpc_niceness_adjustment.parse().unwrap(),
             }
         }
     }
@@ -1933,6 +1940,7 @@ mod tests {
                 health_check_slot_distance: self.health_check_slot_distance,
                 rpc_threads: self.rpc_threads,
                 rpc_blocking_threads: self.rpc_blocking_threads,
+                rpc_niceness_adjustment: self.rpc_niceness_adjustment,
             }
         }
     }
@@ -2916,6 +2924,21 @@ mod tests {
         };
         test_run_command_with_identity_setup(
             vec!["--rpc-blocking-threads", "10"],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[cfg(target_os = "linux")]
+    #[test]
+    fn verify_args_struct_by_command_run_with_rpc_niceness_adjustment_long_arg() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            rpc_niceness_adjustment: 15,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec!["--rpc-niceness-adjustment", "15"],
             default_run_args,
             expected_args,
         );
