@@ -69,6 +69,11 @@ pub struct RunArgs {
     pub hard_forks: Option<Vec<Slot>>,
     pub geyser_plugin_always_enabled: bool,
     pub rpc_port: Option<u16>,
+    pub no_poh_speed_test: bool,
+    pub no_os_memory_stats_reporting: bool,
+    pub no_os_network_stats_reporting: bool,
+    pub no_os_cpu_stats_reporting: bool,
+    pub no_os_disk_stats_reporting: bool,
 
     // json rpc config
     pub enable_rpc_transaction_history: bool,
@@ -91,6 +96,7 @@ pub struct RunArgs {
     pub rpc_pubsub_max_active_subscriptions: usize,
     pub rpc_pubsub_queue_capacity_items: usize,
     pub rpc_pubsub_queue_capacity_bytes: usize,
+    pub rpc_pubsub_worker_threads: usize,
 
     pub private_rpc: bool,
     pub no_port_check: bool,
@@ -266,6 +272,17 @@ impl FromClapArgMatches for RunArgs {
                     "failed to parse rpc_pubsub_queue_capacity_bytes: {err}"
                 ))
             })?,
+            rpc_pubsub_worker_threads: value_t!(matches, "rpc_pubsub_worker_threads", usize)
+                .map_err(|err| {
+                    Box::<dyn std::error::Error>::from(format!(
+                        "failed to parse rpc_pubsub_worker_threads: {err}"
+                    ))
+                })?,
+            no_poh_speed_test: matches.is_present("no_poh_speed_test"),
+            no_os_memory_stats_reporting: matches.is_present("no_os_memory_stats_reporting"),
+            no_os_network_stats_reporting: matches.is_present("no_os_network_stats_reporting"),
+            no_os_cpu_stats_reporting: matches.is_present("no_os_cpu_stats_reporting"),
+            no_os_disk_stats_reporting: matches.is_present("no_os_disk_stats_reporting"),
         })
     }
 }
@@ -1966,6 +1983,12 @@ mod tests {
                     .rpc_pubsub_queue_capacity_bytes
                     .parse()
                     .unwrap(),
+                rpc_pubsub_worker_threads: default_args.rpc_pubsub_worker_threads.parse().unwrap(),
+                no_poh_speed_test: false,
+                no_os_memory_stats_reporting: false,
+                no_os_network_stats_reporting: false,
+                no_os_cpu_stats_reporting: false,
+                no_os_disk_stats_reporting: false,
             }
         }
     }
@@ -2026,6 +2049,12 @@ mod tests {
                 rpc_pubsub_max_active_subscriptions: self.rpc_pubsub_max_active_subscriptions,
                 rpc_pubsub_queue_capacity_items: self.rpc_pubsub_queue_capacity_items,
                 rpc_pubsub_queue_capacity_bytes: self.rpc_pubsub_queue_capacity_bytes,
+                rpc_pubsub_worker_threads: self.rpc_pubsub_worker_threads,
+                no_poh_speed_test: self.no_poh_speed_test,
+                no_os_memory_stats_reporting: self.no_os_memory_stats_reporting,
+                no_os_network_stats_reporting: self.no_os_network_stats_reporting,
+                no_os_cpu_stats_reporting: self.no_os_cpu_stats_reporting,
+                no_os_disk_stats_reporting: self.no_os_disk_stats_reporting,
             }
         }
     }
@@ -3172,6 +3201,90 @@ mod tests {
         };
         test_run_command_with_identity_setup(
             vec!["--rpc-pubsub-queue-capacity-bytes", "100"],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_rpc_pubsub_worker_threads_long_arg() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            rpc_pubsub_worker_threads: 100,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec!["--rpc-pubsub-worker-threads", "100"],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_no_poh_speed_test_long_arg() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            no_poh_speed_test: true,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec!["--no-poh-speed-test"],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_no_os_memory_stats_reporting_long_arg() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            no_os_memory_stats_reporting: true,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec!["--no-os-memory-stats-reporting"],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_no_os_network_stats_reporting_long_arg() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            no_os_network_stats_reporting: true,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec!["--no-os-network-stats-reporting"],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_no_os_cpu_stats_reporting_long_arg() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            no_os_cpu_stats_reporting: true,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec!["--no-os-cpu-stats-reporting"],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_no_os_disk_stats_reporting_long_arg() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            no_os_disk_stats_reporting: true,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec!["--no-os-disk-stats-reporting"],
             default_run_args,
             expected_args,
         );

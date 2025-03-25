@@ -623,7 +623,7 @@ pub fn execute(
             max_active_subscriptions: run_args.rpc_pubsub_max_active_subscriptions,
             queue_capacity_items: run_args.rpc_pubsub_queue_capacity_items,
             queue_capacity_bytes: run_args.rpc_pubsub_queue_capacity_bytes,
-            worker_threads: value_t_or_exit!(matches, "rpc_pubsub_worker_threads", usize),
+            worker_threads: run_args.rpc_pubsub_worker_threads,
             notification_threads: value_t!(matches, "rpc_pubsub_notification_threads", usize)
                 .ok()
                 .and_then(NonZeroUsize::new),
@@ -663,11 +663,11 @@ pub fn execute(
             ),
             tpu_peers: rpc_send_transaction_tpu_peers,
         },
-        no_poh_speed_test: matches.is_present("no_poh_speed_test"),
-        no_os_memory_stats_reporting: matches.is_present("no_os_memory_stats_reporting"),
-        no_os_network_stats_reporting: matches.is_present("no_os_network_stats_reporting"),
-        no_os_cpu_stats_reporting: matches.is_present("no_os_cpu_stats_reporting"),
-        no_os_disk_stats_reporting: matches.is_present("no_os_disk_stats_reporting"),
+        no_poh_speed_test: run_args.no_poh_speed_test,
+        no_os_memory_stats_reporting: run_args.no_os_memory_stats_reporting,
+        no_os_network_stats_reporting: run_args.no_os_network_stats_reporting,
+        no_os_cpu_stats_reporting: run_args.no_os_cpu_stats_reporting,
+        no_os_disk_stats_reporting: run_args.no_os_disk_stats_reporting,
         poh_pinned_cpu_core: value_of(matches, "poh_pinned_cpu_core")
             .unwrap_or(poh_service::DEFAULT_PINNED_CPU_CORE),
         poh_hashes_per_batch: value_of(matches, "poh_hashes_per_batch")
