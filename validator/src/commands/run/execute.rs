@@ -604,7 +604,7 @@ pub fn execute(
             account_indexes: account_indexes.clone(),
             rpc_scan_and_fix_roots: run_args.rpc_scan_and_fix_roots,
             max_request_body_size: Some(run_args.rpc_max_request_body_size),
-            skip_preflight_health_check: matches.is_present("skip_preflight_health_check"),
+            skip_preflight_health_check: run_args.skip_preflight_health_check,
         },
         on_start_geyser_plugin_config_files,
         geyser_plugin_always_enabled: matches.is_present("geyser_plugin_always_enabled"),

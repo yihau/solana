@@ -81,6 +81,7 @@ pub struct RunArgs {
     pub rpc_niceness_adjustment: i8,
     pub rpc_scan_and_fix_roots: bool,
     pub rpc_max_request_body_size: usize,
+    pub skip_preflight_health_check: bool,
 
     pub private_rpc: bool,
     pub no_port_check: bool,
@@ -219,6 +220,7 @@ impl FromClapArgMatches for RunArgs {
                         "failed to parse rpc_max_request_body_size: {err}"
                     ))
                 })?,
+            skip_preflight_health_check: matches.is_present("skip_preflight_health_check"),
         })
     }
 }
@@ -1902,6 +1904,7 @@ mod tests {
                 rpc_niceness_adjustment: default_args.rpc_niceness_adjustment.parse().unwrap(),
                 rpc_scan_and_fix_roots: false,
                 rpc_max_request_body_size: default_args.rpc_max_request_body_size.parse().unwrap(),
+                skip_preflight_health_check: false,
             }
         }
     }
@@ -1954,6 +1957,7 @@ mod tests {
                 rpc_niceness_adjustment: self.rpc_niceness_adjustment,
                 rpc_scan_and_fix_roots: self.rpc_scan_and_fix_roots,
                 rpc_max_request_body_size: self.rpc_max_request_body_size,
+                skip_preflight_health_check: self.skip_preflight_health_check,
             }
         }
     }
@@ -2984,6 +2988,20 @@ mod tests {
         };
         test_run_command_with_identity_setup(
             vec!["--rpc-max-request-body-size", "100"],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_skip_preflight_health_check_long_arg() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            skip_preflight_health_check: true,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec!["--skip-preflight-health-check"],
             default_run_args,
             expected_args,
         );
