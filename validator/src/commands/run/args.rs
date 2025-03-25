@@ -79,6 +79,7 @@ pub struct RunArgs {
     pub rpc_threads: usize,
     pub rpc_blocking_threads: usize,
     pub rpc_niceness_adjustment: i8,
+    pub rpc_scan_and_fix_roots: bool,
 
     pub private_rpc: bool,
     pub no_port_check: bool,
@@ -210,6 +211,7 @@ impl FromClapArgMatches for RunArgs {
                     "failed to parse rpc_niceness_adjustment: {err}"
                 ))
             })?,
+            rpc_scan_and_fix_roots: matches.is_present("rpc_scan_and_fix_roots"),
         })
     }
 }
@@ -1891,6 +1893,7 @@ mod tests {
                 rpc_threads: default_args.rpc_threads.parse().unwrap(),
                 rpc_blocking_threads: default_args.rpc_blocking_threads.parse().unwrap(),
                 rpc_niceness_adjustment: default_args.rpc_niceness_adjustment.parse().unwrap(),
+                rpc_scan_and_fix_roots: false,
             }
         }
     }
@@ -1941,6 +1944,7 @@ mod tests {
                 rpc_threads: self.rpc_threads,
                 rpc_blocking_threads: self.rpc_blocking_threads,
                 rpc_niceness_adjustment: self.rpc_niceness_adjustment,
+                rpc_scan_and_fix_roots: self.rpc_scan_and_fix_roots,
             }
         }
     }
@@ -2939,6 +2943,24 @@ mod tests {
         };
         test_run_command_with_identity_setup(
             vec!["--rpc-niceness-adjustment", "15"],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_rpc_scan_and_fix_roots_long_arg() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            enable_rpc_transaction_history: true, // required by rpc_scan_and_fix_roots
+            rpc_scan_and_fix_roots: true,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec![
+                "--enable-rpc-transaction-history",
+                "--rpc-scan-and-fix-roots",
+            ],
             default_run_args,
             expected_args,
         );
