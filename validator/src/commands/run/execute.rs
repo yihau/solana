@@ -608,7 +608,7 @@ pub fn execute(
         },
         on_start_geyser_plugin_config_files,
         geyser_plugin_always_enabled: run_args.geyser_plugin_always_enabled,
-        rpc_addrs: value_t!(matches, "rpc_port", u16).ok().map(|rpc_port| {
+        rpc_addrs: run_args.rpc_port.map(|rpc_port| {
             (
                 SocketAddr::new(rpc_bind_address, rpc_port),
                 SocketAddr::new(rpc_bind_address, rpc_port + 1),

@@ -68,6 +68,7 @@ pub struct RunArgs {
     pub expected_bank_hash: Option<Hash>,
     pub hard_forks: Option<Vec<Slot>>,
     pub geyser_plugin_always_enabled: bool,
+    pub rpc_port: Option<u16>,
 
     // json rpc config
     pub enable_rpc_transaction_history: bool,
@@ -223,6 +224,7 @@ impl FromClapArgMatches for RunArgs {
                 })?,
             skip_preflight_health_check: matches.is_present("skip_preflight_health_check"),
             geyser_plugin_always_enabled: matches.is_present("geyser_plugin_always_enabled"),
+            rpc_port: value_t!(matches, "rpc_port", u16).ok(),
         })
     }
 }
@@ -1908,6 +1910,7 @@ mod tests {
                 rpc_max_request_body_size: default_args.rpc_max_request_body_size.parse().unwrap(),
                 skip_preflight_health_check: false,
                 geyser_plugin_always_enabled: false,
+                rpc_port: None,
             }
         }
     }
@@ -1962,6 +1965,7 @@ mod tests {
                 rpc_max_request_body_size: self.rpc_max_request_body_size,
                 skip_preflight_health_check: self.skip_preflight_health_check,
                 geyser_plugin_always_enabled: self.geyser_plugin_always_enabled,
+                rpc_port: self.rpc_port,
             }
         }
     }
@@ -3020,6 +3024,20 @@ mod tests {
         };
         test_run_command_with_identity_setup(
             vec!["--geyser-plugin-always-enabled"],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_rpc_port_long_arg() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            rpc_port: Some(8889),
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec!["--rpc-port", "8889"],
             default_run_args,
             expected_args,
         );
