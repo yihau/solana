@@ -77,6 +77,7 @@ pub struct RunArgs {
     pub rpc_max_multiple_accounts: usize,
     pub health_check_slot_distance: u64,
     pub rpc_threads: usize,
+    pub rpc_blocking_threads: usize,
 
     pub private_rpc: bool,
     pub no_port_check: bool,
@@ -196,6 +197,13 @@ impl FromClapArgMatches for RunArgs {
             rpc_threads: value_t!(matches, "rpc_threads", usize).map_err(|err| {
                 Box::<dyn std::error::Error>::from(format!("failed to parse rpc_threads: {err}"))
             })?,
+            rpc_blocking_threads: value_t!(matches, "rpc_blocking_threads", usize).map_err(
+                |err| {
+                    Box::<dyn std::error::Error>::from(format!(
+                        "failed to parse rpc_blocking_threads: {err}"
+                    ))
+                },
+            )?,
         })
     }
 }
@@ -1875,6 +1883,7 @@ mod tests {
                     .parse()
                     .unwrap(),
                 rpc_threads: default_args.rpc_threads.parse().unwrap(),
+                rpc_blocking_threads: default_args.rpc_blocking_threads.parse().unwrap(),
             }
         }
     }
@@ -1923,6 +1932,7 @@ mod tests {
                 rpc_max_multiple_accounts: self.rpc_max_multiple_accounts,
                 health_check_slot_distance: self.health_check_slot_distance,
                 rpc_threads: self.rpc_threads,
+                rpc_blocking_threads: self.rpc_blocking_threads,
             }
         }
     }
@@ -2892,6 +2902,20 @@ mod tests {
         };
         test_run_command_with_identity_setup(
             vec!["--rpc-threads", "100"],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_rpc_blocking_threads_long_arg() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            rpc_blocking_threads: 10,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec!["--rpc-blocking-threads", "10"],
             default_run_args,
             expected_args,
         );
