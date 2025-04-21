@@ -3,7 +3,7 @@ use {
         cli::{hash_validator, port_range_validator, port_validator, DefaultArgs},
         commands::{FromClapArgMatches, Result},
     },
-    clap::{App, Arg, ArgMatches},
+    clap::{value_t, App, Arg, ArgMatches},
     solana_clap_utils::{
         hidden_unless_forced,
         input_parsers::keypair_of,
@@ -25,7 +25,7 @@ use {
         MAX_BATCH_SEND_RATE_MS, MAX_TRANSACTION_BATCH_SIZE,
     },
     solana_unified_scheduler_pool::DefaultSchedulerPool,
-    std::str::FromStr,
+    std::{path::PathBuf, str::FromStr},
 };
 
 const EXCLUDE_KEY: &str = "account-index-exclude-key";
@@ -36,6 +36,7 @@ pub struct RunArgs {
     pub identity: Keypair,
     pub logfile: String,
     pub cuda: bool,
+    pub init_complete_file: Option<PathBuf>,
 }
 
 impl FromClapArgMatches for RunArgs {
@@ -52,10 +53,13 @@ impl FromClapArgMatches for RunArgs {
 
         let cuda = matches.is_present("cuda");
 
+        let init_complete_file = value_t!(matches, "init_complete_file", PathBuf).ok();
+
         Ok(RunArgs {
             identity,
             logfile,
             cuda,
+            init_complete_file,
         })
     }
 }
@@ -1685,11 +1689,13 @@ mod tests {
             let identity = Keypair::new();
             let logfile = format!("agave-validator-{}.log", identity.pubkey());
             let cuda = false;
+            let init_complete_file = None;
 
             RunArgs {
                 identity,
                 logfile,
                 cuda,
+                init_complete_file,
             }
         }
     }
@@ -1700,6 +1706,7 @@ mod tests {
                 identity: self.identity.insecure_clone(),
                 logfile: self.logfile.clone(),
                 cuda: self.cuda,
+                init_complete_file: self.init_complete_file.clone(),
             }
         }
     }
@@ -1822,5 +1829,19 @@ mod tests {
             ..default_run_args.clone()
         };
         test_run_command_with_identity_setup(vec!["--cuda"], default_run_args, expected_args);
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_init_complete_file_long_arg() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            init_complete_file: Some(PathBuf::from("init_complete")),
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec!["--init-complete-file", "init_complete"],
+            default_run_args,
+            expected_args,
+        );
     }
 }

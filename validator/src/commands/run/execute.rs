@@ -160,7 +160,7 @@ pub fn execute(
         .staked_map_id,
     ));
 
-    let init_complete_file = matches.value_of("init_complete_file");
+    let init_complete_file = run_args.init_complete_file;
 
     let rpc_bootstrap_config = bootstrap::RpcBootstrapConfig {
         no_genesis_fetch: matches.is_present("no_genesis_fetch"),
@@ -1314,7 +1314,8 @@ pub fn execute(
     }?;
 
     if let Some(filename) = init_complete_file {
-        File::create(filename).map_err(|err| format!("unable to create {filename}: {err}"))?;
+        File::create(&filename)
+            .map_err(|err| format!("unable to create {}: {err}", filename.display()))?;
     }
     info!("Validator initialized");
     validator.join();
