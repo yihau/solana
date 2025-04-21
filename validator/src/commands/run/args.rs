@@ -1768,14 +1768,16 @@ mod tests {
             let logfile = format!("agave-validator-{}.log", identity.pubkey());
             let cuda = false;
             let init_complete_file = None;
-            let no_genesis_fetch = false;
-            let no_snapshot_fetch = false;
             let entrypoints = vec![];
-            let check_vote_account = None;
             let known_validators = None;
             let repair_validators = None;
             let gossip_validators = None;
             let repair_whitelist = None;
+
+            // rpc bootstrap config
+            let no_genesis_fetch = false;
+            let no_snapshot_fetch = false;
+            let check_vote_account = None;
             let only_known_rpc = false;
             let no_incremental_snapshots = false;
             let max_genesis_archive_unpacked_size =
@@ -1808,14 +1810,14 @@ mod tests {
                 logfile: self.logfile.clone(),
                 cuda: self.cuda,
                 init_complete_file: self.init_complete_file.clone(),
-                no_genesis_fetch: self.no_genesis_fetch,
-                no_snapshot_fetch: self.no_snapshot_fetch,
                 entrypoints: self.entrypoints.clone(),
-                check_vote_account: self.check_vote_account.clone(),
                 known_validators: self.known_validators.clone(),
                 repair_validators: self.repair_validators.clone(),
                 gossip_validators: self.gossip_validators.clone(),
                 repair_whitelist: self.repair_whitelist.clone(),
+                no_genesis_fetch: self.no_genesis_fetch,
+                no_snapshot_fetch: self.no_snapshot_fetch,
+                check_vote_account: self.check_vote_account.clone(),
                 only_known_rpc: self.only_known_rpc,
                 no_incremental_snapshots: self.no_incremental_snapshots,
                 max_genesis_archive_unpacked_size: self.max_genesis_archive_unpacked_size,
