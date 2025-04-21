@@ -37,6 +37,9 @@ pub struct RunArgs {
     pub logfile: String,
     pub cuda: bool,
     pub init_complete_file: Option<PathBuf>,
+
+    // rpc bootstrap config
+    pub no_genesis_fetch: bool,
 }
 
 impl FromClapArgMatches for RunArgs {
@@ -55,11 +58,14 @@ impl FromClapArgMatches for RunArgs {
 
         let init_complete_file = value_t!(matches, "init_complete_file", PathBuf).ok();
 
+        let no_genesis_fetch = matches.is_present("no_genesis_fetch");
+
         Ok(RunArgs {
             identity,
             logfile,
             cuda,
             init_complete_file,
+            no_genesis_fetch,
         })
     }
 }
@@ -1690,12 +1696,14 @@ mod tests {
             let logfile = format!("agave-validator-{}.log", identity.pubkey());
             let cuda = false;
             let init_complete_file = None;
+            let no_genesis_fetch = false;
 
             RunArgs {
                 identity,
                 logfile,
                 cuda,
                 init_complete_file,
+                no_genesis_fetch,
             }
         }
     }
@@ -1707,6 +1715,7 @@ mod tests {
                 logfile: self.logfile.clone(),
                 cuda: self.cuda,
                 init_complete_file: self.init_complete_file.clone(),
+                no_genesis_fetch: self.no_genesis_fetch,
             }
         }
     }
@@ -1840,6 +1849,20 @@ mod tests {
         };
         test_run_command_with_identity_setup(
             vec!["--init-complete-file", "init_complete"],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_no_genesis_fetch_long_arg() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            no_genesis_fetch: true,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec!["--no-genesis-fetch"],
             default_run_args,
             expected_args,
         );
