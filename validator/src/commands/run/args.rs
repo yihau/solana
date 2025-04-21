@@ -40,6 +40,7 @@ pub struct RunArgs {
 
     // rpc bootstrap config
     pub no_genesis_fetch: bool,
+    pub no_snapshot_fetch: bool,
 }
 
 impl FromClapArgMatches for RunArgs {
@@ -59,6 +60,7 @@ impl FromClapArgMatches for RunArgs {
         let init_complete_file = value_t!(matches, "init_complete_file", PathBuf).ok();
 
         let no_genesis_fetch = matches.is_present("no_genesis_fetch");
+        let no_snapshot_fetch = matches.is_present("no_snapshot_fetch");
 
         Ok(RunArgs {
             identity,
@@ -66,6 +68,7 @@ impl FromClapArgMatches for RunArgs {
             cuda,
             init_complete_file,
             no_genesis_fetch,
+            no_snapshot_fetch,
         })
     }
 }
@@ -1697,6 +1700,7 @@ mod tests {
             let cuda = false;
             let init_complete_file = None;
             let no_genesis_fetch = false;
+            let no_snapshot_fetch = false;
 
             RunArgs {
                 identity,
@@ -1704,6 +1708,7 @@ mod tests {
                 cuda,
                 init_complete_file,
                 no_genesis_fetch,
+                no_snapshot_fetch,
             }
         }
     }
@@ -1716,6 +1721,7 @@ mod tests {
                 cuda: self.cuda,
                 init_complete_file: self.init_complete_file.clone(),
                 no_genesis_fetch: self.no_genesis_fetch,
+                no_snapshot_fetch: self.no_snapshot_fetch,
             }
         }
     }
@@ -1863,6 +1869,20 @@ mod tests {
         };
         test_run_command_with_identity_setup(
             vec!["--no-genesis-fetch"],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_no_snapshot_fetch_long_arg() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            no_snapshot_fetch: true,
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec!["--no-snapshot-fetch"],
             default_run_args,
             expected_args,
         );
