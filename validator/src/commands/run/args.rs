@@ -42,6 +42,7 @@ pub struct RunArgs {
     // rpc bootstrap config
     pub no_genesis_fetch: bool,
     pub no_snapshot_fetch: bool,
+    pub check_vote_account: Option<String>,
 }
 
 impl FromClapArgMatches for RunArgs {
@@ -75,6 +76,10 @@ impl FromClapArgMatches for RunArgs {
         }
         let entrypoints = parsed_entrypoints.into_iter().collect();
 
+        let check_vote_account = matches
+            .value_of("check_vote_account")
+            .map(|url| url.to_string());
+
         Ok(RunArgs {
             identity,
             logfile,
@@ -83,6 +88,7 @@ impl FromClapArgMatches for RunArgs {
             entrypoints,
             no_genesis_fetch,
             no_snapshot_fetch,
+            check_vote_account,
         })
     }
 }
@@ -1719,6 +1725,7 @@ mod tests {
             let no_genesis_fetch = false;
             let no_snapshot_fetch = false;
             let entrypoints = vec![];
+            let check_vote_account = None;
 
             RunArgs {
                 identity,
@@ -1728,6 +1735,7 @@ mod tests {
                 no_genesis_fetch,
                 no_snapshot_fetch,
                 entrypoints,
+                check_vote_account,
             }
         }
     }
@@ -1742,6 +1750,7 @@ mod tests {
                 no_genesis_fetch: self.no_genesis_fetch,
                 no_snapshot_fetch: self.no_snapshot_fetch,
                 entrypoints: self.entrypoints.clone(),
+                check_vote_account: self.check_vote_account.clone(),
             }
         }
     }
@@ -1967,6 +1976,30 @@ mod tests {
                 "127.0.0.1:8000",
                 "--entrypoint",
                 "127.0.0.1:8000",
+            ],
+            default_run_args,
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_check_vote_account_long_arg() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            entrypoints: vec![SocketAddr::new(
+                IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1)),
+                8000,
+            )],
+            check_vote_account: Some("https://api.mainnet-beta.solana.com".to_string()),
+            ..default_run_args.clone()
+        };
+        test_run_command_with_identity_setup(
+            vec![
+                // entrypoint is required for check-vote-account
+                "--entrypoint",
+                "127.0.0.1:8000",
+                "--check-vote-account",
+                "https://api.mainnet-beta.solana.com",
             ],
             default_run_args,
             expected_args,
