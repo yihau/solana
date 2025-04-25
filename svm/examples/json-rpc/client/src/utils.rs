@@ -1,5 +1,3 @@
-#![allow(clippy::result_large_err)]
-
 use {
     borsh::{BorshDeserialize, BorshSerialize},
     solana_sdk::{

@@ -1,5 +1,3 @@
-#![allow(clippy::result_large_err)]
-
 //! A client for subscribing to messages from the RPC server.
 //!
 //! The [`PubsubClient`] implements [Solana WebSocket event

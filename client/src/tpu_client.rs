@@ -1,4 +1,3 @@
-#![allow(clippy::result_large_err)]
 use {
     crate::connection_cache::ConnectionCache,
     solana_connection_cache::connection_cache::{

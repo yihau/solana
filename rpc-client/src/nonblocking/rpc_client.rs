@@ -1,5 +1,3 @@
-#![allow(clippy::result_large_err)]
-
 //! Communication with a Solana node over RPC asynchronously .
 //!
 //! Software that interacts with the Solana blockchain, whether querying its

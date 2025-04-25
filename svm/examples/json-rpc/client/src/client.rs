@@ -1,4 +1,3 @@
-#![allow(clippy::result_large_err)]
 use {
     crate::utils,
     solana_client::rpc_client::RpcClient,
