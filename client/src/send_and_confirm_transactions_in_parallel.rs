@@ -1,3 +1,4 @@
+#![allow(clippy::result_large_err)]
 use {
     crate::{
         nonblocking::{rpc_client::RpcClient, tpu_client::TpuClient},

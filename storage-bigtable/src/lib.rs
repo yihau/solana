@@ -1,4 +1,5 @@
 #![allow(clippy::arithmetic_side_effects)]
+#![allow(clippy::result_large_err)]
 
 use {
     crate::bigtable::RowKey,

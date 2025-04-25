@@ -1,3 +1,5 @@
+#![allow(clippy::result_large_err)]
+
 pub use crate::nonblocking::tpu_client::TpuSenderError;
 use {
     crate::nonblocking::tpu_client::TpuClient as NonblockingTpuClient,

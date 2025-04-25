@@ -1,4 +1,6 @@
 #![allow(clippy::arithmetic_side_effects)]
+#![allow(clippy::result_large_err)]
+
 mod arg_parser;
 mod args;
 mod stake_accounts;

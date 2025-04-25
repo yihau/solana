@@ -1,3 +1,5 @@
+#![allow(clippy::result_large_err)]
+
 //! Module responsible for updating the staked key map.
 //! Adapted from jito-relayer code.
 

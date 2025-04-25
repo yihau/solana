@@ -1,4 +1,5 @@
 #![allow(clippy::arithmetic_side_effects)]
+#![allow(clippy::result_large_err)]
 pub use solana_test_validator as test_validator;
 use {
     console::style,
