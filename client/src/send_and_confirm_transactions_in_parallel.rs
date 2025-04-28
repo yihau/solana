@@ -103,6 +103,7 @@ pub async fn send_and_confirm_transactions_in_parallel<T: Signers + ?Sized>(
     since = "2.2.0",
     note = "Use send_and_confirm_transactions_in_parallel_blocking_v2"
 )]
+#[allow(clippy::result_large_err)]
 pub fn send_and_confirm_transactions_in_parallel_blocking<T: Signers + ?Sized>(
     rpc_client: Arc<BlockingRpcClient>,
     tpu_client: Option<QuicTpuClient>,
@@ -123,6 +124,7 @@ pub fn send_and_confirm_transactions_in_parallel_blocking<T: Signers + ?Sized>(
 }
 
 /// Sends and confirms transactions concurrently in a sync context
+#[allow(clippy::result_large_err)]
 pub fn send_and_confirm_transactions_in_parallel_blocking_v2<T: Signers + ?Sized>(
     rpc_client: Arc<BlockingRpcClient>,
     tpu_client: Option<QuicTpuClient>,

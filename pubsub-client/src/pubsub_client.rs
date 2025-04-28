@@ -157,6 +157,7 @@ where
     }
 }
 
+#[allow(clippy::result_large_err)]
 impl<T> PubsubClientSubscription<T>
 where
     T: DeserializeOwned,
@@ -298,6 +299,7 @@ pub type RootSubscription = (PubsubRootClientSubscription, Receiver<Slot>);
 /// See the [module documentation][self].
 pub struct PubsubClient {}
 
+#[allow(clippy::result_large_err)]
 fn connect_with_retry(
     url: Url,
 ) -> Result<WebSocket<MaybeTlsStream<TcpStream>>, tungstenite::Error> {
@@ -331,6 +333,7 @@ fn connect_with_retry(
     }
 }
 
+#[allow(clippy::result_large_err)]
 impl PubsubClient {
     /// Subscribe to account events.
     ///

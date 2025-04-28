@@ -137,6 +137,7 @@ fn test_rpc_send_tx() {
 }
 
 #[test]
+#[allow(clippy::result_large_err)]
 fn test_simulation_replaced_blockhash() -> ClientResult<()> {
     solana_logger::setup();
 
@@ -552,6 +553,7 @@ fn test_tpu_send_transaction_with_quic() {
 }
 
 #[test]
+#[allow(clippy::result_large_err)]
 fn deserialize_rpc_error() -> ClientResult<()> {
     solana_logger::setup();
 

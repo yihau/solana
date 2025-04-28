@@ -73,6 +73,7 @@ where
     }
 }
 
+#[allow(clippy::result_large_err)]
 impl TpuClient<QuicPool, QuicConnectionManager, QuicConfig> {
     /// Create a new client that disconnects when dropped
     pub fn new(
@@ -92,6 +93,7 @@ impl TpuClient<QuicPool, QuicConnectionManager, QuicConfig> {
     }
 }
 
+#[allow(clippy::result_large_err)]
 impl<P, M, C> TpuClient<P, M, C>
 where
     P: ConnectionPool<NewConnectionConfig = C>,

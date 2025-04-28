@@ -4653,6 +4653,7 @@ impl RpcClient {
     }
 }
 
+#[allow(clippy::result_large_err)]
 fn serialize_and_encode<T>(input: &T, encoding: UiTransactionEncoding) -> ClientResult<String>
 where
     T: serde::ser::Serialize,
@@ -4680,6 +4681,7 @@ pub(crate) fn get_rpc_request_str(rpc_addr: SocketAddr, tls: bool) -> String {
     }
 }
 
+#[allow(clippy::result_large_err)]
 pub(crate) fn parse_keyed_accounts(
     accounts: Vec<RpcKeyedAccount>,
     request: RpcRequest,

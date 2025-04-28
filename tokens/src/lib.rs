@@ -1,4 +1,5 @@
 #![allow(clippy::arithmetic_side_effects)]
+#![allow(clippy::result_large_err)]
 pub mod arg_parser;
 pub mod args;
 pub mod commands;

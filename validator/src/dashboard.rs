@@ -254,6 +254,7 @@ fn get_contact_info(rpc_client: &RpcClient, identity: &Pubkey) -> Option<RpcCont
         .find(|node| node.pubkey == identity.to_string())
 }
 
+#[allow(clippy::result_large_err)]
 fn get_validator_stats(
     rpc_client: &RpcClient,
     identity: &Pubkey,

@@ -35,6 +35,7 @@ struct GreetingSchema {
 }
 
 /// Parses and returns the Solana yaml config on the system.
+#[allow(clippy::result_large_err)]
 pub fn get_config(config: &Option<&str>) -> Result<yaml_rust::Yaml> {
     let path = match config {
         Some(path) => std::path::PathBuf::from(path),
@@ -64,6 +65,7 @@ pub fn get_config(config: &Option<&str>) -> Result<yaml_rust::Yaml> {
 
 /// Gets the RPC url for the cluster that this machine is configured
 /// to communicate with.
+#[allow(clippy::result_large_err)]
 pub fn get_rpc_url(config: &Option<&str>) -> Result<String> {
     let config = get_config(config)?;
     match config["json_rpc_url"].as_str() {
@@ -76,6 +78,7 @@ pub fn get_rpc_url(config: &Option<&str>) -> Result<String> {
 
 /// Gets the "player" or local solana wallet that has been configured
 /// on the machine.
+#[allow(clippy::result_large_err)]
 pub fn get_player(config: &Option<&str>) -> Result<Keypair> {
     let config = get_config(config)?;
     if let Some(path) = config["keypair_path"].as_str() {
@@ -98,6 +101,7 @@ pub fn get_greeting_seed() -> &'static str {
 
 /// Derives and returns the greeting account public key for a given
 /// PLAYER, PROGRAM combination.
+#[allow(clippy::result_large_err)]
 pub fn get_greeting_public_key(player: &Pubkey, program: &Pubkey) -> Result<Pubkey> {
     Ok(Pubkey::create_with_seed(
         player,

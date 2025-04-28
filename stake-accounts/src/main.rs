@@ -26,12 +26,14 @@ use {
     std::{env, error::Error},
 };
 
+#[allow(clippy::result_large_err)]
 fn get_balance_at(client: &RpcClient, pubkey: &Pubkey, i: usize) -> Result<u64, ClientError> {
     let address = stake_accounts::derive_stake_account_address(pubkey, i);
     client.get_balance(&address)
 }
 
 // Return the number of derived stake accounts with balances
+#[allow(clippy::result_large_err)]
 fn count_stake_accounts(client: &RpcClient, base_pubkey: &Pubkey) -> Result<usize, ClientError> {
     let mut i = 0;
     while get_balance_at(client, base_pubkey, i)? > 0 {
@@ -40,6 +42,7 @@ fn count_stake_accounts(client: &RpcClient, base_pubkey: &Pubkey) -> Result<usiz
     Ok(i)
 }
 
+#[allow(clippy::result_large_err)]
 fn get_balances(
     client: &RpcClient,
     addresses: Vec<Pubkey>,
@@ -50,12 +53,14 @@ fn get_balances(
         .collect()
 }
 
+#[allow(clippy::result_large_err)]
 fn get_lockup(client: &RpcClient, address: &Pubkey) -> Result<Lockup, ClientError> {
     client
         .get_account(address)
         .map(|account| stake_state::lockup_from(&account).unwrap())
 }
 
+#[allow(clippy::result_large_err)]
 fn get_lockups(
     client: &RpcClient,
     addresses: Vec<Pubkey>,
@@ -66,6 +71,7 @@ fn get_lockups(
         .collect()
 }
 
+#[allow(clippy::result_large_err)]
 fn process_new_stake_account(
     client: &RpcClient,
     args: &NewArgs<Pubkey, Box<dyn Signer>>,
@@ -89,6 +95,7 @@ fn process_new_stake_account(
     Ok(signature)
 }
 
+#[allow(clippy::result_large_err)]
 fn process_authorize_stake_accounts(
     client: &RpcClient,
     args: &AuthorizeArgs<Pubkey, Box<dyn Signer>>,
@@ -111,6 +118,7 @@ fn process_authorize_stake_accounts(
     Ok(())
 }
 
+#[allow(clippy::result_large_err)]
 fn process_lockup_stake_accounts(
     client: &RpcClient,
     args: &SetLockupArgs<Pubkey, Box<dyn Signer>>,
@@ -140,6 +148,7 @@ fn process_lockup_stake_accounts(
     Ok(())
 }
 
+#[allow(clippy::result_large_err)]
 fn process_rebase_stake_accounts(
     client: &RpcClient,
     args: &RebaseArgs<Pubkey, Box<dyn Signer>>,
@@ -167,6 +176,7 @@ fn process_rebase_stake_accounts(
     Ok(())
 }
 
+#[allow(clippy::result_large_err)]
 fn process_move_stake_accounts(
     client: &RpcClient,
     move_args: &MoveArgs<Pubkey, Box<dyn Signer>>,
@@ -200,6 +210,7 @@ fn process_move_stake_accounts(
     Ok(())
 }
 
+#[allow(clippy::result_large_err)]
 fn send_and_confirm_message<S: Signers>(
     client: &RpcClient,
     message: Message,
@@ -218,6 +229,7 @@ fn send_and_confirm_message<S: Signers>(
     }
 }
 
+#[allow(clippy::result_large_err)]
 fn send_and_confirm_messages<S: Signers>(
     client: &RpcClient,
     messages: Vec<Message>,

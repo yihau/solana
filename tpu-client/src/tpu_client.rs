@@ -80,6 +80,7 @@ pub struct TpuClient<
     tpu_client: Arc<NonblockingTpuClient<P, M, C>>,
 }
 
+#[allow(clippy::result_large_err)]
 impl<P, M, C> TpuClient<P, M, C>
 where
     P: ConnectionPool<NewConnectionConfig = C>,

@@ -124,6 +124,7 @@ pub struct BigTableConnection {
     max_message_size: usize,
 }
 
+#[allow(clippy::result_large_err)]
 impl BigTableConnection {
     /// Establish a connection to the BigTable instance named `instance_name`.  If read-only access
     /// is required, the `read_only` flag should be used to reduce the requested OAuth2 scope.
@@ -899,6 +900,7 @@ impl<F: FnMut(Request<()>) -> InterceptedRequestResult> BigTable<F> {
     }
 }
 
+#[allow(clippy::result_large_err)]
 pub(crate) fn deserialize_protobuf_or_bincode_cell_data<B, P>(
     row_data: RowDataSlice,
     table: &str,
@@ -918,6 +920,7 @@ where
     deserialize_bincode_cell_data(row_data, table, key).map(CellData::Bincode)
 }
 
+#[allow(clippy::result_large_err)]
 pub(crate) fn deserialize_protobuf_cell_data<T>(
     row_data: RowDataSlice,
     table: &str,
@@ -939,6 +942,7 @@ where
     })
 }
 
+#[allow(clippy::result_large_err)]
 pub(crate) fn deserialize_bincode_cell_data<T>(
     row_data: RowDataSlice,
     table: &str,

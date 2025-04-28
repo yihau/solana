@@ -244,6 +244,7 @@ fn get_config() -> Config {
     config
 }
 
+#[allow(clippy::result_large_err)]
 fn get_cluster_info(
     config: &Config,
     rpc_client: &RpcClient,
@@ -274,6 +275,7 @@ struct EndpointData {
     last_recent_blockhash: Hash,
 }
 
+#[allow(clippy::result_large_err)]
 fn query_endpoint(
     config: &Config,
     endpoint: &mut EndpointData,

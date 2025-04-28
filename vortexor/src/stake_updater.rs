@@ -64,6 +64,7 @@ impl StakeUpdater {
 
     /// Update the stake info when it has elapsed more than the
     /// STAKE_REFRESH_INTERVAL since the last time it was refreshed.
+    #[allow(clippy::result_large_err)]
     fn try_refresh_stake_info(
         last_refresh: &mut Option<Instant>,
         shared_staked_nodes: &Arc<RwLock<StakedNodes>>,

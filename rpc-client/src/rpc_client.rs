@@ -198,6 +198,7 @@ impl Drop for RpcClient {
     }
 }
 
+#[allow(clippy::result_large_err)]
 impl RpcClient {
     /// Create an `RpcClient` from an [`RpcSender`] and an [`RpcClientConfig`].
     ///
@@ -3882,6 +3883,7 @@ mod tests {
     // Regression test that the get_block_production_with_config
     // method internally creates the json params array correctly.
     #[test]
+    #[allow(clippy::result_large_err)]
     fn get_block_production_with_config_no_error() -> ClientResult<()> {
         let rpc_client = RpcClient::new_mock("succeeds".to_string());
 

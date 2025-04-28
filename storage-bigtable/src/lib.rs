@@ -463,6 +463,7 @@ impl LedgerStorage {
         .await
     }
 
+    #[allow(clippy::result_large_err)]
     pub fn new_for_emulator(
         instance_name: &str,
         app_profile_id: &str,

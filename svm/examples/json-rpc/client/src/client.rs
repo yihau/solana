@@ -13,6 +13,7 @@ use {
 
 /// Establishes a RPC connection with the Simulation server.
 /// Information about the server is gleened from the config file `config.yml`.
+#[allow(clippy::result_large_err)]
 pub fn establish_connection(url: &Option<&str>, config: &Option<&str>) -> utils::Result<RpcClient> {
     let rpc_url = match url {
         Some(x) => {
@@ -35,6 +36,7 @@ pub fn establish_connection(url: &Option<&str>, config: &Option<&str>) -> utils:
 /// to an executable account via CONNECTION. Failure to read the
 /// keypair or the loaded keypair corresponding to an executable
 /// account will result in an error being returned.
+#[allow(clippy::result_large_err)]
 pub fn get_program(keypair_path: &str, connection: &RpcClient) -> utils::Result<Keypair> {
     let program_keypair = read_keypair_file(keypair_path).map_err(|e| {
         utils::Error::InvalidConfig(format!(
@@ -54,6 +56,7 @@ pub fn get_program(keypair_path: &str, connection: &RpcClient) -> utils::Result<
     Ok(program_keypair)
 }
 
+#[allow(clippy::result_large_err)]
 pub fn say_hello(player: &Keypair, program: &Keypair, connection: &RpcClient) -> utils::Result<()> {
     let greeting_pubkey = utils::get_greeting_public_key(&player.pubkey(), &program.pubkey())?;
     println!("greeting pubkey {greeting_pubkey:?}");

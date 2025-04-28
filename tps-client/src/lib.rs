@@ -39,6 +39,7 @@ pub enum TpsClientError {
 
 pub type TpsClientResult<T> = std::result::Result<T, TpsClientError>;
 
+#[allow(clippy::result_large_err)]
 pub trait TpsClient {
     /// Send a signed transaction without confirmation
     fn send_transaction(&self, transaction: Transaction) -> TpsClientResult<Signature>;
