@@ -511,6 +511,7 @@ impl ClusterQuerySubCommands for App<'_, '_> {
     }
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_catchup(
     matches: &ArgMatches<'_>,
     wallet_manager: &mut Option<Rc<RemoteWalletManager>>,
@@ -542,6 +543,7 @@ pub fn parse_catchup(
     }))
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_cluster_ping(
     matches: &ArgMatches<'_>,
     default_signer: &DefaultSigner,
@@ -570,6 +572,7 @@ pub fn parse_cluster_ping(
     })
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_get_block(matches: &ArgMatches<'_>) -> Result<CliCommandInfo, CliError> {
     let slot = value_of(matches, "slot");
     Ok(CliCommandInfo::without_signers(CliCommand::GetBlock {
@@ -577,6 +580,7 @@ pub fn parse_get_block(matches: &ArgMatches<'_>) -> Result<CliCommandInfo, CliEr
     }))
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_get_recent_prioritization_fees(
     matches: &ArgMatches<'_>,
 ) -> Result<CliCommandInfo, CliError> {
@@ -590,6 +594,7 @@ pub fn parse_get_recent_prioritization_fees(
     ))
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_get_block_time(matches: &ArgMatches<'_>) -> Result<CliCommandInfo, CliError> {
     let slot = value_of(matches, "slot");
     Ok(CliCommandInfo::without_signers(CliCommand::GetBlockTime {
@@ -597,22 +602,27 @@ pub fn parse_get_block_time(matches: &ArgMatches<'_>) -> Result<CliCommandInfo, 
     }))
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_get_epoch(_matches: &ArgMatches<'_>) -> Result<CliCommandInfo, CliError> {
     Ok(CliCommandInfo::without_signers(CliCommand::GetEpoch))
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_get_epoch_info(_matches: &ArgMatches<'_>) -> Result<CliCommandInfo, CliError> {
     Ok(CliCommandInfo::without_signers(CliCommand::GetEpochInfo))
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_get_slot(_matches: &ArgMatches<'_>) -> Result<CliCommandInfo, CliError> {
     Ok(CliCommandInfo::without_signers(CliCommand::GetSlot))
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_get_block_height(_matches: &ArgMatches<'_>) -> Result<CliCommandInfo, CliError> {
     Ok(CliCommandInfo::without_signers(CliCommand::GetBlockHeight))
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_largest_accounts(matches: &ArgMatches<'_>) -> Result<CliCommandInfo, CliError> {
     let filter = if matches.is_present("circulating") {
         Some(RpcLargestAccountsFilter::Circulating)
@@ -626,6 +636,7 @@ pub fn parse_largest_accounts(matches: &ArgMatches<'_>) -> Result<CliCommandInfo
     ))
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_supply(matches: &ArgMatches<'_>) -> Result<CliCommandInfo, CliError> {
     let print_accounts = matches.is_present("print_accounts");
     Ok(CliCommandInfo::without_signers(CliCommand::Supply {
@@ -633,16 +644,19 @@ pub fn parse_supply(matches: &ArgMatches<'_>) -> Result<CliCommandInfo, CliError
     }))
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_total_supply(_matches: &ArgMatches<'_>) -> Result<CliCommandInfo, CliError> {
     Ok(CliCommandInfo::without_signers(CliCommand::TotalSupply))
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_get_transaction_count(_matches: &ArgMatches<'_>) -> Result<CliCommandInfo, CliError> {
     Ok(CliCommandInfo::without_signers(
         CliCommand::GetTransactionCount,
     ))
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_show_stakes(
     matches: &ArgMatches<'_>,
     wallet_manager: &mut Option<Rc<RemoteWalletManager>>,
@@ -658,6 +672,7 @@ pub fn parse_show_stakes(
     }))
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_show_validators(matches: &ArgMatches<'_>) -> Result<CliCommandInfo, CliError> {
     let use_lamports_unit = matches.is_present("lamports");
     let number_validators = matches.is_present("number");
@@ -691,6 +706,7 @@ pub fn parse_show_validators(matches: &ArgMatches<'_>) -> Result<CliCommandInfo,
     ))
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_transaction_history(
     matches: &ArgMatches<'_>,
     wallet_manager: &mut Option<Rc<RemoteWalletManager>>,
@@ -972,6 +988,7 @@ pub fn process_first_available_block(rpc_client: &RpcClient) -> ProcessResult {
     Ok(format!("{first_available_block}"))
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_leader_schedule(matches: &ArgMatches<'_>) -> Result<CliCommandInfo, CliError> {
     let epoch = value_of(matches, "epoch");
     Ok(CliCommandInfo::without_signers(
@@ -1195,6 +1212,7 @@ pub fn process_get_block_height(rpc_client: &RpcClient, _config: &CliConfig) -> 
     Ok(block_height.to_string())
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_show_block_production(matches: &ArgMatches<'_>) -> Result<CliCommandInfo, CliError> {
     let epoch = value_t!(matches, "epoch", Epoch).ok();
     let slot_limit = value_t!(matches, "slot_limit", u64).ok();
@@ -1643,6 +1661,7 @@ pub fn process_ping(
     Ok(config.output_format.formatted_string(&cli_ping))
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_logs(
     matches: &ArgMatches<'_>,
     wallet_manager: &mut Option<Rc<RemoteWalletManager>>,

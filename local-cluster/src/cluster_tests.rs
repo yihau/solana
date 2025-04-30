@@ -680,6 +680,7 @@ pub fn submit_vote_to_cluster_gossip(
     )
 }
 
+#[allow(clippy::result_large_err)]
 pub fn new_tpu_quic_client(
     contact_info: &ContactInfo,
     connection_cache: Arc<ConnectionCache>,

@@ -243,6 +243,7 @@ impl ValidatorInfoSubCommands for App<'_, '_> {
     }
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_validator_info_command(
     matches: &ArgMatches<'_>,
     default_signer: &DefaultSigner,
@@ -263,6 +264,7 @@ pub fn parse_validator_info_command(
     })
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_get_validator_info_command(
     matches: &ArgMatches<'_>,
 ) -> Result<CliCommandInfo, CliError> {

@@ -184,6 +184,7 @@ fn apply_previous_transactions(
     allocations.retain(|x| x.amount > 0);
 }
 
+#[allow(clippy::result_large_err)]
 fn transfer<S: Signer>(
     client: &RpcClient,
     lamports: u64,
@@ -324,6 +325,7 @@ fn distribution_instructions(
     }
 }
 
+#[allow(clippy::result_large_err)]
 fn build_messages(
     client: &RpcClient,
     db: &mut PickleDb,
@@ -398,6 +400,7 @@ fn build_messages(
     Ok(())
 }
 
+#[allow(clippy::result_large_err)]
 fn send_messages(
     client: &RpcClient,
     db: &mut PickleDb,
@@ -471,6 +474,7 @@ fn send_messages(
     Ok(())
 }
 
+#[allow(clippy::result_large_err)]
 fn distribute_allocations(
     client: &RpcClient,
     db: &mut PickleDb,
@@ -505,6 +509,7 @@ fn distribute_allocations(
     Ok(())
 }
 
+#[allow(clippy::result_large_err)]
 fn read_allocations(
     input_csv: &str,
     transfer_amount: Option<u64>,
@@ -607,6 +612,7 @@ fn new_spinner_progress_bar() -> ProgressBar {
     progress_bar
 }
 
+#[allow(clippy::result_large_err)]
 pub fn process_allocations(
     client: &RpcClient,
     args: &DistributeTokensArgs,
@@ -689,6 +695,7 @@ pub fn process_allocations(
     Ok(opt_confirmations)
 }
 
+#[allow(clippy::result_large_err)]
 fn finalize_transactions(
     client: &RpcClient,
     db: &mut PickleDb,
@@ -722,6 +729,7 @@ fn finalize_transactions(
 
 // Update the finalized bit on any transactions that are now rooted
 // Return the lowest number of confirmations on the unfinalized transactions or None if all are finalized.
+#[allow(clippy::result_large_err)]
 fn update_finalized_transactions(
     client: &RpcClient,
     db: &mut PickleDb,
@@ -768,6 +776,7 @@ fn update_finalized_transactions(
     Ok(confirmations)
 }
 
+#[allow(clippy::result_large_err)]
 fn log_transaction_confirmations(
     client: &RpcClient,
     db: &mut PickleDb,
@@ -803,6 +812,7 @@ fn log_transaction_confirmations(
     Ok(())
 }
 
+#[allow(clippy::result_large_err)]
 pub fn get_fee_estimate_for_messages(
     messages: &[Message],
     client: &RpcClient,
@@ -817,6 +827,7 @@ pub fn get_fee_estimate_for_messages(
     Ok(fee_estimate)
 }
 
+#[allow(clippy::result_large_err)]
 fn check_payer_balances(
     messages: &[Message],
     allocations: &[TypedAllocation],
@@ -898,6 +909,7 @@ fn check_payer_balances(
     Ok(())
 }
 
+#[allow(clippy::result_large_err)]
 pub fn process_balances(
     client: &RpcClient,
     args: &BalancesArgs,
@@ -947,6 +959,7 @@ pub fn process_balances(
     Ok(())
 }
 
+#[allow(clippy::result_large_err)]
 pub fn process_transaction_log(args: &TransactionLogArgs) -> Result<(), Error> {
     let db = db::open_db(&args.transaction_db, true)?;
     db::write_transaction_log(&db, &args.output_path)?;

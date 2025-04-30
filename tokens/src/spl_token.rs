@@ -16,6 +16,7 @@ use {
     },
 };
 
+#[allow(clippy::result_large_err)]
 pub fn update_token_args(client: &RpcClient, args: &mut Option<SplTokenArgs>) -> Result<(), Error> {
     if let Some(spl_token_args) = args {
         let sender_account = client
@@ -27,6 +28,7 @@ pub fn update_token_args(client: &RpcClient, args: &mut Option<SplTokenArgs>) ->
     Ok(())
 }
 
+#[allow(clippy::result_large_err)]
 pub fn update_decimals(client: &RpcClient, args: &mut Option<SplTokenArgs>) -> Result<(), Error> {
     if let Some(spl_token_args) = args {
         let mint_account = client.get_account(&spl_token_args.mint).unwrap_or_default();
@@ -73,6 +75,7 @@ pub(crate) fn build_spl_token_instructions(
     instructions
 }
 
+#[allow(clippy::result_large_err)]
 pub(crate) fn check_spl_token_balances(
     messages: &[Message],
     allocations: &[TypedAllocation],
@@ -110,6 +113,7 @@ pub(crate) fn check_spl_token_balances(
     Ok(())
 }
 
+#[allow(clippy::result_large_err)]
 pub(crate) fn print_token_balances(
     client: &RpcClient,
     allocation: &TypedAllocation,

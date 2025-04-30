@@ -54,6 +54,7 @@ impl InflationSubCommands for App<'_, '_> {
     }
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_inflation_subcommand(
     matches: &ArgMatches<'_>,
     _default_signer: &DefaultSigner,

@@ -1111,6 +1111,7 @@ fn compute_and_report_stats(
     );
 }
 
+#[allow(clippy::result_large_err)]
 pub fn generate_and_fund_keypairs<T: 'static + TpsClient + Send + Sync + ?Sized>(
     client: Arc<T>,
     funding_key: &Keypair,
@@ -1140,6 +1141,7 @@ pub fn generate_and_fund_keypairs<T: 'static + TpsClient + Send + Sync + ?Sized>
     Ok(keypairs)
 }
 
+#[allow(clippy::result_large_err)]
 pub fn fund_keypairs<T: 'static + TpsClient + Send + Sync + ?Sized>(
     client: Arc<T>,
     funding_key: &Keypair,

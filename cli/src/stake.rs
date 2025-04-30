@@ -796,6 +796,7 @@ impl StakeSubCommands for App<'_, '_> {
     }
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_create_stake_account(
     matches: &ArgMatches<'_>,
     default_signer: &DefaultSigner,
@@ -872,6 +873,7 @@ pub fn parse_create_stake_account(
     })
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_stake_delegate_stake(
     matches: &ArgMatches<'_>,
     default_signer: &DefaultSigner,
@@ -920,6 +922,7 @@ pub fn parse_stake_delegate_stake(
     })
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_stake_authorize(
     matches: &ArgMatches<'_>,
     default_signer: &DefaultSigner,
@@ -1049,6 +1052,7 @@ pub fn parse_stake_authorize(
     })
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_split_stake(
     matches: &ArgMatches<'_>,
     default_signer: &DefaultSigner,
@@ -1102,6 +1106,7 @@ pub fn parse_split_stake(
     })
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_merge_stake(
     matches: &ArgMatches<'_>,
     default_signer: &DefaultSigner,
@@ -1149,6 +1154,7 @@ pub fn parse_merge_stake(
     })
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_stake_deactivate_stake(
     matches: &ArgMatches<'_>,
     default_signer: &DefaultSigner,
@@ -1197,6 +1203,7 @@ pub fn parse_stake_deactivate_stake(
     })
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_stake_withdraw_stake(
     matches: &ArgMatches<'_>,
     default_signer: &DefaultSigner,
@@ -1252,6 +1259,7 @@ pub fn parse_stake_withdraw_stake(
     })
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_stake_set_lockup(
     matches: &ArgMatches<'_>,
     default_signer: &DefaultSigner,
@@ -1321,6 +1329,7 @@ pub fn parse_stake_set_lockup(
     })
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_show_stake_account(
     matches: &ArgMatches<'_>,
     wallet_manager: &mut Option<Rc<RemoteWalletManager>>,
@@ -1346,6 +1355,7 @@ pub fn parse_show_stake_account(
     ))
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_show_stake_history(matches: &ArgMatches<'_>) -> Result<CliCommandInfo, CliError> {
     let use_lamports_unit = matches.is_present("lamports");
     let limit_results = value_of(matches, "limit").unwrap();
@@ -1357,6 +1367,7 @@ pub fn parse_show_stake_history(matches: &ArgMatches<'_>) -> Result<CliCommandIn
     ))
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_stake_minimum_delegation(
     matches: &ArgMatches<'_>,
 ) -> Result<CliCommandInfo, CliError> {
@@ -2497,6 +2508,7 @@ fn get_stake_account_state(
     })
 }
 
+#[allow(clippy::result_large_err)]
 pub(crate) fn check_current_authority(
     permitted_authorities: &[Pubkey],
     provided_current_authority: &Pubkey,
@@ -2636,6 +2648,7 @@ pub fn process_show_stake_account(
     Ok(config.output_format.formatted_string(&state))
 }
 
+#[allow(clippy::result_large_err)]
 pub fn get_account_stake_state(
     rpc_client: &RpcClient,
     stake_account_address: &Pubkey,

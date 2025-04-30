@@ -512,6 +512,7 @@ impl FeatureSubCommands for App<'_, '_> {
     }
 }
 
+#[allow(clippy::result_large_err)]
 fn known_feature(feature: &Pubkey) -> Result<(), CliError> {
     if FEATURE_NAMES.contains_key(feature) {
         Ok(())
@@ -522,6 +523,7 @@ fn known_feature(feature: &Pubkey) -> Result<(), CliError> {
     }
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_feature_subcommand(
     matches: &ArgMatches<'_>,
     default_signer: &DefaultSigner,
@@ -678,6 +680,7 @@ impl ClusterInfoStats {
     }
 }
 
+#[allow(clippy::result_large_err)]
 fn cluster_info_stats(rpc_client: &RpcClient) -> Result<ClusterInfoStats, ClientError> {
     #[derive(Default)]
     struct StatsEntry {
@@ -776,6 +779,7 @@ fn cluster_info_stats(rpc_client: &RpcClient) -> Result<ClusterInfoStats, Client
 }
 
 // Feature activation is only allowed when 95% of the active stake is on the current feature set
+#[allow(clippy::result_large_err)]
 fn feature_activation_allowed(
     rpc_client: &RpcClient,
     quiet: bool,
@@ -901,6 +905,7 @@ pub fn get_feature_is_active(
         .map(|status| matches!(status, Some(CliFeatureStatus::Active(_))))
 }
 
+#[allow(clippy::result_large_err)]
 pub fn get_feature_activation_epoch(
     rpc_client: &RpcClient,
     feature_id: &Pubkey,

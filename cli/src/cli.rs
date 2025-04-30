@@ -1718,6 +1718,7 @@ pub fn process_command(config: &CliConfig) -> ProcessResult {
     }
 }
 
+#[allow(clippy::result_large_err)]
 pub fn request_and_confirm_airdrop(
     rpc_client: &RpcClient,
     config: &CliConfig,

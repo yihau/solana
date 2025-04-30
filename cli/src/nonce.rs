@@ -204,6 +204,7 @@ impl NonceSubCommands for App<'_, '_> {
     }
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_authorize_nonce_account(
     matches: &ArgMatches<'_>,
     default_signer: &DefaultSigner,
@@ -235,6 +236,7 @@ pub fn parse_authorize_nonce_account(
     })
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_nonce_create_account(
     matches: &ArgMatches<'_>,
     default_signer: &DefaultSigner,
@@ -268,6 +270,7 @@ pub fn parse_nonce_create_account(
     })
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_get_nonce(
     matches: &ArgMatches<'_>,
     wallet_manager: &mut Option<Rc<RemoteWalletManager>>,
@@ -280,6 +283,7 @@ pub fn parse_get_nonce(
     )))
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_new_nonce(
     matches: &ArgMatches<'_>,
     default_signer: &DefaultSigner,
@@ -309,6 +313,7 @@ pub fn parse_new_nonce(
     })
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_show_nonce_account(
     matches: &ArgMatches<'_>,
     wallet_manager: &mut Option<Rc<RemoteWalletManager>>,
@@ -325,6 +330,7 @@ pub fn parse_show_nonce_account(
     ))
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_withdraw_from_nonce_account(
     matches: &ArgMatches<'_>,
     default_signer: &DefaultSigner,
@@ -359,6 +365,7 @@ pub fn parse_withdraw_from_nonce_account(
     })
 }
 
+#[allow(clippy::result_large_err)]
 pub(crate) fn parse_upgrade_nonce_account(
     matches: &ArgMatches<'_>,
 ) -> Result<CliCommandInfo, CliError> {
@@ -376,6 +383,7 @@ pub(crate) fn parse_upgrade_nonce_account(
 }
 
 /// Check if a nonce account is initialized with the given authority and hash
+#[allow(clippy::result_large_err)]
 pub fn check_nonce_account(
     nonce_account: &Account,
     nonce_authority: &Pubkey,

@@ -10,6 +10,7 @@ use {
 const NUM_RETRY: u64 = 5;
 const RETRY_EVERY_MS: u64 = 4 * DEFAULT_MS_PER_SLOT;
 
+#[allow(clippy::result_large_err)]
 fn call_rpc_with_retry<Func, Data>(f: Func, retry_warning: &str) -> TpsClientResult<Data>
 where
     Func: Fn() -> TpsClientResult<Data>,
@@ -32,6 +33,7 @@ where
     }
 }
 
+#[allow(clippy::result_large_err)]
 pub(crate) fn get_slot_with_retry<Client>(
     client: &Arc<Client>,
     commitment: CommitmentConfig,
@@ -45,6 +47,7 @@ where
     )
 }
 
+#[allow(clippy::result_large_err)]
 pub(crate) fn get_blocks_with_retry<Client>(
     client: &Arc<Client>,
     start_slot: Slot,

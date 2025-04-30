@@ -60,6 +60,7 @@ struct SpendAndFee {
     fee: u64,
 }
 
+#[allow(clippy::result_large_err)]
 pub fn resolve_spend_tx_and_check_account_balance<F>(
     rpc_client: &RpcClient,
     sign_only: bool,
@@ -86,6 +87,7 @@ where
     )
 }
 
+#[allow(clippy::result_large_err)]
 pub fn resolve_spend_tx_and_check_account_balances<F>(
     rpc_client: &RpcClient,
     sign_only: bool,
@@ -186,6 +188,7 @@ where
     }
 }
 
+#[allow(clippy::result_large_err)]
 fn resolve_spend_message<F>(
     rpc_client: &RpcClient,
     amount: SpendAmount,

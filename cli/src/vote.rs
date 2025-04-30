@@ -451,6 +451,7 @@ impl VoteSubCommands for App<'_, '_> {
     }
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_create_vote_account(
     matches: &ArgMatches<'_>,
     default_signer: &DefaultSigner,
@@ -520,6 +521,7 @@ pub fn parse_create_vote_account(
     })
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_vote_authorize(
     matches: &ArgMatches<'_>,
     default_signer: &DefaultSigner,
@@ -581,6 +583,7 @@ pub fn parse_vote_authorize(
     })
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_vote_update_validator(
     matches: &ArgMatches<'_>,
     default_signer: &DefaultSigner,
@@ -628,6 +631,7 @@ pub fn parse_vote_update_validator(
     })
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_vote_update_commission(
     matches: &ArgMatches<'_>,
     default_signer: &DefaultSigner,
@@ -674,6 +678,7 @@ pub fn parse_vote_update_commission(
     })
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_vote_get_account_command(
     matches: &ArgMatches<'_>,
     wallet_manager: &mut Option<Rc<RemoteWalletManager>>,
@@ -699,6 +704,7 @@ pub fn parse_vote_get_account_command(
     ))
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_withdraw_from_vote_account(
     matches: &ArgMatches<'_>,
     default_signer: &DefaultSigner,
@@ -755,6 +761,7 @@ pub fn parse_withdraw_from_vote_account(
     })
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_close_vote_account(
     matches: &ArgMatches<'_>,
     default_signer: &DefaultSigner,

@@ -397,6 +397,7 @@ fn resolve_derived_address_program_id(matches: &ArgMatches<'_>, arg_name: &str) 
     })
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_account(
     matches: &ArgMatches<'_>,
     wallet_manager: &mut Option<Rc<RemoteWalletManager>>,
@@ -411,6 +412,7 @@ pub fn parse_account(
     }))
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_airdrop(
     matches: &ArgMatches<'_>,
     default_signer: &DefaultSigner,
@@ -429,6 +431,7 @@ pub fn parse_airdrop(
     })
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_balance(
     matches: &ArgMatches<'_>,
     default_signer: &DefaultSigner,
@@ -449,6 +452,7 @@ pub fn parse_balance(
     })
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_decode_transaction(matches: &ArgMatches<'_>) -> Result<CliCommandInfo, CliError> {
     let blob = value_t_or_exit!(matches, "transaction", String);
     let binary_encoding = match matches.value_of("encoding").unwrap() {
@@ -469,6 +473,7 @@ pub fn parse_decode_transaction(matches: &ArgMatches<'_>) -> Result<CliCommandIn
     }
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_create_address_with_seed(
     matches: &ArgMatches<'_>,
     default_signer: &DefaultSigner,
@@ -495,6 +500,7 @@ pub fn parse_create_address_with_seed(
     })
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_find_program_derived_address(
     matches: &ArgMatches<'_>,
 ) -> Result<CliCommandInfo, CliError> {
@@ -540,6 +546,7 @@ pub fn parse_find_program_derived_address(
     ))
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_transfer(
     matches: &ArgMatches<'_>,
     default_signer: &DefaultSigner,
@@ -596,6 +603,7 @@ pub fn parse_transfer(
     })
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_sign_offchain_message(
     matches: &ArgMatches<'_>,
     default_signer: &DefaultSigner,
@@ -613,6 +621,7 @@ pub fn parse_sign_offchain_message(
     })
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_verify_offchain_signature(
     matches: &ArgMatches<'_>,
     default_signer: &DefaultSigner,

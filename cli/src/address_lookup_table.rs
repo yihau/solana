@@ -248,6 +248,7 @@ impl AddressLookupTableSubCommands for App<'_, '_> {
     }
 }
 
+#[allow(clippy::result_large_err)]
 pub fn parse_address_lookup_table_subcommand(
     matches: &ArgMatches<'_>,
     default_signer: &DefaultSigner,

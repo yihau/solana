@@ -4,6 +4,7 @@ use {
     solana_sdk::stake::state::StakeStateV2,
 };
 
+#[allow(clippy::result_large_err)]
 pub fn update_stake_args(client: &RpcClient, args: &mut Option<StakeArgs>) -> Result<(), Error> {
     if let Some(stake_args) = args {
         if let Some(sender_args) = &mut stake_args.sender_stake_args {

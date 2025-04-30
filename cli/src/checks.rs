@@ -5,6 +5,7 @@ use {
     solana_rpc_client_api::client_error::Result as ClientResult,
 };
 
+#[allow(clippy::result_large_err)]
 pub fn check_account_for_fee(
     rpc_client: &RpcClient,
     account_pubkey: &Pubkey,
@@ -13,6 +14,7 @@ pub fn check_account_for_fee(
     check_account_for_multiple_fees(rpc_client, account_pubkey, &[message])
 }
 
+#[allow(clippy::result_large_err)]
 pub fn check_account_for_fee_with_commitment(
     rpc_client: &RpcClient,
     account_pubkey: &Pubkey,
@@ -27,6 +29,7 @@ pub fn check_account_for_fee_with_commitment(
     )
 }
 
+#[allow(clippy::result_large_err)]
 pub fn check_account_for_multiple_fees(
     rpc_client: &RpcClient,
     account_pubkey: &Pubkey,
@@ -40,6 +43,7 @@ pub fn check_account_for_multiple_fees(
     )
 }
 
+#[allow(clippy::result_large_err)]
 pub fn check_account_for_multiple_fees_with_commitment(
     rpc_client: &RpcClient,
     account_pubkey: &Pubkey,
@@ -55,6 +59,7 @@ pub fn check_account_for_multiple_fees_with_commitment(
     )
 }
 
+#[allow(clippy::result_large_err)]
 pub fn check_account_for_spend_multiple_fees_with_commitment(
     rpc_client: &RpcClient,
     account_pubkey: &Pubkey,
@@ -72,6 +77,7 @@ pub fn check_account_for_spend_multiple_fees_with_commitment(
     )
 }
 
+#[allow(clippy::result_large_err)]
 pub fn check_account_for_spend_and_fee_with_commitment(
     rpc_client: &RpcClient,
     account_pubkey: &Pubkey,
@@ -110,6 +116,7 @@ pub fn check_account_for_spend_and_fee_with_commitment(
     Ok(())
 }
 
+#[allow(clippy::result_large_err)]
 pub fn get_fee_for_messages(
     rpc_client: &RpcClient,
     messages: &[&Message],
@@ -122,6 +129,7 @@ pub fn get_fee_for_messages(
         .sum())
 }
 
+#[allow(clippy::result_large_err)]
 pub fn check_account_for_balance(
     rpc_client: &RpcClient,
     account_pubkey: &Pubkey,
@@ -135,6 +143,7 @@ pub fn check_account_for_balance(
     )
 }
 
+#[allow(clippy::result_large_err)]
 pub fn check_account_for_balance_with_commitment(
     rpc_client: &RpcClient,
     account_pubkey: &Pubkey,
@@ -150,6 +159,7 @@ pub fn check_account_for_balance_with_commitment(
     Ok(false)
 }
 
+#[allow(clippy::result_large_err)]
 pub fn check_unique_pubkeys(
     pubkey0: (&Pubkey, String),
     pubkey1: (&Pubkey, String),
