@@ -1,0 +1,35 @@
+name: Test Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "The version to release"
+        required: true
+        default: "0.1.0"
+      branch:
+        description: "The branch to release"
+        required: true
+        default: "main"
+
+jobs:
+  version-bump:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branch }}
+          fetch-depth: 0
+
+      - name: Create branch and make changes
+        run: |
+          next_version=${{ inputs.version }}
+
+          git checkout -b version-bump-$next_version
+          ./scripts/increment-cargo-version.sh patch
+
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git commit -am "Bump version to $next_version"
+          git push origin version-bump-$next_version

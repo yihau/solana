@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -e
+set -ex
 
 usage() {
   cat <<EOF
@@ -143,13 +143,17 @@ for Cargo_toml in "${Cargo_tomls[@]}"; do
   done
 done
 
+echo "Before cargo-for-all-lock-files.sh tree"
 # Update cargo lock files
 scripts/cargo-for-all-lock-files.sh tree >/dev/null
+
+echo "Before cargo-for-all-lock-files.sh tree"
 
 # Filter out unrelated changes
 # some other dependencies might change after the tree command (like hashbrown)
 # the workaround is to filter out unrelated changes then apply the patch
 (
+  set -x
   shopt -s globstar
   git diff --unified=0 ./**/Cargo.lock >cargo-lock-patch
   grep -E '^(diff|index|---|\+\+\+|@@.*@@ name = .*|-version|\+version|@@.*@@ dependencies.*|- "agave-|\+ "agave-|- "solana-|\+ "solana-)' cargo-lock-patch >filtered-cargo-lock-patch
