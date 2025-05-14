@@ -54,7 +54,7 @@ if [[ -z $1 ]]; then
     --workspace
     --tests
     --exclude solana-local-cluster
-    --exclude cargo_test_sbf
+    --exclude solana-cargo-build-sbf
   )
 else
   PACKAGES=("$@")
