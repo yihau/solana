@@ -608,7 +608,6 @@ wasm-bindgen = "0.2"
 winapi = "0.3.8"
 winreg = "0.50"
 x509-parser = "0.14.0"
-# See "zeroize versioning issues" below if you are updating this version.
 zeroize = { version = "1.7", default-features = false }
 zstd = "0.13.3"
 
