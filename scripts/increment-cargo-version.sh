@@ -183,7 +183,7 @@ scripts/cargo-for-all-lock-files.sh tree >/dev/null
   done
   mv "$tmp_file" filtered-cargo-lock-patch
 
-  git checkout ./**/Cargo.lock
+  git ls-files -- **/Cargo.lock | xargs -I {} git checkout {}
   git apply --unidiff-zero filtered-cargo-lock-patch
   rm cargo-lock-patch filtered-cargo-lock-patch
 )
