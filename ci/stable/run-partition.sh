@@ -8,7 +8,7 @@ TOTAL=$2
 : "${TOTAL:?}"
 
 if [ "$CURRENT" -gt "$TOTAL" ]; then
-  echo "Error: The value of CURRENT (\$1) must be less than the value of TOTAL (\$2)."
+  echo "Error: The value of CURRENT (\$1) cannot be greater than the value of TOTAL (\$2)."
   exit 1
 fi
 
