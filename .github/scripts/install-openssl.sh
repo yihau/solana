@@ -24,7 +24,7 @@ case "$os_name" in
       "version": "3.4.1"
     }
   ],
-  "builtin-baseline": "772170438c9a2fd90198d71c7c66b52c675ae844"
+  "builtin-baseline": "5ee5eee0d3e9c6098b24d263e9099edcdcef6631"
 }
 EOL
   vcpkg install --triplet x64-windows-static-md
