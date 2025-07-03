@@ -15,8 +15,6 @@ case "$os_name" in
   #     git show __COMMIT_HASH__:versions/o-/openssl.json
   cat > vcpkg.json <<EOL
 {
-  "name": "agave",
-  "version-string": "0.1.0",
   "dependencies": ["openssl"],
   "overrides": [
     {
