@@ -23,6 +23,8 @@ enum Commands {
     Hello,
     #[command(about = "Bump version")]
     BumpVersion(commands::bump_version::BumpArgs),
+    #[command(about = "Generate pipeline")]
+    GeneratePipeline(commands::generate_pipeline::GeneratePipelineArgs),
 }
 
 #[derive(Args, Debug)]
@@ -32,8 +34,9 @@ pub struct GlobalOptions {
     pub verbose: bool,
 }
 
-fn main() {
-    if let Err(err) = try_main() {
+#[tokio::main]
+async fn main() {
+    if let Err(err) = try_main().await {
         error!("Error: {err}");
         for (i, cause) in err.chain().skip(1).enumerate() {
             error!("  {}: {}", i.saturating_add(1), cause);
@@ -42,7 +45,7 @@ fn main() {
     }
 }
 
-fn try_main() -> Result<()> {
+async fn try_main() -> Result<()> {
     // parse the command line arguments
     let xtask = Xtask::parse();
 
@@ -61,6 +64,9 @@ fn try_main() -> Result<()> {
         }
         Commands::BumpVersion(args) => {
             commands::bump_version::run(args)?;
+        }
+        Commands::GeneratePipeline(args) => {
+            commands::generate_pipeline::run(args).await?;
         }
     }
     Ok(())
