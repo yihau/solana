@@ -1787,6 +1787,7 @@ mod tests {
                 blockstore_options: BlockstoreOptions::default(),
                 json_rpc_config: JsonRpcConfig {
                     health_check_slot_distance: 128,
+                    max_multiple_accounts: Some(100),
                     ..JsonRpcConfig::default()
                 },
             }
