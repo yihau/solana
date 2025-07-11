@@ -1766,6 +1766,7 @@ mod tests {
     use {
         super::*,
         crate::cli::thread_args::thread_args,
+        solana_rpc::rpc::MAX_REQUEST_BODY_SIZE,
         std::{
             net::{IpAddr, Ipv4Addr},
             num::NonZeroUsize,
@@ -1791,6 +1792,7 @@ mod tests {
                     max_multiple_accounts: Some(100),
                     rpc_threads: num_cpus::get(),
                     rpc_blocking_threads: 1.max(num_cpus::get() / 4),
+                    max_request_body_size: Some(MAX_REQUEST_BODY_SIZE),
                     ..JsonRpcConfig::default()
                 },
             }
