@@ -1784,7 +1784,10 @@ mod tests {
                 known_validators,
                 rpc_bootstrap_config: RpcBootstrapConfig::default(),
                 blockstore_options: BlockstoreOptions::default(),
-                json_rpc_config: JsonRpcConfig::default(),
+                json_rpc_config: JsonRpcConfig {
+                    health_check_slot_distance: 128,
+                    ..JsonRpcConfig::default()
+                },
             }
         }
     }
