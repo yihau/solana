@@ -1769,6 +1769,7 @@ mod tests {
     use {
         super::*,
         crate::cli::thread_args::thread_args,
+        solana_rayon_threadlimit::get_thread_count,
         solana_rpc::rpc::MAX_REQUEST_BODY_SIZE,
         std::{
             net::{IpAddr, Ipv4Addr},
@@ -1800,6 +1801,7 @@ mod tests {
                 },
                 pub_sub_config: PubSubConfig {
                     worker_threads: 4,
+                    notification_threads: Some(NonZeroUsize::new(get_thread_count()).unwrap()),
                     ..PubSubConfig::default()
                 },
             }
