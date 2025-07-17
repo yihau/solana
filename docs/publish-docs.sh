@@ -2,10 +2,6 @@
 
 set -e
 
-if [[ -d .vercel ]]; then
-  rm -r .vercel
-fi
-
 CONFIG_FILE=vercel.json
 
 if [[ -n $CI_TAG ]]; then
