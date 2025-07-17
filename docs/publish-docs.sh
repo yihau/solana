@@ -27,7 +27,7 @@ else
 
   if [[ -n $CI_TAG ]]; then
     if [[ $CI_TAG != $BETA_CHANNEL* ]]; then
-    PROJECT_NAME=docs-anza-xyz
+      PROJECT_NAME=docs-anza-xyz
     fi
   else
     case $CHANNEL in
