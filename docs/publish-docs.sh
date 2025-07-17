@@ -2,6 +2,11 @@
 
 set -e
 
+here=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
+
+# shellcheck source=ci/env.sh
+source "$here/../ci/env.sh"
+
 if [[ -z $CI ]]; then
   echo "Publishing docs from local"
   if [[ -z $PROJECT_NAME ]]; then
@@ -18,7 +23,7 @@ else
   fi
 
   # get the channel info
-  eval "$(../ci/channel-info.sh)"
+  eval "$("$here/../ci/channel-info.sh")"
 
   if [[ -n $CI_TAG ]]; then
     if [[ $CI_TAG != $BETA_CHANNEL* ]]; then
