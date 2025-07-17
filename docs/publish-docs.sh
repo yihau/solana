@@ -2,25 +2,51 @@
 
 set -e
 
-CONFIG_FILE=vercel.json
-
-if [[ -n $CI_TAG ]]; then
-  PROJECT_NAME=docs-anza-xyz
+if [[ -z $CI ]]; then
+  echo "Publishing docs from local"
+  if [[ -z $PROJECT_NAME ]]; then
+    echo "❌ PROJECT_NAME is undefined"
+    exit 1
+  fi
 else
-  eval "$(../ci/channel-info.sh)"
-  case $CHANNEL in
-  edge)
-    PROJECT_NAME=edge-docs-anza-xyz
-    ;;
-  beta)
-    PROJECT_NAME=beta-docs-anza-xyz
-    ;;
-  *)
-    PROJECT_NAME=docs
-    ;;
-  esac
-fi
+  echo "Publishing docs from CI"
 
+  # skip docs publish from pull requests
+  if [[ -n $CI_PULL_REQUEST ]]; then
+    echo "skipping docs publish from pull requests"
+    exit 0
+  fi
+
+  # get the channel info
+  eval "$(../ci/channel-info.sh)"
+
+  if [[ -n $CI_TAG ]]; then
+    if [[ $CI_TAG != $BETA_CHANNEL* ]]; then
+    PROJECT_NAME=docs-anza-xyz
+    fi
+  else
+    case $CHANNEL in
+    edge)
+      PROJECT_NAME=edge-docs-anza-xyz
+      ;;
+    beta)
+      PROJECT_NAME=beta-docs-anza-xyz
+      ;;
+    stable)
+      echo "skipping docs publish from stable channel"
+      exit 0
+      ;;
+    *)
+      echo "❌ unknown channel: '$CHANNEL'"
+      exit 1
+      ;;
+    esac
+  fi
+fi
+echo "PROJECT_NAME: $PROJECT_NAME"
+
+# create the vercel.json file
+CONFIG_FILE=vercel.json
 cat > "$CONFIG_FILE" <<EOF
 {
   "name": "$PROJECT_NAME",
@@ -143,8 +169,9 @@ cat > "$CONFIG_FILE" <<EOF
 }
 EOF
 
-[[ -n $VERCEL_TOKEN ]] || {
-  echo "VERCEL_TOKEN is undefined.  Needed for Vercel authentication."
+if [[ -z $VERCEL_TOKEN ]]; then
+  echo "❌ VERCEL_TOKEN is undefined"
   exit 1
-}
+fi
+
 vercel deploy . --local-config="$CONFIG_FILE" --yes --token "$VERCEL_TOKEN" --prod
