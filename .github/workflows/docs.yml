@@ -1,4 +1,4 @@
-name: docs
+name: Docs
 
 on:
   push:
@@ -89,6 +89,11 @@ jobs:
         run: |
           npm install
           ./build.sh
+
+      - name: Deploy
+        working-directory: docs
+        run: |
+          ./publish-docs.sh
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_SCOPE: ${{ secrets.VERCEL_SCOPE }}
