@@ -6,6 +6,17 @@ use {
 
 impl FromClapArgMatches for SendTransactionServiceConfig {
     fn from_clap_arg_match(matches: &ArgMatches) -> Result<Self> {
+        let rpc_send_batch_send_rate_ms = value_t!(matches, "rpc_send_transaction_batch_ms", u64)?;
+        let rpc_send_retry_rate_ms = value_t!(matches, "rpc_send_transaction_retry_ms", u64)?;
+        if rpc_send_batch_send_rate_ms > rpc_send_retry_rate_ms {
+            return Err(crate::commands::Error::Dynamic(Box::<dyn std::error::Error>::from(
+                format!(
+                    "the specified rpc-send-batch-ms ({rpc_send_batch_send_rate_ms}) is invalid, it must \
+                 be <= rpc-send-retry-ms ({rpc_send_retry_rate_ms})"
+                ),
+            )));
+        }
+
         let tpu_peers = matches
             .values_of("rpc_send_transaction_tpu_peer")
             .map(|values| values.map(solana_net_utils::parse_host_port).collect())
@@ -26,9 +37,9 @@ impl FromClapArgMatches for SendTransactionServiceConfig {
         };
 
         Ok(SendTransactionServiceConfig {
-            retry_rate_ms: value_t!(matches, "rpc_send_transaction_retry_ms", u64)?,
+            retry_rate_ms: rpc_send_retry_rate_ms,
             batch_size: value_t!(matches, "rpc_send_transaction_batch_size", usize)?,
-            batch_send_rate_ms: value_t!(matches, "rpc_send_transaction_batch_ms", u64)?,
+            batch_send_rate_ms: rpc_send_batch_send_rate_ms,
             default_max_retries: value_t!(
                 matches,
                 "rpc_send_transaction_default_max_retries",
@@ -101,14 +112,14 @@ mod tests {
         let default_run_args = RunArgs::default();
         let expected_args = RunArgs {
             send_transaction_service_config: SendTransactionServiceConfig {
-                batch_send_rate_ms: 99999,
+                batch_send_rate_ms: 1999,
                 ..default_run_args.send_transaction_service_config.clone()
             },
             ..default_run_args.clone()
         };
         verify_args_struct_by_command_run_with_identity_setup(
             default_run_args,
-            vec!["--rpc-send-batch-ms", "99999"],
+            vec!["--rpc-send-batch-ms", "1999"],
             expected_args,
         );
     }
