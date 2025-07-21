@@ -6,6 +6,25 @@ use {
 
 impl FromClapArgMatches for SendTransactionServiceConfig {
     fn from_clap_arg_match(matches: &ArgMatches) -> Result<Self> {
+        let tpu_peers = matches
+            .values_of("rpc_send_transaction_tpu_peer")
+            .map(|values| values.map(solana_net_utils::parse_host_port).collect())
+            .transpose()
+            .map_err(|e| {
+                crate::commands::Error::Dynamic(Box::<dyn std::error::Error>::from(format!(
+                    "Invalid tpu peer address: {e}",
+                )))
+            })?;
+
+        let rpc_send_transaction_also_leader =
+            matches.is_present("rpc_send_transaction_also_leader");
+        let leader_forward_count = if tpu_peers.is_some() && !rpc_send_transaction_also_leader {
+            // rpc-sts is configured to send only to specific tpu peers. disable leader forwards
+            0
+        } else {
+            value_t!(matches, "rpc_send_transaction_leader_forward_count", u64)?
+        };
+
         Ok(SendTransactionServiceConfig {
             retry_rate_ms: value_t!(matches, "rpc_send_transaction_retry_ms", u64)?,
             batch_size: value_t!(matches, "rpc_send_transaction_batch_size", usize)?,
@@ -26,15 +45,8 @@ impl FromClapArgMatches for SendTransactionServiceConfig {
                 "rpc_send_transaction_retry_pool_max_size",
                 usize
             )?,
-            tpu_peers: matches
-                .values_of("rpc_send_transaction_tpu_peer")
-                .map(|values| values.map(solana_net_utils::parse_host_port).collect())
-                .transpose()
-                .map_err(|e| {
-                    crate::commands::Error::Dynamic(Box::<dyn std::error::Error>::from(format!(
-                        "Invalid tpu peer address: {e}",
-                    )))
-                })?,
+            tpu_peers,
+            leader_forward_count,
             ..Default::default()
         })
     }
@@ -160,6 +172,7 @@ mod tests {
             let expected_args = RunArgs {
                 send_transaction_service_config: SendTransactionServiceConfig {
                     tpu_peers: Some(vec![SocketAddr::from((Ipv4Addr::LOCALHOST, 8000))]),
+                    leader_forward_count: 0, // see SendTransactionServiceConfig::from_clap_arg_match for more details
                     ..default_run_args.send_transaction_service_config.clone()
                 },
                 ..default_run_args.clone()
@@ -181,6 +194,7 @@ mod tests {
                         SocketAddr::from((Ipv4Addr::LOCALHOST, 8001)),
                         SocketAddr::from((Ipv4Addr::LOCALHOST, 8002)),
                     ]),
+                    leader_forward_count: 0, // see SendTransactionServiceConfig::from_clap_arg_match for more details
                     ..default_run_args.send_transaction_service_config.clone()
                 },
                 ..default_run_args.clone()
@@ -194,6 +208,73 @@ mod tests {
                     "127.0.0.1:8001",
                     "--rpc-send-transaction-tpu-peer",
                     "127.0.0.1:8002",
+                ],
+                expected_args,
+            );
+        }
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_rpc_send_transaction_leader_forward_count() {
+        // rpc-send-transaction-leader-forward-count
+        {
+            let default_run_args = RunArgs::default();
+            let expected_args = RunArgs {
+                send_transaction_service_config: SendTransactionServiceConfig {
+                    leader_forward_count: 100,
+                    ..default_run_args.send_transaction_service_config.clone()
+                },
+                ..default_run_args.clone()
+            };
+            verify_args_struct_by_command_run_with_identity_setup(
+                default_run_args,
+                vec!["--rpc-send-leader-count", "100"],
+                expected_args,
+            );
+        }
+
+        // rpc-send-transaction-leader-forward-count + rpc-send-transaction-tpu-peer
+        {
+            let default_run_args = RunArgs::default();
+            let expected_args = RunArgs {
+                send_transaction_service_config: SendTransactionServiceConfig {
+                    leader_forward_count: 0,
+                    tpu_peers: Some(vec![SocketAddr::from((Ipv4Addr::LOCALHOST, 8000))]),
+                    ..default_run_args.send_transaction_service_config.clone()
+                },
+                ..default_run_args.clone()
+            };
+            verify_args_struct_by_command_run_with_identity_setup(
+                default_run_args,
+                vec![
+                    "--rpc-send-transaction-tpu-peer",
+                    "127.0.0.1:8000",
+                    "--rpc-send-leader-count",
+                    "100",
+                ],
+                expected_args,
+            );
+        }
+
+        // rpc-send-transaction-leader-forward-count + rpc-send-transaction-also-leader + rpc-send-transaction-tpu-peer
+        {
+            let default_run_args = RunArgs::default();
+            let expected_args = RunArgs {
+                send_transaction_service_config: SendTransactionServiceConfig {
+                    tpu_peers: Some(vec![SocketAddr::from((Ipv4Addr::LOCALHOST, 8000))]),
+                    leader_forward_count: 100,
+                    ..default_run_args.send_transaction_service_config.clone()
+                },
+                ..default_run_args.clone()
+            };
+            verify_args_struct_by_command_run_with_identity_setup(
+                default_run_args,
+                vec![
+                    "--rpc-send-transaction-tpu-peer",
+                    "127.0.0.1:8000",
+                    "--rpc-send-transaction-also-leader",
+                    "--rpc-send-leader-count",
+                    "100",
                 ],
                 expected_args,
             );
