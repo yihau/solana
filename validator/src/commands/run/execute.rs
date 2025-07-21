@@ -59,7 +59,6 @@ use {
             self, ArchiveFormat, SnapshotInterval, SnapshotVersion, BANK_SNAPSHOTS_DIR,
         },
     },
-    solana_send_transaction_service::send_transaction_service,
     solana_signer::Signer,
     solana_streamer::quic::{QuicServerParams, DEFAULT_TPU_COALESCE},
     solana_tpu_client::tpu_client::DEFAULT_TPU_ENABLE_UDP,
@@ -458,11 +457,6 @@ pub fn execute(
     let starting_with_geyser_plugins: bool = on_start_geyser_plugin_config_files.is_some()
         || matches.is_present("geyser_plugin_always_enabled");
 
-    let rpc_send_retry_rate_ms = run_args.send_transaction_service_config.retry_rate_ms;
-    let rpc_send_batch_size = run_args.send_transaction_service_config.batch_size;
-    let rpc_send_batch_send_rate_ms = run_args.send_transaction_service_config.batch_send_rate_ms;
-    let rpc_send_transaction_tpu_peers = run_args.send_transaction_service_config.tpu_peers;
-
     let xdp_interface = matches.value_of("retransmit_xdp_interface");
     let xdp_zero_copy = matches.is_present("retransmit_xdp_zero_copy");
     let retransmit_xdp = matches.value_of("retransmit_xdp_cpu_cores").map(|cpus| {
@@ -568,16 +562,7 @@ pub fn execute(
         generator_config: None,
         contact_debug_interval,
         contact_save_interval: DEFAULT_CONTACT_SAVE_INTERVAL_MILLIS,
-        send_transaction_service_config: send_transaction_service::Config {
-            retry_rate_ms: rpc_send_retry_rate_ms,
-            leader_forward_count: run_args.send_transaction_service_config.leader_forward_count,
-            default_max_retries: run_args.send_transaction_service_config.default_max_retries,
-            service_max_retries: run_args.send_transaction_service_config.service_max_retries,
-            batch_send_rate_ms: rpc_send_batch_send_rate_ms,
-            batch_size: rpc_send_batch_size,
-            retry_pool_max_size: run_args.send_transaction_service_config.retry_pool_max_size,
-            tpu_peers: rpc_send_transaction_tpu_peers,
-        },
+        send_transaction_service_config: run_args.send_transaction_service_config,
         no_poh_speed_test: matches.is_present("no_poh_speed_test"),
         no_os_memory_stats_reporting: matches.is_present("no_os_memory_stats_reporting"),
         no_os_network_stats_reporting: matches.is_present("no_os_network_stats_reporting"),
