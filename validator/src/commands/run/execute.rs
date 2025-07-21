@@ -87,8 +87,6 @@ pub enum Operation {
     Run,
 }
 
-const MILLIS_PER_SECOND: u64 = 1000;
-
 pub fn execute(
     matches: &ArgMatches,
     solana_version: &str,
@@ -463,17 +461,6 @@ pub fn execute(
     let rpc_send_retry_rate_ms = run_args.send_transaction_service_config.retry_rate_ms;
     let rpc_send_batch_size = run_args.send_transaction_service_config.batch_size;
     let rpc_send_batch_send_rate_ms = run_args.send_transaction_service_config.batch_send_rate_ms;
-
-    let tps = rpc_send_batch_size as u64 * MILLIS_PER_SECOND / rpc_send_batch_send_rate_ms;
-    if tps > send_transaction_service::MAX_TRANSACTION_SENDS_PER_SECOND {
-        Err(format!(
-            "either the specified rpc-send-batch-size ({}) or rpc-send-batch-ms ({}) is invalid, \
-             'rpc-send-batch-size * 1000 / rpc-send-batch-ms' must be smaller than ({}) .",
-            rpc_send_batch_size,
-            rpc_send_batch_send_rate_ms,
-            send_transaction_service::MAX_TRANSACTION_SENDS_PER_SECOND
-        ))?;
-    }
     let rpc_send_transaction_tpu_peers = run_args.send_transaction_service_config.tpu_peers;
 
     let xdp_interface = matches.value_of("retransmit_xdp_interface");
