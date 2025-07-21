@@ -9,12 +9,12 @@ use {
 impl FromClapArgMatches for SendTransactionServiceConfig {
     fn from_clap_arg_match(matches: &ArgMatches) -> Result<Self> {
         let batch_send_rate_ms = value_t!(matches, "rpc_send_transaction_batch_ms", u64)?;
-        let rpc_send_retry_rate_ms = value_t!(matches, "rpc_send_transaction_retry_ms", u64)?;
-        if batch_send_rate_ms > rpc_send_retry_rate_ms {
+        let retry_rate_ms = value_t!(matches, "rpc_send_transaction_retry_ms", u64)?;
+        if batch_send_rate_ms > retry_rate_ms {
             return Err(crate::commands::Error::Dynamic(
                 Box::<dyn std::error::Error>::from(format!(
                     "the specified rpc-send-batch-ms ({batch_send_rate_ms}) is invalid, it must \
-                 be <= rpc-send-retry-ms ({rpc_send_retry_rate_ms})"
+                 be <= rpc-send-retry-ms ({retry_rate_ms})"
                 )),
             ));
         }
@@ -51,7 +51,7 @@ impl FromClapArgMatches for SendTransactionServiceConfig {
         };
 
         Ok(SendTransactionServiceConfig {
-            retry_rate_ms: rpc_send_retry_rate_ms,
+            retry_rate_ms,
             batch_size: value_t!(matches, "rpc_send_transaction_batch_size", usize)?,
             batch_send_rate_ms,
             default_max_retries: value_t!(
