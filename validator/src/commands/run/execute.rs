@@ -462,8 +462,7 @@ pub fn execute(
 
     let rpc_send_retry_rate_ms = run_args.send_transaction_service_config.retry_rate_ms;
     let rpc_send_batch_size = run_args.send_transaction_service_config.batch_size;
-    let rpc_send_batch_send_rate_ms =
-        value_t_or_exit!(matches, "rpc_send_transaction_batch_ms", u64);
+    let rpc_send_batch_send_rate_ms = run_args.send_transaction_service_config.batch_send_rate_ms;
 
     if rpc_send_batch_send_rate_ms > rpc_send_retry_rate_ms {
         Err(format!(
