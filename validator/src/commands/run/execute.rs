@@ -538,11 +538,7 @@ pub fn execute(
             retry_rate_ms: rpc_send_retry_rate_ms,
             leader_forward_count,
             default_max_retries: run_args.send_transaction_service_config.default_max_retries,
-            service_max_retries: value_t_or_exit!(
-                matches,
-                "rpc_send_transaction_service_max_retries",
-                usize
-            ),
+            service_max_retries: run_args.send_transaction_service_config.service_max_retries,
             batch_send_rate_ms: rpc_send_batch_send_rate_ms,
             batch_size: rpc_send_batch_size,
             retry_pool_max_size: value_t_or_exit!(
