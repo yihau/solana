@@ -448,7 +448,7 @@ pub fn execute(
         || matches.is_present("geyser_plugin_always_enabled");
 
     let rpc_send_retry_rate_ms = run_args.send_transaction_service_config.retry_rate_ms;
-    let rpc_send_batch_size = value_t_or_exit!(matches, "rpc_send_transaction_batch_size", usize);
+    let rpc_send_batch_size = run_args.send_transaction_service_config.batch_size;
     let rpc_send_batch_send_rate_ms =
         value_t_or_exit!(matches, "rpc_send_transaction_batch_ms", u64);
 
