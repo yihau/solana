@@ -8,24 +8,24 @@ use {
 
 impl FromClapArgMatches for SendTransactionServiceConfig {
     fn from_clap_arg_match(matches: &ArgMatches) -> Result<Self> {
-        let rpc_send_batch_send_rate_ms = value_t!(matches, "rpc_send_transaction_batch_ms", u64)?;
+        let batch_send_rate_ms = value_t!(matches, "rpc_send_transaction_batch_ms", u64)?;
         let rpc_send_retry_rate_ms = value_t!(matches, "rpc_send_transaction_retry_ms", u64)?;
-        if rpc_send_batch_send_rate_ms > rpc_send_retry_rate_ms {
-            return Err(crate::commands::Error::Dynamic(Box::<dyn std::error::Error>::from(
-                format!(
-                    "the specified rpc-send-batch-ms ({rpc_send_batch_send_rate_ms}) is invalid, it must \
+        if batch_send_rate_ms > rpc_send_retry_rate_ms {
+            return Err(crate::commands::Error::Dynamic(
+                Box::<dyn std::error::Error>::from(format!(
+                    "the specified rpc-send-batch-ms ({batch_send_rate_ms}) is invalid, it must \
                  be <= rpc-send-retry-ms ({rpc_send_retry_rate_ms})"
-                ),
-            )));
+                )),
+            ));
         }
 
         let rpc_send_batch_size = value_t!(matches, "rpc_send_transaction_batch_size", usize)?;
         let millis_per_second = 1000;
-        let tps = rpc_send_batch_size as u64 * millis_per_second / rpc_send_batch_send_rate_ms;
+        let tps = rpc_send_batch_size as u64 * millis_per_second / batch_send_rate_ms;
         if tps > MAX_TRANSACTION_SENDS_PER_SECOND {
             return Err(crate::commands::Error::Dynamic(Box::<dyn std::error::Error>::from(
                 format!(
-                    "either the specified rpc-send-batch-size ({rpc_send_batch_size}) or rpc-send-batch-ms ({rpc_send_batch_send_rate_ms}) is invalid, \
+                    "either the specified rpc-send-batch-size ({rpc_send_batch_size}) or rpc-send-batch-ms ({batch_send_rate_ms}) is invalid, \
                  'rpc-send-batch-size * 1000 / rpc-send-batch-ms' must be smaller than ({MAX_TRANSACTION_SENDS_PER_SECOND}) .",
                 ),
             )));
@@ -53,7 +53,7 @@ impl FromClapArgMatches for SendTransactionServiceConfig {
         Ok(SendTransactionServiceConfig {
             retry_rate_ms: rpc_send_retry_rate_ms,
             batch_size: value_t!(matches, "rpc_send_transaction_batch_size", usize)?,
-            batch_send_rate_ms: rpc_send_batch_send_rate_ms,
+            batch_send_rate_ms,
             default_max_retries: value_t!(
                 matches,
                 "rpc_send_transaction_default_max_retries",
