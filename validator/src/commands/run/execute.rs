@@ -613,11 +613,7 @@ pub fn execute(
             service_max_retries: run_args.send_transaction_service_config.service_max_retries,
             batch_send_rate_ms: rpc_send_batch_send_rate_ms,
             batch_size: rpc_send_batch_size,
-            retry_pool_max_size: value_t_or_exit!(
-                matches,
-                "rpc_send_transaction_retry_pool_max_size",
-                usize
-            ),
+            retry_pool_max_size: run_args.send_transaction_service_config.retry_pool_max_size,
             tpu_peers: rpc_send_transaction_tpu_peers,
         },
         no_poh_speed_test: matches.is_present("no_poh_speed_test"),

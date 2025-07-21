@@ -21,6 +21,11 @@ impl FromClapArgMatches for SendTransactionServiceConfig {
                 "rpc_send_transaction_service_max_retries",
                 usize
             )?,
+            retry_pool_max_size: value_t!(
+                matches,
+                "rpc_send_transaction_retry_pool_max_size",
+                usize
+            )?,
             ..Default::default()
         })
     }
@@ -116,6 +121,23 @@ mod tests {
         verify_args_struct_by_command_run_with_identity_setup(
             default_run_args,
             vec!["--rpc-send-service-max-retries", "9999"],
+            expected_args,
+        );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_retry_pool_max_size() {
+        let default_run_args = RunArgs::default();
+        let expected_args = RunArgs {
+            send_transaction_service_config: SendTransactionServiceConfig {
+                retry_pool_max_size: 9999,
+                ..default_run_args.send_transaction_service_config.clone()
+            },
+            ..default_run_args.clone()
+        };
+        verify_args_struct_by_command_run_with_identity_setup(
+            default_run_args,
+            vec!["--rpc-send-transaction-retry-pool-max-size", "9999"],
             expected_args,
         );
     }
