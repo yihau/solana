@@ -72,7 +72,6 @@ impl FromClapArgMatches for SendTransactionServiceConfig {
             )?,
             tpu_peers,
             leader_forward_count,
-            ..Default::default()
         })
     }
 }
