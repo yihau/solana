@@ -1,7 +1,9 @@
 use {
     crate::commands::{FromClapArgMatches, Result},
     clap::{value_t, ArgMatches},
-    solana_send_transaction_service::send_transaction_service::Config as SendTransactionServiceConfig,
+    solana_send_transaction_service::send_transaction_service::{
+        Config as SendTransactionServiceConfig, MAX_TRANSACTION_SENDS_PER_SECOND,
+    },
 };
 
 impl FromClapArgMatches for SendTransactionServiceConfig {
@@ -13,6 +15,18 @@ impl FromClapArgMatches for SendTransactionServiceConfig {
                 format!(
                     "the specified rpc-send-batch-ms ({rpc_send_batch_send_rate_ms}) is invalid, it must \
                  be <= rpc-send-retry-ms ({rpc_send_retry_rate_ms})"
+                ),
+            )));
+        }
+
+        let rpc_send_batch_size = value_t!(matches, "rpc_send_transaction_batch_size", usize)?;
+        let millis_per_second = 1000;
+        let tps = rpc_send_batch_size as u64 * millis_per_second / rpc_send_batch_send_rate_ms;
+        if tps > MAX_TRANSACTION_SENDS_PER_SECOND {
+            return Err(crate::commands::Error::Dynamic(Box::<dyn std::error::Error>::from(
+                format!(
+                    "either the specified rpc-send-batch-size ({rpc_send_batch_size}) or rpc-send-batch-ms ({rpc_send_batch_send_rate_ms}) is invalid, \
+                 'rpc-send-batch-size * 1000 / rpc-send-batch-ms' must be smaller than ({MAX_TRANSACTION_SENDS_PER_SECOND}) .",
                 ),
             )));
         }
@@ -95,14 +109,14 @@ mod tests {
         let default_run_args = RunArgs::default();
         let expected_args = RunArgs {
             send_transaction_service_config: SendTransactionServiceConfig {
-                batch_size: 9999,
+                batch_size: 1,
                 ..default_run_args.send_transaction_service_config.clone()
             },
             ..default_run_args.clone()
         };
         verify_args_struct_by_command_run_with_identity_setup(
             default_run_args,
-            vec!["--rpc-send-batch-size", "9999"],
+            vec!["--rpc-send-batch-size", "1"],
             expected_args,
         );
     }
