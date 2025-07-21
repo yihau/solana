@@ -468,17 +468,7 @@ pub fn execute(
             send_transaction_service::MAX_TRANSACTION_SENDS_PER_SECOND
         ))?;
     }
-    let rpc_send_transaction_tpu_peers = matches
-        .values_of("rpc_send_transaction_tpu_peer")
-        .map(|values| {
-            values
-                .map(solana_net_utils::parse_host_port)
-                .collect::<Result<Vec<SocketAddr>, String>>()
-        })
-        .transpose()
-        .map_err(|err| {
-            format!("failed to parse rpc send-transaction-service tpu peer address: {err}")
-        })?;
+    let rpc_send_transaction_tpu_peers = run_args.send_transaction_service_config.tpu_peers;
     let rpc_send_transaction_also_leader = matches.is_present("rpc_send_transaction_also_leader");
     let leader_forward_count =
         if rpc_send_transaction_tpu_peers.is_some() && !rpc_send_transaction_also_leader {

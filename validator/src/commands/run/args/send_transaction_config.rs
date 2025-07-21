@@ -26,6 +26,15 @@ impl FromClapArgMatches for SendTransactionServiceConfig {
                 "rpc_send_transaction_retry_pool_max_size",
                 usize
             )?,
+            tpu_peers: matches
+                .values_of("rpc_send_transaction_tpu_peer")
+                .map(|values| values.map(solana_net_utils::parse_host_port).collect())
+                .transpose()
+                .map_err(|e| {
+                    crate::commands::Error::Dynamic(Box::<dyn std::error::Error>::from(format!(
+                        "Invalid tpu peer address: {e}",
+                    )))
+                })?,
             ..Default::default()
         })
     }
@@ -38,6 +47,7 @@ mod tests {
         crate::commands::run::args::{
             tests::verify_args_struct_by_command_run_with_identity_setup, RunArgs,
         },
+        std::net::{Ipv4Addr, SocketAddr},
     };
 
     #[test]
@@ -140,5 +150,53 @@ mod tests {
             vec!["--rpc-send-transaction-retry-pool-max-size", "9999"],
             expected_args,
         );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_tpu_peers() {
+        // single tpu peer
+        {
+            let default_run_args = RunArgs::default();
+            let expected_args = RunArgs {
+                send_transaction_service_config: SendTransactionServiceConfig {
+                    tpu_peers: Some(vec![SocketAddr::from((Ipv4Addr::LOCALHOST, 8000))]),
+                    ..default_run_args.send_transaction_service_config.clone()
+                },
+                ..default_run_args.clone()
+            };
+            verify_args_struct_by_command_run_with_identity_setup(
+                default_run_args,
+                vec!["--rpc-send-transaction-tpu-peer", "127.0.0.1:8000"],
+                expected_args,
+            );
+        }
+
+        // multiple tpu peers
+        {
+            let default_run_args = RunArgs::default();
+            let expected_args = RunArgs {
+                send_transaction_service_config: SendTransactionServiceConfig {
+                    tpu_peers: Some(vec![
+                        SocketAddr::from((Ipv4Addr::LOCALHOST, 8000)),
+                        SocketAddr::from((Ipv4Addr::LOCALHOST, 8001)),
+                        SocketAddr::from((Ipv4Addr::LOCALHOST, 8002)),
+                    ]),
+                    ..default_run_args.send_transaction_service_config.clone()
+                },
+                ..default_run_args.clone()
+            };
+            verify_args_struct_by_command_run_with_identity_setup(
+                default_run_args,
+                vec![
+                    "--rpc-send-transaction-tpu-peer",
+                    "127.0.0.1:8000",
+                    "--rpc-send-transaction-tpu-peer",
+                    "127.0.0.1:8001",
+                    "--rpc-send-transaction-tpu-peer",
+                    "127.0.0.1:8002",
+                ],
+                expected_args,
+            );
+        }
     }
 }
