@@ -451,13 +451,6 @@ pub fn execute(
     let rpc_send_batch_size = run_args.send_transaction_service_config.batch_size;
     let rpc_send_batch_send_rate_ms = run_args.send_transaction_service_config.batch_send_rate_ms;
 
-    if rpc_send_batch_send_rate_ms > rpc_send_retry_rate_ms {
-        Err(format!(
-            "the specified rpc-send-batch-ms ({rpc_send_batch_send_rate_ms}) is invalid, it must \
-             be <= rpc-send-retry-ms ({rpc_send_retry_rate_ms})"
-        ))?;
-    }
-
     let tps = rpc_send_batch_size as u64 * MILLIS_PER_SECOND / rpc_send_batch_send_rate_ms;
     if tps > send_transaction_service::MAX_TRANSACTION_SENDS_PER_SECOND {
         Err(format!(
