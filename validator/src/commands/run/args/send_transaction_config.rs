@@ -105,19 +105,43 @@ mod tests {
 
     #[test]
     fn verify_args_struct_by_command_run_with_batch_size() {
-        let default_run_args = RunArgs::default();
-        let expected_args = RunArgs {
-            send_transaction_service_config: SendTransactionServiceConfig {
-                batch_size: 1,
-                ..default_run_args.send_transaction_service_config.clone()
-            },
-            ..default_run_args.clone()
-        };
-        verify_args_struct_by_command_run_with_identity_setup(
-            default_run_args,
-            vec!["--rpc-send-batch-size", "1"],
-            expected_args,
-        );
+        {
+            let default_run_args = RunArgs::default();
+            let expected_args = RunArgs {
+                send_transaction_service_config: SendTransactionServiceConfig {
+                    batch_size: 1,
+                    ..default_run_args.send_transaction_service_config.clone()
+                },
+                ..default_run_args.clone()
+            };
+            verify_args_struct_by_command_run_with_identity_setup(
+                default_run_args,
+                vec!["--rpc-send-batch-size", "1"],
+                expected_args,
+            );
+        }
+
+        {
+            let default_run_args = RunArgs::default();
+            let expected_args = RunArgs {
+                send_transaction_service_config: SendTransactionServiceConfig {
+                    batch_size: 999,
+                    batch_send_rate_ms: 1000,
+                    ..default_run_args.send_transaction_service_config.clone()
+                },
+                ..default_run_args.clone()
+            };
+            verify_args_struct_by_command_run_with_identity_setup(
+                default_run_args,
+                vec![
+                    "--rpc-send-batch-size",
+                    "999",
+                    "--rpc-send-batch-ms",
+                    "1000",
+                ],
+                expected_args,
+            );
+        }
     }
 
     #[test]
