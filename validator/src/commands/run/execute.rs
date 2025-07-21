@@ -482,14 +482,6 @@ pub fn execute(
         ))?;
     }
     let rpc_send_transaction_tpu_peers = run_args.send_transaction_service_config.tpu_peers;
-    let rpc_send_transaction_also_leader = matches.is_present("rpc_send_transaction_also_leader");
-    let leader_forward_count =
-        if rpc_send_transaction_tpu_peers.is_some() && !rpc_send_transaction_also_leader {
-            // rpc-sts is configured to send only to specific tpu peers. disable leader forwards
-            0
-        } else {
-            value_t_or_exit!(matches, "rpc_send_transaction_leader_forward_count", u64)
-        };
 
     let xdp_interface = matches.value_of("retransmit_xdp_interface");
     let xdp_zero_copy = matches.is_present("retransmit_xdp_zero_copy");
@@ -598,7 +590,7 @@ pub fn execute(
         contact_save_interval: DEFAULT_CONTACT_SAVE_INTERVAL_MILLIS,
         send_transaction_service_config: send_transaction_service::Config {
             retry_rate_ms: rpc_send_retry_rate_ms,
-            leader_forward_count,
+            leader_forward_count: run_args.send_transaction_service_config.leader_forward_count,
             default_max_retries: run_args.send_transaction_service_config.default_max_retries,
             service_max_retries: run_args.send_transaction_service_config.service_max_retries,
             batch_send_rate_ms: rpc_send_batch_send_rate_ms,
