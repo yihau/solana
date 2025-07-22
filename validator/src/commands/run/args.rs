@@ -5,6 +5,7 @@ use {
         commands::{FromClapArgMatches, Result},
     },
     clap::{values_t, App, Arg, ArgMatches},
+    solana_accounts_db::accounts_db::AccountsDbConfig,
     solana_clap_utils::{
         hidden_unless_forced,
         input_parsers::keypair_of,
@@ -57,6 +58,7 @@ const WEN_RESTART_HELP: &str =
      watch the discord channel for instructions.";
 
 pub mod account_secondary_indexes;
+pub mod accounts_db_config;
 pub mod blockstore_options;
 pub mod json_rpc_config;
 pub mod pub_sub_config;
@@ -76,6 +78,7 @@ pub struct RunArgs {
     pub json_rpc_config: JsonRpcConfig,
     pub pub_sub_config: PubSubConfig,
     pub send_transaction_service_config: SendTransactionServiceConfig,
+    pub accounts_db_config: AccountsDbConfig,
 }
 
 impl FromClapArgMatches for RunArgs {
@@ -128,6 +131,7 @@ impl FromClapArgMatches for RunArgs {
             send_transaction_service_config: SendTransactionServiceConfig::from_clap_arg_match(
                 matches,
             )?,
+            accounts_db_config: AccountsDbConfig::from_clap_arg_match(matches)?,
         })
     }
 }
@@ -1684,6 +1688,7 @@ mod tests {
                     ..PubSubConfig::default_for_tests()
                 },
                 send_transaction_service_config: SendTransactionServiceConfig::default(),
+                accounts_db_config: AccountsDbConfig::default(),
             }
         }
     }
@@ -1701,6 +1706,7 @@ mod tests {
                 json_rpc_config: self.json_rpc_config.clone(),
                 pub_sub_config: self.pub_sub_config.clone(),
                 send_transaction_service_config: self.send_transaction_service_config.clone(),
+                accounts_db_config: self.accounts_db_config.clone(),
             }
         }
     }
