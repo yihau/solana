@@ -1776,7 +1776,7 @@ mod tests {
                 logfile: self.logfile.clone(),
                 entrypoints: self.entrypoints.clone(),
                 known_validators: self.known_validators.clone(),
-                socket_addr_space: self.socket_addr_space.clone(),
+                socket_addr_space: self.socket_addr_space,
                 rpc_bootstrap_config: self.rpc_bootstrap_config.clone(),
                 blockstore_options: self.blockstore_options.clone(),
             }
