@@ -1,18 +1,12 @@
 use {
     assert_cmd::assert::Assert,
     predicates::prelude::*,
-    std::{
-        env, fs,
-        path::PathBuf,
-        str::FromStr,
-        sync::atomic::{AtomicBool, Ordering},
-    },
+    std::{env, fs, path::PathBuf, str::FromStr},
 };
 
 #[macro_use]
 extern crate serial_test;
 
-static SBF_TOOLS_INSTALL: AtomicBool = AtomicBool::new(true);
 fn run_cargo_build(crate_name: &str, extra_args: &[&str], fail: bool) {
     let cwd = env::current_dir().expect("Unable to get current working directory");
     let toml = cwd
@@ -22,9 +16,6 @@ fn run_cargo_build(crate_name: &str, extra_args: &[&str], fail: bool) {
         .join("Cargo.toml");
     let toml = format!("{}", toml.display());
     let mut args = vec!["-v", "--sbf-sdk", "../sbf", "--manifest-path", &toml];
-    if SBF_TOOLS_INSTALL.fetch_and(false, Ordering::SeqCst) {
-        args.push("--force-tools-install");
-    }
     for arg in extra_args {
         args.push(arg);
     }
