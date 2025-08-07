@@ -20,6 +20,8 @@ ENV \
   CARGO_HOME=/usr/local/cargo \
   PATH="$PATH:/usr/local/cargo/bin"
 
+COPY platform-tools-sdk/sbf/scripts/install.sh /platform-tools-sdk/sbf/scripts/install.sh
+
 RUN \
   if [ -z "$RUST_VERSION" ]; then echo "ERROR: The RUST_VERSION argument is required!" && exit 1; fi && \
   if [ -z "$RUST_NIGHTLY_VERSION" ]; then echo "ERROR: The RUST_NIGHTLY_VERSION argument is required!" && exit 1; fi && \
@@ -42,6 +44,8 @@ RUN \
   lld \
   cmake \
   openssh-client \
+  tar \
+  bzip2 \
   # docs
   mscgen \
   # solana compiling
@@ -119,6 +123,9 @@ RUN \
   tar -xf grcov-x86_64-unknown-linux-musl.tar.bz2 && \
   mv ./grcov $CARGO_HOME/bin && \
   rm grcov-x86_64-unknown-linux-musl.tar.bz2 && \
+  # platform-tools-sdk
+  chmod +x /platform-tools-sdk/sbf/scripts/install.sh && \
+  /platform-tools-sdk/sbf/scripts/install.sh && \
   # codecov
   curl -Os https://uploader.codecov.io/latest/linux/codecov && \
   chmod +x codecov && \
