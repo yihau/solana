@@ -130,8 +130,8 @@ pub fn get_metrics_config() -> Result<MetricsConfig, MetricsError> {
 pub fn query(q: &str) -> Result<String, MetricsError> {
     let config = get_metrics_config()?;
     let query_url = format!(
-        "{}/query?u={}&p={}&q={}",
-        &config.host, &config.username, &config.password, &q
+        "{}/query?db={}&u={}&p={}&q={}",
+        &config.host, &config.db, &config.username, &config.password, &q
     );
 
     let response = reqwest::blocking::get(query_url.as_str())?.text()?;
