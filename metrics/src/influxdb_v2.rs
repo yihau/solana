@@ -2,7 +2,7 @@ use {
     crate::{
         datapoint::DataPoint,
         influxdb_common::serialize_points,
-        metrics::{MetricsWriter, HOST_ID},
+        metrics::{MetricsError, MetricsWriter, HOST_ID},
     },
     log::*,
     std::{env, time::Duration},
@@ -101,4 +101,17 @@ impl MetricsWriter for Writer {
             warn!("tried to submit points to influxdb v2 but no url was set");
         }
     }
+}
+
+// https://docs.influxdata.com/influxdb/v2/query-data/execute-queries/influx-api/#influxql---example-query-request
+pub fn query(q: &str) -> Result<String, MetricsError> {
+    let config = Config::from_env();
+    let query_url = format!(
+        "{}/query?db={}&p={}&u=ignored&q={}",
+        &config.host, &config.bucket, &config.token, &q
+    );
+
+    let response = reqwest::blocking::get(query_url.as_str())?.text()?;
+
+    Ok(response)
 }
