@@ -91,6 +91,12 @@ impl MetricsWriter for MetricsWriters {
     }
 }
 
+impl Default for MetricsWriters {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl Default for MetricsAgent {
     fn default() -> Self {
         let max_points_per_sec = env::var("SOLANA_METRICS_MAX_POINTS_PER_SECOND")

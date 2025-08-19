@@ -62,6 +62,12 @@ impl Writer {
     }
 }
 
+impl Default for Writer {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl MetricsWriter for Writer {
     fn write(&self, points: Vec<DataPoint>) {
         if let Some(ref write_url) = self.write_url {
