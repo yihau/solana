@@ -30,6 +30,13 @@ bencher = { workspace = true }
 env_logger = { workspace = true }
 rand = { workspace = true }
 serial_test = { workspace = true }
+solana-logger = { workspace = true }
+testcontainers = { workspace = true, features = ["blocking"] }
+serde_json = { workspace = true }
+
+[features]
+default = []
+docker-tests = []
 
 [[bench]]
 name = "metrics"
