@@ -1,5 +1,5 @@
 use {
-    crate::commands::{FromClapArgMatches, Result},
+    crate::commands::{Error, FromClapArgMatches, Result},
     clap::{value_t, ArgMatches},
     solana_send_transaction_service::send_transaction_service::{
         Config as SendTransactionServiceConfig, MAX_TRANSACTION_SENDS_PER_SECOND,
@@ -11,19 +11,17 @@ impl FromClapArgMatches for SendTransactionServiceConfig {
         let batch_send_rate_ms = value_t!(matches, "rpc_send_transaction_batch_ms", u64)?;
         let retry_rate_ms = value_t!(matches, "rpc_send_transaction_retry_ms", u64)?;
         if batch_send_rate_ms > retry_rate_ms {
-            return Err(crate::commands::Error::Dynamic(
-                Box::<dyn std::error::Error>::from(format!(
-                    "the specified rpc-send-batch-ms ({batch_send_rate_ms}) is invalid, it must \
+            return Err(Error::Dynamic(Box::<dyn std::error::Error>::from(format!(
+                "the specified rpc-send-batch-ms ({batch_send_rate_ms}) is invalid, it must \
                  be <= rpc-send-retry-ms ({retry_rate_ms})"
-                )),
-            ));
+            ))));
         }
 
         let rpc_send_batch_size = value_t!(matches, "rpc_send_transaction_batch_size", usize)?;
         let millis_per_second = 1000;
         let tps = rpc_send_batch_size as u64 * millis_per_second / batch_send_rate_ms;
         if tps > MAX_TRANSACTION_SENDS_PER_SECOND {
-            return Err(crate::commands::Error::Dynamic(Box::<dyn std::error::Error>::from(
+            return Err(Error::Dynamic(Box::<dyn std::error::Error>::from(
                 format!(
                     "either the specified rpc-send-batch-size ({rpc_send_batch_size}) or rpc-send-batch-ms ({batch_send_rate_ms}) is invalid, \
                  'rpc-send-batch-size * 1000 / rpc-send-batch-ms' must be smaller than ({MAX_TRANSACTION_SENDS_PER_SECOND}) .",
@@ -36,7 +34,7 @@ impl FromClapArgMatches for SendTransactionServiceConfig {
             .map(|values| values.map(solana_net_utils::parse_host_port).collect())
             .transpose()
             .map_err(|e| {
-                crate::commands::Error::Dynamic(Box::<dyn std::error::Error>::from(format!(
+                Error::Dynamic(Box::<dyn std::error::Error>::from(format!(
                     "Invalid tpu peer address: {e}",
                 )))
             })?;
