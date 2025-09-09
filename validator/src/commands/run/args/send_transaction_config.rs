@@ -22,9 +22,9 @@ impl FromClapArgMatches for SendTransactionServiceConfig {
         let tps = batch_size as u64 * millis_per_second / batch_send_rate_ms;
         if tps > MAX_TRANSACTION_SENDS_PER_SECOND {
             return Err(Error::Dynamic(Box::<dyn std::error::Error>::from(format!(
-                "either the specified rpc-send-batch-size ({batch_size}) or \
-                 rpc-send-batch-ms ({batch_send_rate_ms}) is invalid, 'rpc-send-batch-size * 1000 \
-                 / rpc-send-batch-ms' must be smaller than ({MAX_TRANSACTION_SENDS_PER_SECOND}) .",
+                "either the specified rpc-send-batch-size ({batch_size}) or rpc-send-batch-ms \
+                 ({batch_send_rate_ms}) is invalid, 'rpc-send-batch-size * 1000 / \
+                 rpc-send-batch-ms' must be smaller than ({MAX_TRANSACTION_SENDS_PER_SECOND}) .",
             ))));
         }
 
