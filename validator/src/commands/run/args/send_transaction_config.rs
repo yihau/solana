@@ -38,6 +38,9 @@ impl FromClapArgMatches for SendTransactionServiceConfig {
                 )))
             })?;
 
+        let default_max_retries =
+            value_t!(matches, "rpc_send_transaction_default_max_retries", usize).ok();
+
         let rpc_send_transaction_also_leader =
             matches.is_present("rpc_send_transaction_also_leader");
         let leader_forward_count = if tpu_peers.is_some() && !rpc_send_transaction_also_leader {
@@ -51,12 +54,7 @@ impl FromClapArgMatches for SendTransactionServiceConfig {
             retry_rate_ms,
             batch_size,
             batch_send_rate_ms,
-            default_max_retries: value_t!(
-                matches,
-                "rpc_send_transaction_default_max_retries",
-                usize
-            )
-            .ok(),
+            default_max_retries,
             service_max_retries: value_t!(
                 matches,
                 "rpc_send_transaction_service_max_retries",
