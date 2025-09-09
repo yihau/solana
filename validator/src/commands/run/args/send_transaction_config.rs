@@ -12,8 +12,8 @@ impl FromClapArgMatches for SendTransactionServiceConfig {
         let retry_rate_ms = value_t!(matches, "rpc_send_transaction_retry_ms", u64)?;
         if batch_send_rate_ms > retry_rate_ms {
             return Err(Error::Dynamic(Box::<dyn std::error::Error>::from(format!(
-                "the specified rpc-send-batch-ms ({batch_send_rate_ms}) is invalid, it must \
-                 be <= rpc-send-retry-ms ({retry_rate_ms})"
+                "the specified rpc-send-batch-ms ({batch_send_rate_ms}) is invalid, it must be <= \
+                 rpc-send-retry-ms ({retry_rate_ms})"
             ))));
         }
 
@@ -21,12 +21,11 @@ impl FromClapArgMatches for SendTransactionServiceConfig {
         let millis_per_second = 1000;
         let tps = rpc_send_batch_size as u64 * millis_per_second / batch_send_rate_ms;
         if tps > MAX_TRANSACTION_SENDS_PER_SECOND {
-            return Err(Error::Dynamic(Box::<dyn std::error::Error>::from(
-                format!(
-                    "either the specified rpc-send-batch-size ({rpc_send_batch_size}) or rpc-send-batch-ms ({batch_send_rate_ms}) is invalid, \
-                 'rpc-send-batch-size * 1000 / rpc-send-batch-ms' must be smaller than ({MAX_TRANSACTION_SENDS_PER_SECOND}) .",
-                ),
-            )));
+            return Err(Error::Dynamic(Box::<dyn std::error::Error>::from(format!(
+                "either the specified rpc-send-batch-size ({rpc_send_batch_size}) or \
+                 rpc-send-batch-ms ({batch_send_rate_ms}) is invalid, 'rpc-send-batch-size * 1000 \
+                 / rpc-send-batch-ms' must be smaller than ({MAX_TRANSACTION_SENDS_PER_SECOND}) .",
+            ))));
         }
 
         let tpu_peers = matches
