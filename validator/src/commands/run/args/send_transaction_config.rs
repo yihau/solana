@@ -17,12 +17,12 @@ impl FromClapArgMatches for SendTransactionServiceConfig {
             ))));
         }
 
-        let rpc_send_batch_size = value_t!(matches, "rpc_send_transaction_batch_size", usize)?;
+        let batch_size = value_t!(matches, "rpc_send_transaction_batch_size", usize)?;
         let millis_per_second = 1000;
-        let tps = rpc_send_batch_size as u64 * millis_per_second / batch_send_rate_ms;
+        let tps = batch_size as u64 * millis_per_second / batch_send_rate_ms;
         if tps > MAX_TRANSACTION_SENDS_PER_SECOND {
             return Err(Error::Dynamic(Box::<dyn std::error::Error>::from(format!(
-                "either the specified rpc-send-batch-size ({rpc_send_batch_size}) or \
+                "either the specified rpc-send-batch-size ({batch_size}) or \
                  rpc-send-batch-ms ({batch_send_rate_ms}) is invalid, 'rpc-send-batch-size * 1000 \
                  / rpc-send-batch-ms' must be smaller than ({MAX_TRANSACTION_SENDS_PER_SECOND}) .",
             ))));
@@ -49,7 +49,7 @@ impl FromClapArgMatches for SendTransactionServiceConfig {
 
         Ok(SendTransactionServiceConfig {
             retry_rate_ms,
-            batch_size: value_t!(matches, "rpc_send_transaction_batch_size", usize)?,
+            batch_size,
             batch_send_rate_ms,
             default_max_retries: value_t!(
                 matches,
