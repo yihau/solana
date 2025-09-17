@@ -5,6 +5,7 @@ use {
         commands::{FromClapArgMatches, Result},
     },
     clap::{values_t, App, Arg, ArgMatches},
+    solana_accounts_db::utils::create_and_canonicalize_directory,
     solana_clap_utils::{
         hidden_unless_forced,
         input_parsers::keypair_of,
@@ -31,7 +32,7 @@ use {
     solana_signer::Signer,
     solana_streamer::socket::SocketAddrSpace,
     solana_unified_scheduler_pool::DefaultSchedulerPool,
-    std::{collections::HashSet, net::SocketAddr, str::FromStr},
+    std::{collections::HashSet, net::SocketAddr, path::PathBuf, str::FromStr},
 };
 
 const EXCLUDE_KEY: &str = "account-index-exclude-key";
@@ -67,6 +68,7 @@ pub mod send_transaction_config;
 #[derive(Debug, PartialEq)]
 pub struct RunArgs {
     pub identity_keypair: Keypair,
+    pub ledger_path: PathBuf,
     pub logfile: String,
     pub entrypoints: Vec<SocketAddr>,
     pub known_validators: Option<HashSet<Pubkey>>,
@@ -85,6 +87,21 @@ impl FromClapArgMatches for RunArgs {
                 "The --identity <KEYPAIR> argument is required",
                 clap::ErrorKind::ArgumentNotFound,
             ))?;
+
+        let ledger_path = PathBuf::from(matches.value_of("ledger_path").ok_or(
+            clap::Error::with_description(
+                "The --ledger <DIR> argument is required",
+                clap::ErrorKind::ArgumentNotFound,
+            ),
+        )?);
+        // Canonicalize ledger path to avoid issues with symlink creation
+        let ledger_path =
+            create_and_canonicalize_directory(ledger_path.as_path()).map_err(|err| {
+                crate::commands::Error::Dynamic(Box::<dyn std::error::Error>::from(format!(
+                    "failed to create and canonicalize ledger path '{}': {err}",
+                    ledger_path.display(),
+                )))
+            })?;
 
         let logfile = matches
             .value_of("logfile")
@@ -117,6 +134,7 @@ impl FromClapArgMatches for RunArgs {
 
         Ok(RunArgs {
             identity_keypair,
+            ledger_path,
             logfile,
             entrypoints,
             known_validators,
@@ -1650,18 +1668,23 @@ mod tests {
         super::*,
         crate::cli::thread_args::thread_args,
         solana_rpc::rpc::MAX_REQUEST_BODY_SIZE,
-        std::net::{IpAddr, Ipv4Addr},
+        std::{
+            net::{IpAddr, Ipv4Addr},
+            path::{absolute, PathBuf},
+        },
     };
 
     impl Default for RunArgs {
         fn default() -> Self {
             let identity_keypair = Keypair::new();
+            let ledger_path = absolute(PathBuf::from("ledger")).unwrap();
             let logfile = format!("agave-validator-{}.log", identity_keypair.pubkey());
             let entrypoints = vec![];
             let known_validators = None;
 
             RunArgs {
                 identity_keypair,
+                ledger_path,
                 logfile,
                 entrypoints,
                 known_validators,
@@ -1696,6 +1719,7 @@ mod tests {
                 entrypoints: self.entrypoints.clone(),
                 known_validators: self.known_validators.clone(),
                 socket_addr_space: self.socket_addr_space,
+                ledger_path: self.ledger_path.clone(),
                 rpc_bootstrap_config: self.rpc_bootstrap_config.clone(),
                 blockstore_options: self.blockstore_options.clone(),
                 json_rpc_config: self.json_rpc_config.clone(),
