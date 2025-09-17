@@ -1552,6 +1552,7 @@ mod tests {
         std::{
             fs,
             net::{IpAddr, Ipv4Addr},
+            num::NonZeroUsize,
             path::{absolute, PathBuf},
         },
     };
@@ -1598,6 +1599,10 @@ mod tests {
                         ..AccountsIndexConfig::default()
                     }),
                     account_indexes: Some(AccountSecondaryIndexes::default()),
+                    num_background_threads: Some(
+                        NonZeroUsize::new(solana_accounts_db::accounts_db::quarter_thread_count())
+                            .unwrap(),
+                    ),
                     ..AccountsDbConfig::default()
                 },
             }
