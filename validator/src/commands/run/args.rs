@@ -1676,7 +1676,6 @@ mod tests {
         solana_accounts_db::accounts_index::{AccountSecondaryIndexes, AccountsIndexConfig},
         solana_rpc::rpc::MAX_REQUEST_BODY_SIZE,
         std::{
-            fs,
             net::{IpAddr, Ipv4Addr},
             num::NonZeroUsize,
             path::PathBuf,
@@ -1686,7 +1685,7 @@ mod tests {
     impl Default for RunArgs {
         fn default() -> Self {
             let identity_keypair = Keypair::new();
-            let ledger_path = fs::canonicalize(PathBuf::from("ledger")).unwrap();
+            let ledger_path = create_and_canonicalize_directory(PathBuf::from("ledger")).unwrap(); // only for testing
             let logfile = format!("agave-validator-{}.log", identity_keypair.pubkey());
             let entrypoints = vec![];
             let known_validators = None;
