@@ -1656,7 +1656,10 @@ mod tests {
         crate::cli::{get_deprecated_arguments, thread_args::thread_args},
         solana_accounts_db::accounts_index::{AccountSecondaryIndexes, AccountsIndexConfig},
         solana_rpc::rpc::MAX_REQUEST_BODY_SIZE,
-        std::net::{IpAddr, Ipv4Addr},
+        std::{
+            net::{IpAddr, Ipv4Addr},
+            num::NonZeroUsize,
+        },
     };
 
     impl Default for RunArgs {
@@ -1699,6 +1702,10 @@ mod tests {
                         ..AccountsIndexConfig::default()
                     }),
                     account_indexes: Some(AccountSecondaryIndexes::default()),
+                    num_background_threads: Some(
+                        NonZeroUsize::new(solana_accounts_db::accounts_db::quarter_thread_count())
+                            .unwrap(),
+                    ),
                     ..AccountsDbConfig::default()
                 },
             }
