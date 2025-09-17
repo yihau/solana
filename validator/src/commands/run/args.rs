@@ -1609,6 +1609,7 @@ mod tests {
                         )
                         .unwrap(),
                     ),
+                    memlock_budget_size: solana_accounts_db::accounts_db::DEFAULT_MEMLOCK_BUDGET_SIZE,
                     ..AccountsDbConfig::default()
                 },
             }
