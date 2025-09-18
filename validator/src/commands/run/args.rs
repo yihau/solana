@@ -1667,8 +1667,10 @@ mod tests {
     use {
         super::*,
         crate::cli::thread_args::thread_args,
+        scopeguard::defer,
         solana_rpc::rpc::MAX_REQUEST_BODY_SIZE,
         std::{
+            fs,
             net::{IpAddr, Ipv4Addr},
             path::{absolute, PathBuf},
         },
@@ -1820,6 +1822,92 @@ mod tests {
             ]
             .concat(),
         );
+    }
+
+    #[test]
+    fn verify_args_struct_by_command_run_with_ledger_path() {
+        // unexisting absolute ledger path
+        {
+            let default_run_args = RunArgs::default();
+            let tmp_dir = fs::canonicalize(tempfile::tempdir().unwrap()).unwrap();
+            let ledger_path = tmp_dir.join("my_unexisting_ledger_path");
+            assert!(!fs::exists(&ledger_path).unwrap());
+
+            let expected_args = RunArgs {
+                ledger_path: ledger_path.clone(),
+                ..default_run_args.clone()
+            };
+            verify_args_struct_by_command_run_with_identity_setup(
+                default_run_args,
+                vec!["--ledger", ledger_path.to_str().unwrap()],
+                expected_args,
+            );
+            assert!(fs::exists(&ledger_path).unwrap());
+        }
+
+        // existing absolute ledger path
+        {
+            let default_run_args = RunArgs::default();
+            let tmp_dir = tempfile::tempdir().unwrap();
+            let ledger_path = tmp_dir.path().join("my_existing_ledger_path");
+            fs::create_dir_all(&ledger_path).unwrap();
+            let ledger_path = fs::canonicalize(ledger_path).unwrap();
+            assert!(fs::exists(ledger_path.as_path()).unwrap());
+
+            let expected_args = RunArgs {
+                ledger_path: ledger_path.clone(),
+                ..default_run_args.clone()
+            };
+            verify_args_struct_by_command_run_with_identity_setup(
+                default_run_args,
+                vec!["--ledger", ledger_path.to_str().unwrap()],
+                expected_args,
+            );
+            assert!(fs::exists(&ledger_path).unwrap());
+        }
+
+        // unexisting relative ledger path
+        {
+            let default_run_args = RunArgs::default();
+            let ledger_path = PathBuf::from("test_ledger_unexisting");
+            assert!(!fs::exists(&ledger_path).unwrap());
+
+            let expected_args = RunArgs {
+                ledger_path: absolute(&ledger_path).unwrap(),
+                ..default_run_args.clone()
+            };
+            verify_args_struct_by_command_run_with_identity_setup(
+                default_run_args,
+                vec!["--ledger", ledger_path.to_str().unwrap()],
+                expected_args,
+            );
+            assert!(fs::exists(&ledger_path).unwrap());
+            defer! {
+                fs::remove_dir_all(&ledger_path).unwrap()
+            };
+        }
+
+        // existing relative ledger path
+        {
+            let default_run_args = RunArgs::default();
+            let ledger_path = PathBuf::from("test_ledger_existing");
+            fs::create_dir_all(&ledger_path).unwrap();
+            assert!(fs::exists(&ledger_path).unwrap());
+
+            let expected_args = RunArgs {
+                ledger_path: absolute(&ledger_path).unwrap(),
+                ..default_run_args.clone()
+            };
+            verify_args_struct_by_command_run_with_identity_setup(
+                default_run_args,
+                vec!["--ledger", ledger_path.to_str().unwrap()],
+                expected_args,
+            );
+            assert!(fs::exists(&ledger_path).unwrap());
+            defer! {
+                fs::remove_dir_all(&ledger_path).unwrap()
+            };
+        }
     }
 
     #[test]
