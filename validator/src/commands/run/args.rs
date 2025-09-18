@@ -1871,6 +1871,9 @@ mod tests {
             let default_run_args = RunArgs::default();
             let ledger_path = PathBuf::from("test_ledger_unexisting");
             assert!(!fs::exists(&ledger_path).unwrap());
+            defer! {
+                fs::remove_dir_all(&ledger_path).unwrap()
+            };
 
             let expected_args = RunArgs {
                 ledger_path: absolute(&ledger_path).unwrap(),
@@ -1882,9 +1885,6 @@ mod tests {
                 expected_args,
             );
             assert!(fs::exists(&ledger_path).unwrap());
-            defer! {
-                fs::remove_dir_all(&ledger_path).unwrap()
-            };
         }
 
         // existing relative ledger path
@@ -1893,6 +1893,9 @@ mod tests {
             let ledger_path = PathBuf::from("test_ledger_existing");
             fs::create_dir_all(&ledger_path).unwrap();
             assert!(fs::exists(&ledger_path).unwrap());
+            defer! {
+                fs::remove_dir_all(&ledger_path).unwrap()
+            };
 
             let expected_args = RunArgs {
                 ledger_path: absolute(&ledger_path).unwrap(),
@@ -1904,9 +1907,6 @@ mod tests {
                 expected_args,
             );
             assert!(fs::exists(&ledger_path).unwrap());
-            defer! {
-                fs::remove_dir_all(&ledger_path).unwrap()
-            };
         }
     }
 
