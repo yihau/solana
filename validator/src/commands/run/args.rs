@@ -1830,7 +1830,7 @@ mod tests {
         {
             let default_run_args = RunArgs::default();
             let tmp_dir = fs::canonicalize(tempfile::tempdir().unwrap()).unwrap();
-            let ledger_path = tmp_dir.join("my_unexisting_ledger_path");
+            let ledger_path = tmp_dir.join("unexisting_ledger_path");
             assert!(!fs::exists(&ledger_path).unwrap());
 
             let expected_args = RunArgs {
@@ -1849,7 +1849,7 @@ mod tests {
         {
             let default_run_args = RunArgs::default();
             let tmp_dir = tempfile::tempdir().unwrap();
-            let ledger_path = tmp_dir.path().join("my_existing_ledger_path");
+            let ledger_path = tmp_dir.path().join("existing_ledger_path");
             fs::create_dir_all(&ledger_path).unwrap();
             let ledger_path = fs::canonicalize(ledger_path).unwrap();
             assert!(fs::exists(ledger_path.as_path()).unwrap());
