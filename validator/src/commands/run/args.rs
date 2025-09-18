@@ -1890,7 +1890,7 @@ mod tests {
         // existing relative ledger path
         {
             let default_run_args = RunArgs::default();
-            let ledger_path = PathBuf::from("test_ledger_existing");
+            let ledger_path = PathBuf::from("existing_ledger_path");
             fs::create_dir_all(&ledger_path).unwrap();
             assert!(fs::exists(&ledger_path).unwrap());
             defer! {
