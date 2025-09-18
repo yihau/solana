@@ -1869,7 +1869,7 @@ mod tests {
         // nonexistent relative ledger path
         {
             let default_run_args = RunArgs::default();
-            let ledger_path = PathBuf::from("test_ledger_unexisting");
+            let ledger_path = PathBuf::from("unexistent_ledger_path");
             assert!(!fs::exists(&ledger_path).unwrap());
             defer! {
                 fs::remove_dir_all(&ledger_path).unwrap()
