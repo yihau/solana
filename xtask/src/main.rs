@@ -8,7 +8,7 @@ mod commands;
 mod common;
 
 #[derive(Parser)]
-#[command(name = "xtask", about = "Custom build tasks", version)]
+#[command(name = "xtask", about = "Build tasks", version)]
 struct Xtask {
     #[command(flatten)]
     pub global: GlobalOptions,
