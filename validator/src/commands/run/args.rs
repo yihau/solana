@@ -1826,7 +1826,7 @@ mod tests {
 
     #[test]
     fn verify_args_struct_by_command_run_with_ledger_path() {
-        // unexisting absolute ledger path
+        // nonexistent absolute ledger path
         {
             let default_run_args = RunArgs::default();
             let tmp_dir = fs::canonicalize(tempfile::tempdir().unwrap()).unwrap();
@@ -1866,7 +1866,7 @@ mod tests {
             assert!(fs::exists(&ledger_path).unwrap());
         }
 
-        // unexisting relative ledger path
+        // nonexistent relative ledger path
         {
             let default_run_args = RunArgs::default();
             let ledger_path = PathBuf::from("test_ledger_unexisting");
