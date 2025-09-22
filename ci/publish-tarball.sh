@@ -97,7 +97,9 @@ echo --- Creating release tarball
     find "${RELEASE_BASENAME}" -type f -name "$bin" -print -quit >> "$tmp_excludes"
   done
 
-  tar -I bzip2 -X "$tmp_excludes" -cvf "${TARBALL_BASENAME}"-"$TARGET".tar.bz2 "${RELEASE_BASENAME}"
+  # ensure this works on Windows, Mac, and Linux
+  tar cvf "${TARBALL_BASENAME}"-$TARGET.tar "${RELEASE_BASENAME}"
+  bzip2 "${TARBALL_BASENAME}"-$TARGET.tar
 
   cp "${RELEASE_BASENAME}"/bin/agave-install-init agave-install-init-"$TARGET"
   cp "${RELEASE_BASENAME}"/version.yml "${TARBALL_BASENAME}"-"$TARGET".yml
