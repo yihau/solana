@@ -36,7 +36,7 @@ pub fn run(args: BumpArgs) -> Result<()> {
         crate::common::get_current_version().context("failed to get current version")?;
 
     // bump the version
-    let new_version = bump_version(&args.level.to_string().to_lowercase(), &current_version);
+    let new_version = bump_version(&args.level, &current_version);
 
     // get all crates
     let all_crates = crate::common::get_all_crates().context("failed to get all crates")?;
@@ -256,23 +256,22 @@ pub fn run(args: BumpArgs) -> Result<()> {
     Ok(())
 }
 
-pub fn bump_version(level: &str, current: &str) -> String {
+pub fn bump_version(level: &BumpLevel, current: &str) -> String {
     let mut parts: Vec<u32> = current.split('.').map(|s| s.parse().unwrap_or(0)).collect();
 
     match level {
-        "major" => {
+        BumpLevel::Major => {
             parts[0] = parts[0].saturating_add(1);
             parts[1] = 0;
             parts[2] = 0;
         }
-        "minor" => {
+        BumpLevel::Minor => {
             parts[1] = parts[1].saturating_add(1);
             parts[2] = 0;
         }
-        "patch" => {
+        BumpLevel::Patch => {
             parts[2] = parts[2].saturating_add(1);
         }
-        _ => {}
     }
 
     format!("{}.{}.{}", parts[0], parts[1], parts[2])
