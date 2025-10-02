@@ -14,7 +14,7 @@ pub fn get_git_root_path() -> Result<PathBuf> {
     Ok(PathBuf::from(root))
 }
 
-pub fn find_all_cargo_tomls() -> Result<Vec<PathBuf>> {
+pub fn find_files_by_name(filename: &str) -> Result<Vec<PathBuf>> {
     let git_root = get_git_root_path()?;
     let mut results = vec![];
 
@@ -22,7 +22,7 @@ pub fn find_all_cargo_tomls() -> Result<Vec<PathBuf>> {
         .into_iter()
         .filter_entry(|entry| !entry.path().components().any(|c| c.as_os_str() == "target"))
         .filter_map(Result::ok)
-        .filter(|e| e.file_name() == "Cargo.toml")
+        .filter(|e| e.file_name() == filename)
     {
         results.push(entry.path().to_path_buf());
     }
@@ -30,20 +30,12 @@ pub fn find_all_cargo_tomls() -> Result<Vec<PathBuf>> {
     Ok(results)
 }
 
+pub fn find_all_cargo_tomls() -> Result<Vec<PathBuf>> {
+    find_files_by_name("Cargo.toml")
+}
+
 pub fn find_all_cargo_locks() -> Result<Vec<PathBuf>> {
-    let git_root = get_git_root_path()?;
-    let mut results = vec![];
-
-    for entry in WalkDir::new(git_root)
-        .into_iter()
-        .filter_entry(|entry| !entry.path().components().any(|c| c.as_os_str() == "target"))
-        .filter_map(Result::ok)
-        .filter(|e| e.file_name() == "Cargo.lock")
-    {
-        results.push(entry.path().to_path_buf());
-    }
-
-    Ok(results)
+    find_files_by_name("Cargo.lock")
 }
 
 pub fn get_all_crates() -> Result<Vec<String>> {
