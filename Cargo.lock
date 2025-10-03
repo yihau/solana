@@ -408,7 +408,7 @@ dependencies = [
  "anyhow",
  "axum 0.7.9",
  "cfg-if 1.0.3",
- "env_logger 0.11.8",
+ "env_logger",
  "hyper 0.14.32",
  "log",
  "num_cpus",
@@ -2788,19 +2788,6 @@ checksum = "186e05a59d4c50738528153b83b0b0194d3a29507dfec16eccd4b342903397d0"
 dependencies = [
  "log",
  "regex",
-]
-
-[[package]]
-name = "env_logger"
-version = "0.9.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a12e6657c4c97ebab115a42dcee77225f7f482cdd841cf7088c657a42e9e00e7"
-dependencies = [
- "atty",
- "humantime",
- "log",
- "regex",
- "termcolor",
 ]
 
 [[package]]
@@ -9476,7 +9463,7 @@ version = "3.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ef7421d1092680d72065edbf5c7605856719b021bf5f173656c71febcdd5d003"
 dependencies = [
- "env_logger 0.11.8",
+ "env_logger",
  "lazy_static",
  "libc",
  "log",
@@ -9527,7 +9514,7 @@ version = "3.1.0"
 dependencies = [
  "bencher",
  "crossbeam-channel",
- "env_logger 0.11.8",
+ "env_logger",
  "gethostname",
  "log",
  "rand 0.8.5",
@@ -13597,12 +13584,11 @@ dependencies = [
 
 [[package]]
 name = "walkdir"
-version = "2.3.2"
+version = "2.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "808cf2735cd4b6866113f648b791c6adc5714537bc222d9347bb203386ffda56"
+checksum = "29790946404f91d9c5d06f9874efddea1dc06c5efe94541a7d6863108e3a5e4b"
 dependencies = [
  "same-file",
- "winapi 0.3.9",
  "winapi-util",
 ]
 
@@ -14186,7 +14172,7 @@ version = "3.1.0"
 dependencies = [
  "anyhow",
  "clap 4.5.31",
- "env_logger 0.9.3",
+ "env_logger",
  "futures-util",
  "log",
  "octocrab",
