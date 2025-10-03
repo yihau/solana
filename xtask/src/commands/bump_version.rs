@@ -2,6 +2,7 @@ use {
     anyhow::{anyhow, Context, Result},
     clap::{Args, ValueEnum},
     log::{debug, info},
+    semver::Version,
     std::{fmt, fs, process::Command},
     toml_edit::{value, DocumentMut},
 };
@@ -32,8 +33,9 @@ impl fmt::Display for BumpLevel {
 
 pub fn run(args: BumpArgs) -> Result<()> {
     // get the current version
-    let current_version =
+    let current_version_str =
         crate::common::get_current_version().context("failed to get current version")?;
+    let current_version = Version::parse(&current_version_str)?;
 
     // bump the version
     let new_version = bump_version(&args.level, &current_version);
@@ -62,8 +64,8 @@ pub fn run(args: BumpArgs) -> Result<()> {
             .and_then(|package| package.get("version"))
             .and_then(|version| version.as_str())
         {
-            if workspace_package_version_str == current_version {
-                doc["workspace"]["package"]["version"] = value(&new_version);
+            if workspace_package_version_str == current_version.to_string() {
+                doc["workspace"]["package"]["version"] = value(new_version.to_string());
                 info!("  bumped workspace.package.version from {current_version} to {new_version}",);
             }
         }
@@ -74,8 +76,8 @@ pub fn run(args: BumpArgs) -> Result<()> {
             .and_then(|package| package.get("version"))
             .and_then(|version| version.as_str())
         {
-            if package_version_str == current_version {
-                doc["package"]["version"] = value(&new_version);
+            if package_version_str == current_version.to_string() {
+                doc["package"]["version"] = value(new_version.to_string());
                 info!("  bumped package.version from {current_version} to {current_version}",);
             }
         }
@@ -96,11 +98,12 @@ pub fn run(args: BumpArgs) -> Result<()> {
                         .and_then(|v| v.get("version"))
                         .and_then(|v| v.as_str())
                     {
-                        if !version.contains(&current_version) {
+                        if !version.contains(&current_version.to_string()) {
                             continue;
                         }
                         let old_version = version.to_string();
-                        let new_version = old_version.replace(&current_version, &new_version);
+                        let new_version = old_version
+                            .replace(&current_version.to_string(), &new_version.to_string());
                         doc["workspace"]["dependencies"][&name]["version"] = value(&new_version);
                         info!(
                             "  bumped workspace.dependencies.{name}.version from {old_version} to \
@@ -141,23 +144,69 @@ pub fn run(args: BumpArgs) -> Result<()> {
     Ok(())
 }
 
-pub fn bump_version(level: &BumpLevel, current: &str) -> String {
-    let mut parts: Vec<u32> = current.split('.').map(|s| s.parse().unwrap_or(0)).collect();
-
+pub fn bump_version(level: &BumpLevel, current: &Version) -> Version {
+    let mut new_version = current.clone();
     match level {
         BumpLevel::Major => {
-            parts[0] = parts[0].saturating_add(1);
-            parts[1] = 0;
-            parts[2] = 0;
+            new_version.major = new_version.major.saturating_add(1);
+            new_version.minor = 0;
+            new_version.patch = 0;
         }
         BumpLevel::Minor => {
-            parts[1] = parts[1].saturating_add(1);
-            parts[2] = 0;
+            new_version.minor = new_version.minor.saturating_add(1);
+            new_version.patch = 0;
         }
         BumpLevel::Patch => {
-            parts[2] = parts[2].saturating_add(1);
+            new_version.patch = new_version.patch.saturating_add(1);
         }
     }
 
-    format!("{}.{}.{}", parts[0], parts[1], parts[2])
+    new_version
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_bump_version() {
+        // bump major
+        {
+            assert_eq!(
+                bump_version(&BumpLevel::Major, &Version::parse("1.0.0").unwrap()),
+                Version::parse("2.0.0").unwrap()
+            );
+
+            assert_eq!(
+                bump_version(&BumpLevel::Major, &Version::parse("1.1.0").unwrap()),
+                Version::parse("2.0.0").unwrap()
+            );
+
+            assert_eq!(
+                bump_version(&BumpLevel::Major, &Version::parse("1.1.1").unwrap()),
+                Version::parse("2.0.0").unwrap()
+            );
+        }
+
+        // bump minor
+        {
+            assert_eq!(
+                bump_version(&BumpLevel::Minor, &Version::parse("1.0.0").unwrap()),
+                Version::parse("1.1.0").unwrap()
+            );
+
+            assert_eq!(
+                bump_version(&BumpLevel::Minor, &Version::parse("1.2.1").unwrap()),
+                Version::parse("1.3.0").unwrap()
+            );
+        }
+
+        // bump patch
+        {
+            assert_eq!(
+                bump_version(&BumpLevel::Patch, &Version::parse("1.0.0").unwrap()),
+                Version::parse("1.0.1").unwrap()
+            );
+        }
+    }
 }

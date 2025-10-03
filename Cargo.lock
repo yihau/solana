@@ -14178,6 +14178,7 @@ dependencies = [
  "octocrab",
  "pretty_assertions",
  "regex",
+ "semver 1.0.27",
  "serde",
  "serde_json",
  "test-case",
