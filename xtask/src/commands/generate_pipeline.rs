@@ -13,13 +13,8 @@ pub mod buildkite;
 pub struct GeneratePipelineArgs {}
 
 pub async fn run(_args: GeneratePipelineArgs) -> Result<()> {
-    let branch = env::var("BUILDKITE_BRANCH");
-    if branch.is_err() {
-        return Err(anyhow::anyhow!(
-            "failed to get `BUILDKITE_BRANCH`: {branch:?}"
-        ));
-    }
-    let branch = branch.unwrap();
+    let branch = env::var("BUILDKITE_BRANCH")
+        .map_err(|e| anyhow::anyhow!("failed to get `BUILDKITE_BRANCH`: {e}"))?;
 
     let mut pr_number = None;
     let mut changed_files = vec![];

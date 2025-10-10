@@ -42,8 +42,8 @@ pub fn get_all_crates() -> Result<Vec<String>> {
     let cargo_tomls = find_all_cargo_tomls()?;
     let mut crates = vec![];
     for cargo_toml in cargo_tomls {
-        let content = fs::read_to_string(cargo_toml).unwrap();
-        let doc = content.parse::<ImDocument<String>>().unwrap();
+        let content = fs::read_to_string(cargo_toml)?;
+        let doc = content.parse::<ImDocument<String>>()?;
         let Some(name) = doc
             .get("package")
             .and_then(|package| package.get("name"))
