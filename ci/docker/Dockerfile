@@ -88,6 +88,7 @@ RUN \
   cargo install svgbob_cli && \
   cargo install wasm-pack && \
   cargo install rustfilt && \
+  cargo install toml-cli && \
   rustup show && \
   rustc --version && \
   cargo --version && \
