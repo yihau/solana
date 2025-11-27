@@ -8906,6 +8906,7 @@ version = "4.0.0-alpha.0"
 dependencies = [
  "agave-feature-set",
  "agave-logger",
+ "agave-random",
  "anyhow",
  "arc-swap",
  "arrayvec",
