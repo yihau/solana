@@ -14,10 +14,28 @@ eval "$(ci/channel-info.sh)"
 export RUST_BACKTRACE=1
 export RUSTFLAGS="-D warnings -A incomplete_features"
 
+if ! cargo "+${rust_nightly}" sort --version > /dev/null 2>&1; then
+	if [[ -n $CI ]]; then
+		echo "cargo-sort not found"
+		exit 1
+	else
+		echo "cargo-sort not found. installing..."
+		cargo "+${rust_nightly}" install cargo-sort
+	fi
+fi
 _ scripts/cargo-for-all-lock-files.sh -- "+${rust_nightly}" sort --workspace --check
 
 _ scripts/check-dev-context-only-utils.sh tree
 
+if ! cargo "+${rust_nightly}" fmt --version > /dev/null 2>&1; then
+	if [[ -n $CI ]]; then
+		echo "rustfmt not found"
+		exit 1
+	else
+		echo "rustfmt not found. installing..."
+		rustup component add rustfmt --toolchain=$RUST_NIGHTLY_VERSION
+	fi
+fi
 _ scripts/cargo-for-all-lock-files.sh -- "+${rust_nightly}" fmt --all -- --check
 
 # run cargo check for all rust files in this monorepo for faster turnaround in
