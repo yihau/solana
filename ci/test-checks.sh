@@ -8,8 +8,7 @@ set -e
 cd "$(dirname "$0")/.."
 
 source ci/_
-source ci/rust-version.sh stable
-source ci/rust-version.sh nightly
+source ci/rust-version.sh all
 eval "$(ci/channel-info.sh)"
 cargoNightly="$(readlink -f "./cargo") nightly"
 
