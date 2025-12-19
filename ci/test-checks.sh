@@ -47,12 +47,7 @@ _ ci/order-crates-for-publishing.py
 
 _ scripts/cargo-clippy.sh
 
-if [[ -n $CI ]]; then
-  # exclude from printing "Checking xxx ..."
-  _ scripts/cargo-for-all-lock-files.sh -- "+${rust_nightly}" sort --workspace --check > /dev/null
-else
-  _ scripts/cargo-for-all-lock-files.sh -- "+${rust_nightly}" sort --workspace --check
-fi
+_ scripts/cargo-for-all-lock-files.sh -- "+${rust_nightly}" sort --workspace --check
 
 _ scripts/check-dev-context-only-utils.sh tree
 
