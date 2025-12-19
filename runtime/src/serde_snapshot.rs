@@ -493,18 +493,14 @@ where
 /// Get snapshot storage lengths from accounts_db_fields
 pub(crate) fn snapshot_storage_lengths_from_fields(
     accounts_db_fields: &AccountsDbFields<SerializableAccountStorageEntry>,
-) -> HashMap<Slot, HashMap<SerializedAccountsFileId, usize>> {
+) -> HashMap<Slot, usize> {
     let AccountsDbFields(snapshot_storage, ..) = &accounts_db_fields;
     snapshot_storage
         .iter()
         .map(|(slot, slot_storage)| {
-            (
-                *slot,
-                slot_storage
-                    .iter()
-                    .map(|storage_entry| (storage_entry.id(), storage_entry.current_len()))
-                    .collect(),
-            )
+            assert_eq!(slot_storage.len(), 1, "invalid storage count (slot={slot})");
+            let storage_entry = slot_storage[0];
+            (*slot, storage_entry.current_len())
         })
         .collect()
 }
