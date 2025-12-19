@@ -14,6 +14,12 @@ eval "$(ci/channel-info.sh)"
 export RUST_BACKTRACE=1
 export RUSTFLAGS="-D warnings -A incomplete_features"
 
+_ scripts/cargo-for-all-lock-files.sh -- "+${rust_nightly}" sort --workspace --check
+
+_ scripts/check-dev-context-only-utils.sh tree
+
+_ scripts/cargo-for-all-lock-files.sh -- "+${rust_nightly}" fmt --all -- --check
+
 # run cargo check for all rust files in this monorepo for faster turnaround in
 # case of any compilation/build error for nightly
 
@@ -36,12 +42,6 @@ fi
 _ ci/order-crates-for-publishing.py
 
 _ scripts/cargo-clippy.sh
-
-_ scripts/cargo-for-all-lock-files.sh -- "+${rust_nightly}" sort --workspace --check
-
-_ scripts/check-dev-context-only-utils.sh tree
-
-_ scripts/cargo-for-all-lock-files.sh -- "+${rust_nightly}" fmt --all -- --check
 
 _ ci/do-audit.sh
 
