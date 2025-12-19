@@ -43,7 +43,9 @@ _ ci/order-crates-for-publishing.py
 
 _ scripts/cargo-clippy.sh
 
-_ ci/do-audit.sh
+if [[ -n $CI ]]; then
+  _ ci/do-audit.sh
+fi
 
 if [[ -n $CI ]] && [[ $CHANNEL = "stable" ]]; then
   _ ci/check-install-all.sh
