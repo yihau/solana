@@ -960,6 +960,7 @@ mod tests {
         solana_borsh::v1 as borsh1,
         solana_genesis_config::GenesisConfig,
         solana_stake_interface as stake,
+        solana_vote_program::vote_state::BLS_PUBLIC_KEY_COMPRESSED_SIZE,
         std::{collections::HashMap, fs::remove_file, io::Write, path::Path},
         test_case::test_case,
     };
@@ -1438,7 +1439,10 @@ mod tests {
                     );
                 } else {
                     assert!(b64_account.bls_pubkey.is_none());
-                    assert!(vote_state.bls_pubkey_compressed.is_none());
+                    assert_eq!(
+                        vote_state.bls_pubkey_compressed,
+                        Some([0u8; BLS_PUBLIC_KEY_COMPRESSED_SIZE])
+                    );
                 }
 
                 // check stake account
