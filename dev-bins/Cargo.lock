@@ -6864,6 +6864,7 @@ dependencies = [
  "agave-transaction-view",
  "agave-verified-packet-receiver",
  "agave-votor",
+ "agave-votor-messages",
  "ahash 0.8.12",
  "anyhow",
  "arc-swap",
@@ -8074,6 +8075,7 @@ dependencies = [
 name = "solana-poh"
 version = "4.0.0-alpha.0"
 dependencies = [
+ "agave-votor-messages",
  "arc-swap",
  "core_affinity",
  "crossbeam-channel",
