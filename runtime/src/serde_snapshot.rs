@@ -358,14 +358,14 @@ impl<T> SnapshotAccountsDbFields<T> {
         }
     }
 
-    /// Extract final write version and bank hash info from full and incremental accounts db fields.
+    /// Extract final bank hash info from full and incremental accounts db fields.
     ///
-    /// If there is no incremental snapshot, this returns the fields from the full snapshot.
-    /// Otherwise, gets them from the incremental snapshot.
-    fn into_write_version_and_bank_hash_info(self) -> (u64, BankHashInfo) {
+    /// If there is no incremental snapshot, this returns the field from the full snapshot.
+    /// Otherwise, gets it from the incremental snapshot.
+    fn into_bank_hash_info(self) -> BankHashInfo {
         let AccountsDbFields(
             _snapshot_storages,
-            snapshot_write_version,
+            _snapshot_write_version,
             _snapshot_slot,
             snapshot_bank_hash_info,
             _snapshot_historical_roots,
@@ -373,7 +373,7 @@ impl<T> SnapshotAccountsDbFields<T> {
         ) = self
             .incremental_snapshot_accounts_db_fields
             .unwrap_or(self.full_snapshot_accounts_db_fields);
-        (snapshot_write_version, snapshot_bank_hash_info)
+        snapshot_bank_hash_info
     }
 }
 
@@ -607,7 +607,6 @@ pub fn serialize_bank_snapshot_into(
     bank_hash_stats: BankHashStats,
     account_storage_entries: &[Arc<AccountStorageEntry>],
     extra_fields: ExtraFieldsToSerialize,
-    write_version: u64,
 ) -> Result<(), Error> {
     let mut serializer = bincode::Serializer::new(
         stream,
@@ -619,7 +618,6 @@ pub fn serialize_bank_snapshot_into(
         bank_hash_stats,
         account_storage_entries,
         extra_fields,
-        write_version,
     )
 }
 
@@ -630,7 +628,6 @@ pub fn serialize_bank_snapshot_with<S>(
     bank_hash_stats: BankHashStats,
     account_storage_entries: &[Arc<AccountStorageEntry>],
     extra_fields: ExtraFieldsToSerialize,
-    write_version: u64,
 ) -> Result<S::Ok, S::Error>
 where
     S: serde::Serializer,
@@ -641,7 +638,6 @@ where
         slot,
         account_storage_entries,
         bank_hash_stats,
-        write_version,
     };
     (serializable_bank, serializable_accounts_db, extra_fields).serialize(serializer)
 }
@@ -660,9 +656,7 @@ impl Serialize for SerializableBankAndStorage<'_> {
     {
         let slot = self.bank.slot();
         let mut bank_fields = self.bank.get_fields_to_serialize();
-        let accounts_db = &self.bank.rc.accounts.accounts_db;
         let bank_hash_stats = self.bank.get_bank_hash_stats();
-        let write_version = accounts_db.write_version.load(Ordering::Acquire);
         let lamports_per_signature = bank_fields.fee_rate_governor.lamports_per_signature;
         let versioned_epoch_stakes = std::mem::take(&mut bank_fields.versioned_epoch_stakes);
         let accounts_lt_hash = Some(bank_fields.accounts_lt_hash.clone().into());
@@ -672,7 +666,6 @@ impl Serialize for SerializableBankAndStorage<'_> {
                 slot,
                 account_storage_entries: self.snapshot_storages,
                 bank_hash_stats,
-                write_version,
             },
             ExtraFieldsToSerialize {
                 lamports_per_signature,
@@ -700,16 +693,13 @@ impl Serialize for SerializableBankAndStorageNoExtra<'_> {
     {
         let slot = self.bank.slot();
         let bank_fields = self.bank.get_fields_to_serialize();
-        let accounts_db = &self.bank.rc.accounts.accounts_db;
         let bank_hash_stats = self.bank.get_bank_hash_stats();
-        let write_version = accounts_db.write_version.load(Ordering::Acquire);
         (
             SerializableVersionedBank::from(bank_fields),
             SerializableAccountsDb::<'_> {
                 slot,
                 account_storage_entries: self.snapshot_storages,
                 bank_hash_stats,
-                write_version,
             },
         )
             .serialize(serializer)
@@ -734,7 +724,6 @@ struct SerializableAccountsDb<'a> {
     slot: Slot,
     account_storage_entries: &'a [Arc<AccountStorageEntry>],
     bank_hash_stats: BankHashStats,
-    write_version: u64,
 }
 
 impl Serialize for SerializableAccountsDb<'_> {
@@ -764,7 +753,7 @@ impl Serialize for SerializableAccountsDb<'_> {
         let mut serialize_account_storage_timer = Measure::start("serialize_account_storage_ms");
         let result = (
             entries,
-            self.write_version,
+            0u64, // obsolete, formerly write_version
             self.slot,
             bank_hash_info,
             historical_roots,
@@ -1019,8 +1008,7 @@ where
         exit,
     );
 
-    let (snapshot_write_version, snapshot_bank_hash_info) =
-        snapshot_accounts_db_fields.into_write_version_and_bank_hash_info();
+    let snapshot_bank_hash_info = snapshot_accounts_db_fields.into_bank_hash_info();
 
     // Ensure all account paths exist
     for path in &accounts_db.paths {
@@ -1050,9 +1038,6 @@ where
     accounts_db
         .next_id
         .store(next_append_vec_id, Ordering::Release);
-    accounts_db
-        .write_version
-        .fetch_add(snapshot_write_version, Ordering::Release);
 
     info!("Building accounts index...");
     let start = Instant::now();
