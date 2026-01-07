@@ -1803,6 +1803,7 @@ impl Validator {
             cluster_slots,
             node: Some(node_multihoming),
             banking_control_sender,
+            snapshot_controller,
         });
 
         Ok(Self {
