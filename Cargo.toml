@@ -58,7 +58,6 @@ members = [
     "platform-tools-sdk/gen-headers",
     "poh",
     "poh-bench",
-    "poseidon",
     "precompiles",
     "program-binaries",
     "program-runtime",
@@ -222,8 +221,6 @@ anyhow = "1.0.100"
 aquamarine = "0.6.0"
 arbitrary = "1.4.2"
 arc-swap = "1.8.0"
-ark-bn254 = "0.5.0"
-ark-bn254-0-4 = { package = "ark-bn254", version = "0.4.0" }
 array-bytes = "=1.4.1"
 arrayref = "0.3.9"
 arrayvec = "0.7.6"
@@ -327,8 +324,6 @@ libsecp256k1 = { version = "0.6.0", default-features = false, features = [
     "std",
     "static-context",
 ] }
-light-poseidon = "0.4.0"
-light-poseidon-0-2 = { package = "light-poseidon", version = "0.2.0" }
 log = "0.4.29"
 lru = "0.7.7"
 lz4 = "1.28.1"
@@ -497,7 +492,7 @@ solana-packet = "4.0.0"
 solana-perf = { path = "perf", version = "=4.0.0-alpha.0", features = ["agave-unstable-api"] }
 solana-poh = { path = "poh", version = "=4.0.0-alpha.0", features = ["agave-unstable-api"] }
 solana-poh-config = "3.0.0"
-solana-poseidon = { path = "poseidon", version = "=4.0.0-alpha.0", features = ["agave-unstable-api"] }
+solana-poseidon = "4.0.0"
 solana-precompile-error = "3.0.0"
 solana-presigner = "3.0.0"
 solana-program = { version = "3.0.0", default-features = false }
