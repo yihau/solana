@@ -2,7 +2,7 @@
 
 use {
     solana_bn254::compression::prelude::{
-        alt_bn128_g1_compress, alt_bn128_g1_compress_le, alt_bn128_g1_decompress,
+        alt_bn128_g1_compress_be, alt_bn128_g1_compress_le, alt_bn128_g1_decompress,
         alt_bn128_g1_decompress_le, alt_bn128_g2_compress, alt_bn128_g2_compress_le,
         alt_bn128_g2_decompress, alt_bn128_g2_decompress_le,
     },
@@ -27,7 +27,7 @@ fn alt_bn128_compression_g1_be() {
         [0u8; 64],
     ];
     points_g1.iter().for_each(|point| {
-        let g1_compressed_be = alt_bn128_g1_compress(point).unwrap();
+        let g1_compressed_be = alt_bn128_g1_compress_be(point).unwrap();
         let g1_decompressed_be = alt_bn128_g1_decompress(&g1_compressed_be).unwrap();
         assert_eq!(*point, g1_decompressed_be);
     });

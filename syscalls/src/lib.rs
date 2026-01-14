@@ -1870,7 +1870,7 @@ declare_builtin_function!(
         use solana_bn254::{
             prelude::{ALT_BN128_G1_POINT_SIZE, ALT_BN128_G2_POINT_SIZE},
             compression::prelude::{
-                alt_bn128_g1_compress, alt_bn128_g1_decompress,
+                alt_bn128_g1_compress_be, alt_bn128_g1_decompress,
                 alt_bn128_g2_compress, alt_bn128_g2_decompress,
                 alt_bn128_g1_compress_le, alt_bn128_g1_decompress_le,
                 alt_bn128_g2_compress_le, alt_bn128_g2_decompress_le,
@@ -1919,7 +1919,7 @@ declare_builtin_function!(
 
         match op {
             ALT_BN128_G1_COMPRESS_BE => {
-                let Ok(result_point) = alt_bn128_g1_compress(input) else {
+                let Ok(result_point) = alt_bn128_g1_compress_be(input) else {
                     return Ok(1);
                 };
                 call_result.copy_from_slice(&result_point);
