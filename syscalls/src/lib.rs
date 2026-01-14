@@ -1580,7 +1580,7 @@ declare_builtin_function!(
             alt_bn128_versioned_g1_addition, alt_bn128_versioned_g1_multiplication,
             alt_bn128_versioned_pairing, Endianness, VersionedG1Addition,
             VersionedG1Multiplication, VersionedPairing, ALT_BN128_G1_POINT_SIZE,
-            ALT_BN128_G1_ADD_BE, ALT_BN128_G1_MUL_BE, ALT_BN128_MULTIPLICATION_OUTPUT_SIZE,
+            ALT_BN128_G1_ADD_BE, ALT_BN128_G1_MUL_BE,
             ALT_BN128_PAIRING_BE, ALT_BN128_PAIRING_ELEMENT_SIZE,
             ALT_BN128_PAIRING_OUTPUT_SIZE, ALT_BN128_G1_ADD_LE, ALT_BN128_G1_MUL_LE,
             ALT_BN128_PAIRING_LE
@@ -1594,7 +1594,7 @@ declare_builtin_function!(
             ),
             ALT_BN128_G1_MUL_BE | ALT_BN128_G1_MUL_LE => (
                 execution_cost.alt_bn128_multiplication_cost,
-                ALT_BN128_MULTIPLICATION_OUTPUT_SIZE,
+                ALT_BN128_G1_POINT_SIZE,
             ),
             ALT_BN128_PAIRING_BE | ALT_BN128_PAIRING_LE => {
                 let ele_len = input_size
