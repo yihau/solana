@@ -800,7 +800,6 @@ pub struct TestValidator {
     preserve_ledger: bool,
     rpc_pubsub_url: String,
     rpc_url: String,
-    tpu: SocketAddr,
     tpu_quic: SocketAddr,
     gossip: SocketAddr,
     validator: Option<Validator>,
@@ -1153,8 +1152,7 @@ impl TestValidator {
         let vote_account_address = validator_vote_account.pubkey();
         let rpc_url = format!("http://{}", node.info.rpc().unwrap());
         let rpc_pubsub_url = format!("ws://{}/", node.info.rpc_pubsub().unwrap());
-        let tpu = node.info.tpu(Protocol::UDP).unwrap();
-        let tpu_quic = node.info.tpu(Protocol::QUIC).unwrap_or(tpu);
+        let tpu_quic = node.info.tpu(Protocol::QUIC).unwrap();
         let gossip = node.info.gossip().unwrap();
 
         {
@@ -1257,7 +1255,6 @@ impl TestValidator {
             preserve_ledger,
             rpc_pubsub_url,
             rpc_url,
-            tpu,
             tpu_quic,
             gossip,
             validator,
@@ -1387,11 +1384,6 @@ impl TestValidator {
             sleep(Duration::from_millis(DEFAULT_MS_PER_SLOT)).await;
         }
         panic!("Timeout waiting for program to become usable");
-    }
-
-    /// Return the validator's TPU address
-    pub fn tpu(&self) -> &SocketAddr {
-        &self.tpu
     }
 
     /// Return the validator's TPU QUIC address
