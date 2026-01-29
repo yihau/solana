@@ -19,6 +19,9 @@ steps:
   - name: "local-cluster-9"
     command: "ci/docker-run-default-image.sh ci/stable/run-local-cluster-partially.sh 9 10"
     timeout_in_minutes: 30
+    retry:
+      manual:
+        permit_on_passed: true
     agents:
       queue: "tainted"
 EOF
