@@ -11,8 +11,13 @@ set -e
 cd "$(dirname "$0")"/..
 source ci/_
 
-_ ci/buildkite-solana-private.sh pipeline.yml
-echo +++ pipeline
-cat pipeline.yml
-
-_ buildkite-agent pipeline upload pipeline.yml
+cat <<EOF | tee /dev/tty | buildkite-agent pipeline upload
+priority: 10
+steps:
+  - name: "agave-fs"
+    command: "ci/docker-run-default-image.sh cargo test --features agave-unstable-api -p agave-fs"
+    timeout_in_minutes: 30
+    parallelism: 8
+    agents:
+      queue: "default"
+EOF
