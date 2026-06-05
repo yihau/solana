@@ -27,6 +27,7 @@ pub struct BucketApi<T: Clone + Copy + PartialEq + 'static> {
 
     /// keeps track of which index file this bucket is currently using
     /// or at startup, which bucket file this bucket should initially use
+    /// xxx
     restartable_bucket: RestartableBucket,
 }
 
