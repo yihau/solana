@@ -568,7 +568,7 @@ ur-parse-lib = { version = "1.0.8", default-features = false, features = ["std"]
 ur-registry = { version = "1.0.8", default-features = false, features = ["std"] }
 uriparse = "0.6.4"
 url = "2.5.8"
-winapi = "0.3.8"
+winapi = "0.3.9"
 wincode = { version = "0.6.1", features = ["derive"] }
 winreg = "0.55"
 xxhash-rust = "0.8.5"
