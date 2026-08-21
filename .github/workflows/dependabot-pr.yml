@@ -67,8 +67,6 @@ jobs:
 
           cargo anza-xtask update-crate --package "$CRATE_NAME" --from "$OLD_VERSION" --to "$NEW_VERSION"
 
-          ./scripts/cargo-for-all-lock-files.sh tree
-
       - name: push
         run: |
           if [ -z "$(git status --porcelain)" ]; then
