@@ -7628,23 +7628,23 @@ dependencies = [
 
 [[package]]
 name = "solana-client-traits"
-version = "4.1.0"
+version = "5.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0255645cb08e00df08f889d593581d569a8f347072d77946abea320c48f1a80f"
+checksum = "f0398e621a2d56c8641a583739411077916c044762e77528e218dd426ee29d74"
 dependencies = [
- "solana-account 4.7.0",
+ "solana-account 5.0.0",
  "solana-commitment-config",
  "solana-epoch-info",
  "solana-hash",
- "solana-instruction 3.5.0",
- "solana-keypair 3.1.2",
- "solana-message 4.6.0",
+ "solana-instruction 4.0.0",
+ "solana-keypair 4.0.0",
+ "solana-message 5.0.0",
  "solana-pubkey 4.3.0",
  "solana-signature",
- "solana-signer 3.0.1",
+ "solana-signer 4.0.0",
  "solana-system-interface",
- "solana-transaction 4.3.0",
- "solana-transaction-error 3.4.0",
+ "solana-transaction 5.0.0",
+ "solana-transaction-error 4.0.0",
 ]
 
 [[package]]

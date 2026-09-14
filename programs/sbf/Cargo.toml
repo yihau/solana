@@ -192,7 +192,7 @@ bincode = { workspace = true }
 borsh = { workspace = true }
 solana-account = "5.0.0"
 solana-account-info = "3.1.0"
-solana-client-traits = "4.0.0"
+solana-client-traits = "5.0.0"
 solana-clock = { workspace = true }
 solana-cluster-type = "3.0.0"
 solana-compute-budget = { workspace = true }
