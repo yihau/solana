@@ -9408,13 +9408,13 @@ dependencies = [
 
 [[package]]
 name = "solana-presigner"
-version = "3.0.0"
+version = "4.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0f704eaf825be3180832445b9e4983b875340696e8e7239bf2d535b0f86c14a2"
+checksum = "4a39585971b5c3f9aded0de890d8d87065b2dcb4311535f93921e4333c9a695f"
 dependencies = [
- "solana-pubkey 3.0.0",
+ "solana-pubkey 4.3.0",
  "solana-signature",
- "solana-signer 3.0.1",
+ "solana-signer 4.0.0",
 ]
 
 [[package]]
