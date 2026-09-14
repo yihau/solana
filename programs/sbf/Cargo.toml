@@ -215,7 +215,7 @@ solana-sbf-rust-invoke-dep = { workspace = true }
 solana-sbf-rust-realloc-dep = { workspace = true }
 solana-sbf-rust-realloc-invoke-dep = { workspace = true }
 solana-sdk-ids = "3.1.0"
-solana-signer = "3.0.0"
+solana-signer = "4.0.0"
 solana-stake-history = { workspace = true }
 solana-svm = { workspace = true, features = ["dev-context-only-utils"] }
 solana-svm-feature-set = { workspace = true }
