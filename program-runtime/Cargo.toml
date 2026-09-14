@@ -50,6 +50,7 @@ solana-epoch-schedule = { workspace = true }
 solana-fee-structure = { workspace = true }
 solana-hash = { workspace = true }
 solana-instruction = { workspace = true }
+solana-instruction-error = { workspace = true }
 solana-last-restart-slot = { workspace = true }
 solana-loader-v3-interface = { workspace = true }
 solana-message = { workspace = true, optional = true }

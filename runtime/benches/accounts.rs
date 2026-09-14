@@ -6,7 +6,7 @@ extern crate test;
 use {
     solana_account::{AccountSharedData, ReadableAccount},
     solana_genesis_config::create_genesis_config,
-    solana_instruction::error::LamportsError,
+    solana_instruction_error::LamportsError,
     solana_leader_schedule::SlotLeader,
     solana_pubkey::Pubkey,
     solana_runtime::bank::*,

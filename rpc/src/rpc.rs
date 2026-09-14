@@ -4679,7 +4679,8 @@ pub mod tests {
         solana_entry::entry::next_versioned_entry,
         solana_fee_calculator::FeeRateGovernor,
         solana_gossip::{contact_info::ContactInfo, socketaddr},
-        solana_instruction::{AccountMeta, Instruction, error::InstructionError},
+        solana_instruction::{AccountMeta, Instruction},
+        solana_instruction_error::InstructionError,
         solana_keypair::Keypair,
         solana_ledger::{
             blockstore_meta::PerfSample,

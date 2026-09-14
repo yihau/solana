@@ -6,7 +6,8 @@ use {
     solana_clock::{Clock, Slot},
     solana_epoch_schedule::EpochSchedule,
     solana_hash::Hash,
-    solana_instruction::{AccountMeta, error::InstructionError},
+    solana_instruction::AccountMeta,
+    solana_instruction_error::InstructionError,
     solana_program_runtime::{
         invoke_context::{mock_process_instruction, mock_process_instruction_with_feature_set},
         solana_sbpf::program::BuiltinFunctionDefinition,

@@ -201,6 +201,7 @@ solana-compute-budget-program = { path = "../programs/compute-budget", features 
 solana-core = { path = ".", features = ["agave-unstable-api", "dev-context-only-utils"] }
 solana-cost-model = { path = "../cost-model", features = ["agave-unstable-api", "dev-context-only-utils"] }
 solana-gossip = { path = "../gossip", features = ["agave-unstable-api", "dev-context-only-utils"] }
+solana-instruction-error = { workspace = true }
 solana-keypair = { workspace = true }
 solana-ledger = { path = "../ledger", features = ["agave-unstable-api", "dev-context-only-utils"] }
 solana-loader-v3-interface = { workspace = true }

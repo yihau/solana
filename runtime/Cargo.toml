@@ -131,6 +131,7 @@ solana-hard-forks = { workspace = true, features = ["serde", "wincode"] }
 solana-hash = { workspace = true, features = ["atomic", "wincode", "rand"] }
 solana-inflation = { workspace = true, features = ["serde", "wincode"] }
 solana-instruction = { workspace = true }
+solana-instruction-error = { workspace = true }
 solana-keypair = { workspace = true, features = ["seed-derivable"] }
 solana-lattice-hash = { workspace = true }
 solana-leader-schedule = { workspace = true }
@@ -201,7 +202,6 @@ libsecp256k1 = { workspace = true }
 proptest = { workspace = true }
 solana-accounts-db = { path = "../accounts-db", features = ["agave-unstable-api", "dev-context-only-utils"] }
 solana-builtins = { path = "../builtins", features = ["agave-unstable-api", "dev-context-only-utils"] }
-solana-instruction-error = { workspace = true }
 solana-runtime = { path = ".", features = ["agave-unstable-api", "dev-context-only-utils"] }
 solana-runtime-transaction = { path = "../runtime-transaction", features = ["agave-unstable-api", "dev-context-only-utils"] }
 solana-sdk-ids = { workspace = true }

@@ -121,6 +121,7 @@ solana-fee-calculator = { workspace = true }
 solana-fee-structure = { workspace = true }
 solana-gossip = { path = "../gossip", features = ["agave-unstable-api", "dev-context-only-utils"] }
 solana-instruction = { workspace = true }
+solana-instruction-error = { workspace = true }
 solana-nonce = { workspace = true, features = ["wincode"] }
 solana-nonce-account = { workspace = true, features = ["wincode"] }
 solana-program-option = { workspace = true }

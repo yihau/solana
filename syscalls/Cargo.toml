@@ -43,6 +43,7 @@ solana-define-syscall = { workspace = true }
 solana-hash = { workspace = true, features = ["wincode"] }
 solana-hash-512 = { workspace = true }
 solana-instruction = { workspace = true }
+solana-instruction-error = { workspace = true }
 solana-keccak-hasher = { workspace = true, features = ["sha3"] }
 solana-poseidon = { workspace = true }
 solana-program-entrypoint = { workspace = true }

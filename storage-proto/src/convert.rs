@@ -2,7 +2,7 @@ use {
     crate::{StoredExtendedRewards, StoredTransactionError, StoredTransactionStatusMeta},
     solana_account_decoder::parse_token::{UiTokenAmount, real_number_string_trimmed},
     solana_hash::{HASH_BYTES, Hash},
-    solana_instruction::error::InstructionError,
+    solana_instruction_error::InstructionError,
     solana_message::{
         MessageHeader, VersionedMessage,
         compiled_instruction::CompiledInstruction,

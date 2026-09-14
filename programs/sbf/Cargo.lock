@@ -5591,7 +5591,7 @@ dependencies = [
  "solana-config-interface",
  "solana-epoch-schedule",
  "solana-fee-calculator",
- "solana-instruction 3.5.0",
+ "solana-instruction-error 2.5.0",
  "solana-loader-v3-interface",
  "solana-nonce",
  "solana-program-option",
@@ -5955,7 +5955,8 @@ dependencies = [
  "solana-account",
  "solana-bincode",
  "solana-clock",
- "solana-instruction 3.5.0",
+ "solana-instruction 4.0.0",
+ "solana-instruction-error 2.5.0",
  "solana-loader-v3-interface",
  "solana-packet",
  "solana-program-runtime",
@@ -6212,7 +6213,8 @@ dependencies = [
  "solana-builtins-default-costs",
  "solana-compute-budget",
  "solana-compute-budget-interface",
- "solana-instruction 3.5.0",
+ "solana-instruction 4.0.0",
+ "solana-instruction-error 2.5.0",
  "solana-pubkey 4.3.0",
  "solana-sdk-ids",
  "solana-svm-transaction",
@@ -6346,7 +6348,7 @@ dependencies = [
  "solana-gossip",
  "solana-hard-forks",
  "solana-hash",
- "solana-instruction 3.5.0",
+ "solana-instruction 4.0.0",
  "solana-keypair 4.0.0",
  "solana-leader-schedule",
  "solana-ledger",
@@ -6648,7 +6650,7 @@ dependencies = [
  "log",
  "solana-cli-output",
  "solana-hash",
- "solana-instruction 3.5.0",
+ "solana-instruction 4.0.0",
  "solana-keypair 4.0.0",
  "solana-message 5.0.0",
  "solana-metrics",
@@ -7133,7 +7135,7 @@ dependencies = [
  "solana-genesis-config",
  "solana-genesis-utils",
  "solana-hash",
- "solana-instruction 3.5.0",
+ "solana-instruction 4.0.0",
  "solana-keypair 4.0.0",
  "solana-leader-schedule",
  "solana-measure",
@@ -7620,7 +7622,8 @@ dependencies = [
  "solana-epoch-schedule",
  "solana-fee-structure",
  "solana-hash",
- "solana-instruction 3.5.0",
+ "solana-instruction 4.0.0",
+ "solana-instruction-error 2.5.0",
  "solana-last-restart-slot",
  "solana-loader-v3-interface",
  "solana-message 5.0.0",
@@ -7676,7 +7679,8 @@ dependencies = [
  "solana-fee-calculator",
  "solana-genesis-config",
  "solana-hash",
- "solana-instruction 3.5.0",
+ "solana-instruction 4.0.0",
+ "solana-instruction-error 2.5.0",
  "solana-keypair 4.0.0",
  "solana-loader-v3-interface",
  "solana-message 5.0.0",
@@ -7938,7 +7942,8 @@ dependencies = [
  "solana-epoch-schedule",
  "solana-feature-gate-interface",
  "solana-hash",
- "solana-instruction 3.5.0",
+ "solana-instruction 4.0.0",
+ "solana-instruction-error 2.5.0",
  "solana-message 5.0.0",
  "solana-pubkey 4.3.0",
  "solana-rpc-client-api",
@@ -8080,7 +8085,8 @@ dependencies = [
  "solana-hard-forks",
  "solana-hash",
  "solana-inflation",
- "solana-instruction 3.5.0",
+ "solana-instruction 4.0.0",
+ "solana-instruction-error 2.5.0",
  "solana-keypair 4.0.0",
  "solana-lattice-hash",
  "solana-leader-schedule",
@@ -8192,7 +8198,8 @@ dependencies = [
  "solana-fee-calculator",
  "solana-fee-structure",
  "solana-hash",
- "solana-instruction 3.5.0",
+ "solana-instruction 4.0.0",
+ "solana-instruction-error 2.5.0",
  "solana-keypair 4.0.0",
  "solana-loader-v3-interface",
  "solana-message 5.0.0",
@@ -8321,7 +8328,7 @@ name = "solana-sbf-rust-caller-access"
 version = "4.4.0-alpha.4"
 dependencies = [
  "solana-account-info",
- "solana-instruction 3.5.0",
+ "solana-instruction 4.0.0",
  "solana-msg",
  "solana-program",
  "solana-program-entrypoint",
@@ -8362,7 +8369,7 @@ name = "solana-sbf-rust-deprecated-loader"
 version = "4.4.0-alpha.4"
 dependencies = [
  "solana-account-info",
- "solana-instruction 3.5.0",
+ "solana-instruction 4.0.0",
  "solana-msg",
  "solana-program",
  "solana-program-error",
@@ -8399,7 +8406,7 @@ name = "solana-sbf-rust-dup-accounts"
 version = "4.4.0-alpha.4"
 dependencies = [
  "solana-account-info",
- "solana-instruction 3.5.0",
+ "solana-instruction 4.0.0",
  "solana-msg",
  "solana-program",
  "solana-program-entrypoint",
@@ -8436,7 +8443,7 @@ name = "solana-sbf-rust-inner_instruction_alignment_check"
 version = "4.4.0-alpha.4"
 dependencies = [
  "solana-account-info",
- "solana-instruction 3.5.0",
+ "solana-instruction 4.0.0",
  "solana-msg",
  "solana-program",
  "solana-program-entrypoint",
@@ -8449,7 +8456,7 @@ name = "solana-sbf-rust-instruction-introspection"
 version = "4.4.0-alpha.4"
 dependencies = [
  "solana-account-info",
- "solana-instruction 3.5.0",
+ "solana-instruction 4.0.0",
  "solana-instructions-sysvar 4.0.0",
  "solana-msg",
  "solana-program",
@@ -8463,7 +8470,7 @@ name = "solana-sbf-rust-invoke"
 version = "4.4.0-alpha.4"
 dependencies = [
  "solana-account-info",
- "solana-instruction 3.5.0",
+ "solana-instruction 4.0.0",
  "solana-msg",
  "solana-program",
  "solana-program-entrypoint",
@@ -8482,7 +8489,7 @@ name = "solana-sbf-rust-invoke-and-error"
 version = "4.4.0-alpha.4"
 dependencies = [
  "solana-account-info",
- "solana-instruction 3.5.0",
+ "solana-instruction 4.0.0",
  "solana-program",
  "solana-program-entrypoint",
  "solana-program-error",
@@ -8494,7 +8501,7 @@ name = "solana-sbf-rust-invoke-and-ok"
 version = "4.4.0-alpha.4"
 dependencies = [
  "solana-account-info",
- "solana-instruction 3.5.0",
+ "solana-instruction 4.0.0",
  "solana-program",
  "solana-program-entrypoint",
  "solana-program-error",
@@ -8506,7 +8513,7 @@ name = "solana-sbf-rust-invoke-and-return"
 version = "4.4.0-alpha.4"
 dependencies = [
  "solana-account-info",
- "solana-instruction 3.5.0",
+ "solana-instruction 4.0.0",
  "solana-program",
  "solana-program-entrypoint",
  "solana-program-error",
@@ -8536,7 +8543,7 @@ dependencies = [
 name = "solana-sbf-rust-invoked-dep"
 version = "4.4.0-alpha.4"
 dependencies = [
- "solana-instruction 3.5.0",
+ "solana-instruction 4.0.0",
  "solana-pubkey 4.3.0",
 ]
 
@@ -8681,7 +8688,7 @@ dependencies = [
 name = "solana-sbf-rust-realloc-dep"
 version = "4.4.0-alpha.4"
 dependencies = [
- "solana-instruction 3.5.0",
+ "solana-instruction 4.0.0",
  "solana-pubkey 4.3.0",
 ]
 
@@ -8690,7 +8697,7 @@ name = "solana-sbf-rust-realloc-invoke"
 version = "4.4.0-alpha.4"
 dependencies = [
  "solana-account-info",
- "solana-instruction 3.5.0",
+ "solana-instruction 4.0.0",
  "solana-msg",
  "solana-program",
  "solana-program-entrypoint",
@@ -8722,7 +8729,7 @@ name = "solana-sbf-rust-ro-account_modify"
 version = "4.4.0-alpha.4"
 dependencies = [
  "solana-account-info",
- "solana-instruction 3.5.0",
+ "solana-instruction 4.0.0",
  "solana-msg",
  "solana-program",
  "solana-program-entrypoint",
@@ -8786,7 +8793,7 @@ name = "solana-sbf-rust-sibling-inner-instructions"
 version = "4.4.0-alpha.4"
 dependencies = [
  "solana-account-info",
- "solana-instruction 3.5.0",
+ "solana-instruction 4.0.0",
  "solana-msg",
  "solana-program-entrypoint",
  "solana-program-error",
@@ -8798,7 +8805,7 @@ name = "solana-sbf-rust-sibling-instructions"
 version = "4.4.0-alpha.4"
 dependencies = [
  "solana-account-info",
- "solana-instruction 3.5.0",
+ "solana-instruction 4.0.0",
  "solana-msg",
  "solana-program",
  "solana-program-entrypoint",
@@ -8825,7 +8832,7 @@ name = "solana-sbf-rust-spoof1"
 version = "4.4.0-alpha.4"
 dependencies = [
  "solana-account-info",
- "solana-instruction 3.5.0",
+ "solana-instruction 4.0.0",
  "solana-msg",
  "solana-program",
  "solana-program-entrypoint",
@@ -8850,7 +8857,7 @@ version = "4.4.0-alpha.4"
 dependencies = [
  "solana-account-info",
  "solana-define-syscall 3.0.0",
- "solana-instruction 3.5.0",
+ "solana-instruction 4.0.0",
  "solana-instructions-sysvar 4.0.0",
  "solana-msg",
  "solana-program-entrypoint",
@@ -9258,7 +9265,7 @@ dependencies = [
  "serde",
  "solana-account-decoder",
  "solana-hash",
- "solana-instruction 3.5.0",
+ "solana-instruction-error 2.5.0",
  "solana-message 5.0.0",
  "solana-pubkey 4.3.0",
  "solana-serde",
@@ -9326,7 +9333,7 @@ dependencies = [
  "solana-compute-budget-program",
  "solana-fee-structure",
  "solana-hash",
- "solana-instruction 3.5.0",
+ "solana-instruction 4.0.0",
  "solana-instruction-error 2.5.0",
  "solana-instructions-sysvar 4.0.0",
  "solana-loader-v3-interface",
@@ -9433,7 +9440,8 @@ dependencies = [
  "solana-define-syscall 5.2.0",
  "solana-hash",
  "solana-hash-512",
- "solana-instruction 3.5.0",
+ "solana-instruction 4.0.0",
+ "solana-instruction-error 2.5.0",
  "solana-keccak-hasher",
  "solana-poseidon",
  "solana-program-entrypoint",
@@ -9480,7 +9488,8 @@ dependencies = [
  "solana-account",
  "solana-bincode",
  "solana-fee-calculator",
- "solana-instruction 3.5.0",
+ "solana-instruction 4.0.0",
+ "solana-instruction-error 2.5.0",
  "solana-nonce",
  "solana-nonce-account",
  "solana-packet",
@@ -9584,7 +9593,7 @@ dependencies = [
  "solana-geyser-plugin-manager",
  "solana-gossip",
  "solana-inflation",
- "solana-instruction 3.5.0",
+ "solana-instruction 4.0.0",
  "solana-keypair 4.0.0",
  "solana-ledger",
  "solana-loader-v3-interface",
@@ -9737,7 +9746,8 @@ dependencies = [
  "bincode",
  "serde",
  "solana-account",
- "solana-instruction 3.5.0",
+ "solana-instruction 4.0.0",
+ "solana-instruction-error 2.5.0",
  "solana-instructions-sysvar 4.0.0",
  "solana-pubkey 4.3.0",
  "solana-rent",
@@ -9788,7 +9798,7 @@ dependencies = [
  "solana-clock",
  "solana-entry",
  "solana-hash",
- "solana-instruction 3.5.0",
+ "solana-instruction 4.0.0",
  "solana-loader-v2-interface",
  "solana-loader-v3-interface",
  "solana-message 5.0.0",
@@ -9825,7 +9835,7 @@ dependencies = [
  "serde_json",
  "solana-account-decoder-client-types",
  "solana-commitment-config",
- "solana-instruction 3.5.0",
+ "solana-instruction-error 2.5.0",
  "solana-message 5.0.0",
  "solana-reward-info",
  "solana-signature",
@@ -9967,7 +9977,7 @@ dependencies = [
  "solana-bls-signatures",
  "solana-clock",
  "solana-hash",
- "solana-instruction 3.5.0",
+ "solana-instruction-error 2.5.0",
  "solana-keypair 4.0.0",
  "solana-packet",
  "solana-pubkey 4.3.0",
@@ -10023,7 +10033,8 @@ dependencies = [
  "solana-clock",
  "solana-epoch-schedule",
  "solana-hash",
- "solana-instruction 3.5.0",
+ "solana-instruction 4.0.0",
+ "solana-instruction-error 2.5.0",
  "solana-packet",
  "solana-program-runtime",
  "solana-pubkey 4.3.0",
@@ -10075,7 +10086,7 @@ name = "solana-zk-elgamal-proof-program"
 version = "4.4.0-alpha.4"
 dependencies = [
  "bytemuck",
- "solana-instruction 3.5.0",
+ "solana-instruction-error 2.5.0",
  "solana-program-runtime",
  "solana-sdk-ids",
  "solana-svm-log-collector",

@@ -4,7 +4,7 @@ use {
     crate::vote_state::{self, handler::VoteStateTargetVersion},
     log::*,
     solana_bincode::limited_deserialize,
-    solana_instruction::error::InstructionError,
+    solana_instruction_error::InstructionError,
     solana_program_runtime::{
         declare_process_instruction, invoke_context::InvokeContext,
         sysvar_cache::get_sysvar_with_account_check,

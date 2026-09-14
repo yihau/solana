@@ -10,7 +10,7 @@ use {
     serde::Serialize,
     solana_clock::Slot,
     solana_hash::Hash,
-    solana_instruction::error::InstructionError,
+    solana_instruction_error::InstructionError,
     solana_transaction_error::TransactionError,
     std::{collections::HashMap, path::Path, sync::Arc},
     wincode::{SchemaRead, SchemaWrite},
