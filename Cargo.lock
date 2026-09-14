@@ -382,7 +382,7 @@ dependencies = [
  "solana-sdk-ids",
  "solana-short-vec",
  "solana-signature",
- "solana-svm-transaction",
+ "solana-svm-transaction 5.0.0",
  "solana-transaction 4.3.0",
 ]
 
@@ -6942,7 +6942,7 @@ dependencies = [
  "solana-slot-hashes",
  "solana-slot-history",
  "solana-stake-interface",
- "solana-svm-transaction",
+ "solana-svm-transaction 6.0.0",
  "solana-system-interface",
  "solana-sysvar",
  "solana-time-utils",
@@ -7723,7 +7723,7 @@ dependencies = [
  "solana-pubkey 4.3.0",
  "solana-sdk-ids",
  "solana-signer 4.0.0",
- "solana-svm-transaction",
+ "solana-svm-transaction 6.0.0",
  "solana-system-interface",
  "solana-transaction 5.0.0",
  "solana-transaction-error 3.4.0",
@@ -7758,7 +7758,7 @@ dependencies = [
  "solana-compute-budget-interface",
  "solana-message 5.0.0",
  "solana-sdk-ids",
- "solana-svm-transaction",
+ "solana-svm-transaction 6.0.0",
 ]
 
 [[package]]
@@ -7919,7 +7919,7 @@ dependencies = [
  "solana-streamer",
  "solana-svm",
  "solana-svm-timings",
- "solana-svm-transaction",
+ "solana-svm-transaction 6.0.0",
  "solana-system-interface",
  "solana-system-program",
  "solana-system-transaction",
@@ -7977,7 +7977,7 @@ dependencies = [
  "solana-runtime-transaction",
  "solana-sdk-ids",
  "solana-signer 4.0.0",
- "solana-svm-transaction",
+ "solana-svm-transaction 6.0.0",
  "solana-system-interface",
  "solana-system-transaction",
  "solana-transaction 5.0.0",
@@ -8293,7 +8293,7 @@ name = "solana-fee"
 version = "4.4.0-alpha.4"
 dependencies = [
  "solana-fee-structure",
- "solana-svm-transaction",
+ "solana-svm-transaction 6.0.0",
 ]
 
 [[package]]
@@ -8965,7 +8965,7 @@ dependencies = [
  "solana-streamer",
  "solana-svm",
  "solana-svm-timings",
- "solana-svm-transaction",
+ "solana-svm-transaction 6.0.0",
  "solana-system-interface",
  "solana-system-transaction",
  "solana-time-utils",
@@ -9602,7 +9602,7 @@ dependencies = [
  "solana-svm-log-collector",
  "solana-svm-measure",
  "solana-svm-timings",
- "solana-svm-transaction",
+ "solana-svm-transaction 6.0.0",
  "solana-svm-type-overrides",
  "solana-system-interface",
  "solana-sysvar",
@@ -10205,7 +10205,7 @@ dependencies = [
  "solana-svm",
  "solana-svm-callback",
  "solana-svm-timings",
- "solana-svm-transaction",
+ "solana-svm-transaction 6.0.0",
  "solana-syscalls",
  "solana-system-interface",
  "solana-system-transaction",
@@ -10256,7 +10256,7 @@ dependencies = [
  "solana-sdk-ids",
  "solana-signature",
  "solana-signer 4.0.0",
- "solana-svm-transaction",
+ "solana-svm-transaction 6.0.0",
  "solana-system-interface",
  "solana-system-transaction",
  "solana-transaction 5.0.0",
@@ -10843,7 +10843,7 @@ dependencies = [
  "solana-svm-log-collector",
  "solana-svm-measure",
  "solana-svm-timings",
- "solana-svm-transaction",
+ "solana-svm-transaction 6.0.0",
  "solana-svm-type-overrides",
  "solana-syscalls",
  "solana-system-interface",
@@ -10910,6 +10910,20 @@ dependencies = [
  "solana-sdk-ids",
  "solana-signature",
  "solana-transaction 4.3.0",
+]
+
+[[package]]
+name = "solana-svm-transaction"
+version = "6.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1e1d4d6932de8290b7835f9926281c210291718e14732f5a736ae31ca54e2e47"
+dependencies = [
+ "solana-hash",
+ "solana-message 5.0.0",
+ "solana-pubkey 4.3.0",
+ "solana-sdk-ids",
+ "solana-signature",
+ "solana-transaction 5.0.0",
 ]
 
 [[package]]
@@ -11522,7 +11536,7 @@ dependencies = [
  "solana-pubkey 4.3.0",
  "solana-runtime-transaction",
  "solana-signature",
- "solana-svm-transaction",
+ "solana-svm-transaction 6.0.0",
  "solana-transaction 5.0.0",
  "static_assertions",
  "test-case",
@@ -11612,7 +11626,7 @@ dependencies = [
  "solana-sha256-hasher",
  "solana-signature",
  "solana-signer 4.0.0",
- "solana-svm-transaction",
+ "solana-svm-transaction 6.0.0",
  "solana-system-transaction",
  "solana-transaction 5.0.0",
  "solana-vote",
