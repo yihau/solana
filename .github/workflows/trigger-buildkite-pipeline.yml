@@ -70,7 +70,7 @@ jobs:
 
               gh api --method POST "repos/$REPO/statuses/$COMMIT" \
                 -f state=pending \
-                -f context="buildkite/trigger" \
+                -f context="buildkite/agave" \
                 -f description="⏳ waiting for a member to add the CI label" \
                 -f target_url="$RUN_URL"
               ;;
