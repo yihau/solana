@@ -2489,7 +2489,7 @@ pub mod tests {
                 GenesisConfigInfo, bootstrap_validator_stake_lamports, create_genesis_config,
                 create_genesis_config_with_leader,
             },
-            shred::{ProcessShredsStats, ReedSolomonCache, Shred, Shredder},
+            shred::{ProcessShredsStats, Shred, Shredder},
         },
         agave_transaction_view::transaction_view::SanitizedTransactionView,
         agave_votor_messages::{
@@ -5684,7 +5684,6 @@ pub mod tests {
         let ledger_path = get_tmp_ledger_path_auto_delete!();
         let blockstore = Blockstore::open(ledger_path.path()).unwrap();
         let keypair = Arc::new(Keypair::new());
-        let reed_solomon_cache = ReedSolomonCache::default();
 
         let header = VersionedBlockMarker::from_block_header(BlockHeaderV1 {
             parent_slot: 0,
@@ -5720,7 +5719,6 @@ pub mod tests {
                 Hash::default(),
                 next_shred_index,
                 0,
-                &reed_solomon_cache,
                 &mut ProcessShredsStats::default(),
             )
             .into_iter()
@@ -5739,7 +5737,6 @@ pub mod tests {
                     Hash::default(),
                     next_shred_index,
                     0,
-                    &reed_solomon_cache,
                     &mut ProcessShredsStats::default(),
                 )
                 .into_iter()
@@ -5755,7 +5752,6 @@ pub mod tests {
                     Hash::default(),
                     next_shred_index,
                     0,
-                    &reed_solomon_cache,
                     &mut ProcessShredsStats::default(),
                 )
                 .into_iter()
@@ -5773,7 +5769,6 @@ pub mod tests {
                     Hash::default(),
                     next_shred_index,
                     0,
-                    &reed_solomon_cache,
                     &mut ProcessShredsStats::default(),
                 )
                 .into_iter()
@@ -5789,7 +5784,6 @@ pub mod tests {
                     Hash::default(),
                     next_shred_index,
                     0,
-                    &reed_solomon_cache,
                     &mut ProcessShredsStats::default(),
                 )
                 .into_iter()
@@ -5960,7 +5954,7 @@ pub mod tests {
 
     #[test]
     fn test_check_chained_block_id() {
-        use crate::shred::{ProcessShredsStats, ReedSolomonCache, Shred, Shredder};
+        use crate::shred::{ProcessShredsStats, Shred, Shredder};
 
         let ledger_path = get_tmp_ledger_path_auto_delete!();
         let blockstore = Arc::new(
@@ -5982,7 +5976,6 @@ pub mod tests {
                         chained_merkle_root,
                         0,
                         0,
-                        &ReedSolomonCache::default(),
                         &mut ProcessShredsStats::default(),
                     )
                     .into_iter()
