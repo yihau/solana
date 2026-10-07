@@ -11,8 +11,7 @@ use {
     crossbeam_channel::Receiver,
     log::*,
     solana_account::{
-        Account, AccountSharedData, ReadableAccount, WritableAccount,
-        state_traits::StateMutWincode as _,
+        Account, AccountSharedData, ReadableAccount, state_traits::StateMutWincode as _,
     },
     solana_accounts_db::{
         accounts_db::{ACCOUNTS_DB_CONFIG_FOR_TESTING, AccountsDbConfig},
@@ -248,14 +247,14 @@ fn try_transform_program_data(
         {
             // Serialize new programdata metadata into the resulting account,
             // to overwrite the deployment slot to `0`.
-            wincode::serialize_into(
-                account.data_as_mut_slice(),
-                &UpgradeableLoaderState::ProgramData {
+            account
+                .set_state(&UpgradeableLoaderState::ProgramData {
                     slot: 0,
                     upgrade_authority_address,
-                },
-            )
-            .map_err(|_| format!("Failed to write to upgradeable programdata account {address}"))
+                })
+                .map_err(|_| {
+                    format!("Failed to write to upgradeable programdata account {address}")
+                })
         } else {
             Err(format!(
                 "Failed to read upgradeable programdata account {address}"
@@ -1434,7 +1433,7 @@ mod test {
             let active_feature_accounts = rpc_client.get_multiple_accounts(chunk).await.unwrap();
             for feature_account in active_feature_accounts {
                 let account = feature_account.unwrap();
-                let feature_state: Feature = wincode::deserialize(account.data()).unwrap();
+                let feature_state: Feature = account.state().unwrap();
                 assert!(feature_state.activated_at.is_some());
             }
         }
@@ -1643,7 +1642,7 @@ mod test {
             let active_feature_accounts = rpc_client.get_multiple_accounts(chunk).await.unwrap();
             for f in active_feature_accounts {
                 let account = f.unwrap(); // Should be `Some`.
-                let feature_state: Feature = wincode::deserialize(account.data()).unwrap();
+                let feature_state: Feature = account.state().unwrap();
                 assert!(feature_state.activated_at.is_some());
             }
         }
@@ -1683,7 +1682,7 @@ mod test {
         // The second one should be a feature account.
         let feature_account = our_accounts[1].as_ref().unwrap();
         assert_eq!(feature_account.owner, solana_sdk_ids::feature::id());
-        let feature_state: Feature = wincode::deserialize(feature_account.data()).unwrap();
+        let feature_state: Feature = feature_account.state().unwrap();
         assert!(feature_state.activated_at.is_some());
     }
 
