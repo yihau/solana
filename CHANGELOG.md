@@ -55,6 +55,16 @@ Release channels have their own copy of this changelog:
   no longer has any effect and it is no longer possible to start a test-validator with TowerBFT.
 * `solana-genesis` now activates Alpenglow consensus at genesis by default.
 
+### Geyser
+
+#### Changes
+
+* Contact info notifications now include unchanged gossip republishes. Plugins that subscribe to
+  contact info should be prepared for thousands of callbacks per second, many carrying duplicates.
+  Deduplicate locally if only field changes are needed. Keep callbacks short: a blocked callback
+  can fill the shared channel and cause updates to be dropped for all subscribed plugins.
+  Plugins loaded later can learn about unchanged nodes from subsequent republishes.
+
 ## 4.4.0
 
 ### RPC
