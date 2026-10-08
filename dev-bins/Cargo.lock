@@ -5866,7 +5866,6 @@ dependencies = [
  "rayon",
  "semver",
  "seqlock",
- "serde",
  "smallvec",
  "solana-account",
  "solana-address-lookup-table-interface",
@@ -9117,9 +9116,7 @@ dependencies = [
  "agave-feature-set",
  "rand 0.9.4",
  "semver",
- "serde",
  "solana-sanitize",
- "solana-serde-varint",
  "solana-wincode-varint",
  "wincode",
 ]
