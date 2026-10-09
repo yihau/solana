@@ -8870,6 +8870,7 @@ name = "solana-transaction-context"
 version = "4.5.0-alpha.2"
 dependencies = [
  "bincode",
+ "qualifier_attr",
  "serde",
  "solana-account",
  "solana-instruction 4.0.0",
