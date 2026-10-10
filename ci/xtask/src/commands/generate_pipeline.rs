@@ -181,11 +181,13 @@ impl PullRequestPipelineFlags {
                 || rust_changed
                 || changed_files.iter().any(|file| {
                     file.ends_with("ci/test-checks.sh")
+                        || file.ends_with(".toml")
                         || file == "CHANGELOG.md"
                         || file.ends_with("scripts/cargo-for-all-lock-files.sh")
                         || file.ends_with("scripts/check-dev-context-only-utils.sh")
                         || file.ends_with("scripts/agave-build-lists.sh")
                         || file.ends_with("scripts/cargo-clippy.sh")
+                        || file.ends_with("scripts/check-msrv.sh")
                         || file.ends_with("ci/do-audit.sh")
                         || file.ends_with("ci/check-install-all.sh")
                         || file.ends_with("scripts/spl-token-cli-version.sh")
@@ -801,6 +803,6 @@ mod tests {
     fn test_cargo_config_triggers_release_check() {
         let f = flags(&[".cargo/config.toml"]);
         assert!(f.release_check);
-        assert!(!f.checks);
+        assert!(f.checks);
     }
 }
