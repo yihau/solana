@@ -247,6 +247,11 @@ impl PullRequestPipelineFlags {
                         || file.ends_with("ci/upload-ci-artifact.sh")
                         || file.ends_with("scripts/configure-metrics.sh")
                         || file.ends_with("scripts/run.sh")
+                        || file.starts_with("multinode-demo/")
+                        || file == "net/common.sh"
+                        || file == "fetch-core-bpf.sh"
+                        || file == "fetch-spl.sh"
+                        || file == "fetch-programs.sh"
                 }),
             stable_sbf: trigger_all
                 || rust_changed
