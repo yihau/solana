@@ -202,7 +202,7 @@ impl PullRequestPipelineFlags {
                 || rust_changed
                 || changed_files
                     .iter()
-                    .any(|file| file.starts_with("ci/feature-check/")),
+                    .any(|file| file.starts_with("ci/feature-check/") || file == "clippy.toml"),
             miri: trigger_all
                 || rust_changed
                 || changed_files
