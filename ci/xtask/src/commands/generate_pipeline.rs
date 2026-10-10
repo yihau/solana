@@ -256,7 +256,8 @@ impl PullRequestPipelineFlags {
                         || file.ends_with("scripts/ulimit-n.sh")
                         || file.ends_with("ci/common/limit-threads.sh")
                         || file.ends_with("ci/common/shared-functions.sh")
-                        || file.ends_with("programs/sbf/install.sh")
+                        || file.starts_with("programs/sbf/")
+                        || file == "cargo-build-sbf"
                 }),
             shuttle: trigger_all
                 || rust_changed
