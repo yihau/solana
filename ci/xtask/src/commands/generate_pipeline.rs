@@ -269,9 +269,9 @@ impl PullRequestPipelineFlags {
                 }),
             shuttle: trigger_all
                 || rust_changed
-                || changed_files
-                    .iter()
-                    .any(|file| file.ends_with("ci/test-shuttle.sh")),
+                || changed_files.iter().any(|file| {
+                    file == ".config/nextest.toml" || file.ends_with("ci/test-shuttle.sh")
+                }),
             coverage: trigger_all
                 || rust_changed
                 || changed_files.iter().any(|file| {
