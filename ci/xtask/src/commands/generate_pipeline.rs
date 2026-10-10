@@ -226,7 +226,8 @@ impl PullRequestPipelineFlags {
             local_cluster: trigger_all
                 || rust_changed
                 || changed_files.iter().any(|file| {
-                    file.ends_with("ci/stable/run-local-cluster-partially.sh")
+                    file == ".config/nextest.toml"
+                        || file.ends_with("ci/stable/run-local-cluster-partially.sh")
                         || file.ends_with("ci/stable/common.sh")
                         || file.ends_with("ci/common/shared-functions.sh")
                 }),
