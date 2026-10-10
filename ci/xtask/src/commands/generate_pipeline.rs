@@ -268,6 +268,8 @@ impl PullRequestPipelineFlags {
                 || changed_files.iter().any(|file| {
                     file.ends_with("scripts/coverage.sh")
                         || file.ends_with("ci/test-coverage.sh")
+                        || file.ends_with("ci/intercept.sh")
+                        || file.ends_with("ci/codecov-env.sh")
                         || file.starts_with("ci/coverage/")
                 }),
             xdp_tests: trigger_all
