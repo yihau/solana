@@ -9165,7 +9165,6 @@ version = "7.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e91bf90031e7387f9a57f8c4203d433a3ca08b9c1f24d95424e9bab38d5b2620"
 dependencies = [
- "bincode",
  "cfg_eval",
  "num-derive 0.4.2",
  "num-traits",
@@ -9190,10 +9189,8 @@ dependencies = [
 name = "solana-vote-program"
 version = "4.5.0-alpha.2"
 dependencies = [
- "bincode",
  "log",
  "solana-account",
- "solana-bincode",
  "solana-bls-signatures",
  "solana-clock",
  "solana-epoch-schedule",
