@@ -6123,10 +6123,8 @@ dependencies = [
 name = "solana-bpf-loader-program"
 version = "4.5.0-alpha.4"
 dependencies = [
- "bincode",
  "qualifier_attr",
  "solana-account",
- "solana-bincode",
  "solana-clock",
  "solana-instruction 4.0.0",
  "solana-instruction-error 3.1.0",
