@@ -687,15 +687,18 @@ fn test_remove_unrooted_slot_cached() {
     let ancestors = Ancestors::from(vec![unrooted_slot]);
     assert!(!db.contains(&key));
     db.store_for_tests((unrooted_slot, &[(&key, &account0)][..]));
-    assert!(db.accounts_cache.contains(unrooted_slot));
-    assert!(!db.accounts_cache.contains_unflushed_root(unrooted_slot));
+    assert!(db.accounts_cache.contains(BankId::new(unrooted_slot)));
+    assert!(
+        !db.accounts_cache
+            .contains_unflushed_bank(BankId::new(unrooted_slot))
+    );
     assert!(db.contains(&key));
     db.assert_load_account(unrooted_slot, key, 1);
 
     // Purge the slot
     db.remove_unrooted_slots(&[(unrooted_slot, unrooted_bank_id)]);
     assert!(db.do_load_for_tests(&ancestors, &key).is_none());
-    assert!(db.accounts_cache.slot_cache(unrooted_slot).is_none());
+    assert!(db.slot_cache_for_tests(unrooted_slot).is_none());
     assert!(db.storage.get_slot_storage_entry(unrooted_slot).is_none());
     assert!(!db.contains(&key));
 
@@ -703,6 +706,38 @@ fn test_remove_unrooted_slot_cached() {
     let account0 = AccountSharedData::new(2, 0, &key);
     db.store_for_tests((unrooted_slot, [(&key, &account0)].as_slice()));
     db.assert_load_account(unrooted_slot, key, 2);
+}
+
+/// Two banks can store at the same slot; purging one leaves the other's cache intact.
+#[test]
+fn test_purge_slot_keeps_other_bank_at_same_slot() {
+    let db = AccountsDb::new_for_tests_with_config(Vec::new(), DEFAULT_ACCOUNTS_DB_CONFIG);
+    let slot = 9;
+    let removed_bank_id = BankId::new(1);
+    let kept_bank_id = BankId::new(2);
+    let key = Pubkey::new_unique();
+    let removed_account = AccountSharedData::new(1, 0, &Pubkey::default());
+    let kept_account = AccountSharedData::new(2, 0, &Pubkey::default());
+    let removed_ancestors = Ancestors::from(vec![(slot, removed_bank_id)]);
+    let kept_ancestors = Ancestors::from(vec![(slot, kept_bank_id)]);
+    db.store_accounts_unfrozen(
+        (slot, [(&key, &removed_account)].as_slice()),
+        removed_bank_id,
+        &removed_ancestors,
+    );
+    db.store_accounts_unfrozen(
+        (slot, [(&key, &kept_account)].as_slice()),
+        kept_bank_id,
+        &kept_ancestors,
+    );
+
+    db.purge_slot(removed_bank_id, false);
+    assert!(!db.accounts_cache.contains(removed_bank_id));
+    assert!(db.do_load_for_tests(&removed_ancestors, &key).is_none());
+    assert_eq!(
+        db.do_load_for_tests(&kept_ancestors, &key),
+        Some((kept_account, slot))
+    );
 }
 
 /// Cache writes populate the secondary indexes but not the primary index. When a cache-only
@@ -762,6 +797,13 @@ fn test_remove_unrooted_slots_aborts_ongoing_scan(
     let pubkeys: Vec<_> = (0..num_accounts).map(|_| Pubkey::new_unique()).collect();
     let accounts: Vec<_> = pubkeys.iter().map(|pubkey| (pubkey, &account)).collect();
     db.store_for_tests((slot, accounts.as_slice()));
+    // Another version of the slot, stored by a different bank
+    let other_bank_id = BankId::new(2);
+    db.store_accounts_unfrozen(
+        (slot, accounts.as_slice()),
+        other_bank_id,
+        &Ancestors::from(vec![(slot, other_bank_id)]),
+    );
 
     let mut visited = 0;
     let result = db.scan_accounts(
@@ -3467,7 +3509,7 @@ fn test_flush_accounts_cache() {
     assert!(db.do_load_for_tests(&ancestors, &unrooted_key).is_some());
     assert!(db.contains(&unrooted_key));
     assert_eq!(db.accounts_cache.num_slots(), 1);
-    assert!(db.accounts_cache.slot_cache(unrooted_slot).is_some());
+    assert!(db.slot_cache_for_tests(unrooted_slot).is_some());
     assert_eq!(
         db.do_load_for_tests(&Ancestors::default(), &key5),
         Some((account0.clone(), root5))
@@ -3526,15 +3568,13 @@ fn run_test_flush_accounts_cache_if_needed(num_roots: usize, num_unrooted: usize
         assert_eq!(db.accounts_cache.num_slots(), num_unrooted);
         for root_slot in 0..num_roots {
             assert!(
-                db.accounts_cache.slot_cache(root_slot as Slot).is_none(),
+                db.slot_cache_for_tests(root_slot as Slot).is_none(),
                 "root_slot {root_slot} should have been flushed from cache"
             );
         }
         for unrooted_slot in num_roots..total_slots {
             assert!(
-                db.accounts_cache
-                    .slot_cache(unrooted_slot as Slot)
-                    .is_some(),
+                db.slot_cache_for_tests(unrooted_slot as Slot).is_some(),
                 "unrooted_slot {unrooted_slot} should remain in cache"
             );
         }
@@ -4211,7 +4251,7 @@ fn test_scan_flush_accounts_cache_then_clean_drop() {
     // remain in the cache
     db.flush_accounts_cache(true, Some(new_root));
     assert_eq!(db.accounts_cache.num_slots(), 1);
-    assert!(db.accounts_cache.slot_cache(1).is_some());
+    assert!(db.slot_cache_for_tests(1).is_some());
 
     // Intra cache cleaning should not clean the entry for `account_key` from slot 0,
     // even though it was updated in slot `2` because of the ongoing scan
@@ -5022,8 +5062,8 @@ fn test_partial_clean() {
     db.print_accounts_stats("post-clean1");
 
     // Assert that cache entries are still present
-    assert!(!db.accounts_cache.slot_cache(0).unwrap().is_empty());
-    assert!(!db.accounts_cache.slot_cache(1).unwrap().is_empty());
+    assert!(!db.slot_cache_for_tests(0).unwrap().is_empty());
+    assert!(!db.slot_cache_for_tests(1).unwrap().is_empty());
 
     // root slot 0
     db.add_root_and_flush_write_cache(0);
@@ -6492,7 +6532,7 @@ fn test_new_zero_lamport_accounts_skipped() {
         &ancestors,
     );
     assert!(!accounts_db.accounts_index.contains(&pubkey1));
-    assert!(accounts_db.accounts_cache.slot_cache(slot).is_none());
+    assert!(accounts_db.slot_cache_for_tests(slot).is_none());
 
     // 2. Insert a zero-lamport (pubkey1) together with non-zero lamport accounts
     //    (pubkey2, pubkey3) in the same slot and verify only the non-zero lamport pubkeys are
@@ -6513,8 +6553,7 @@ fn test_new_zero_lamport_accounts_skipped() {
     assert!(!accounts_db.accounts_index.contains(&pubkey1));
     assert!(
         !accounts_db
-            .accounts_cache
-            .slot_cache(slot)
+            .slot_cache_for_tests(slot)
             .unwrap()
             .contains_key(&pubkey1)
     );
@@ -6523,16 +6562,14 @@ fn test_new_zero_lamport_accounts_skipped() {
     assert!(!accounts_db.accounts_index.contains(&pubkey2));
     assert!(
         accounts_db
-            .accounts_cache
-            .slot_cache(slot)
+            .slot_cache_for_tests(slot)
             .unwrap()
             .contains_key(&pubkey2)
     );
     assert!(!accounts_db.accounts_index.contains(&pubkey3));
     assert!(
         accounts_db
-            .accounts_cache
-            .slot_cache(slot)
+            .slot_cache_for_tests(slot)
             .unwrap()
             .contains_key(&pubkey3)
     );
