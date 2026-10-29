@@ -8302,7 +8302,6 @@ dependencies = [
  "crossbeam-channel",
  "log",
  "num_cpus",
- "proptest",
  "rand 0.9.4",
  "rayon",
  "smallvec",
