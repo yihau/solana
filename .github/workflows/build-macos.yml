@@ -1,0 +1,73 @@
+name: Build macOS binaries
+
+on:
+  workflow_dispatch:
+    inputs:
+      runner:
+        description: "Runner label"
+        type: choice
+        options:
+          - macos-26
+          - macos-26-xlarge
+        default: macos-26
+  push:
+    branches:
+      - migrate-to-gh-build
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  publish-tarball:
+    runs-on: ${{ inputs.runner || 'macos-26' }}
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+
+      - name: Runner info
+        shell: bash
+        run: |
+          sw_vers
+          sysctl -n machdep.cpu.brand_string hw.ncpu hw.memsize
+          df -h .
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          source .github/scripts/install-all-deps.sh ${{ runner.os }}
+          # cargo-install-all.sh needs greadlink
+          brew install coreutils
+          # persist LIBCLANG_PATH for later steps
+          echo "LIBCLANG_PATH=$LIBCLANG_PATH" >> "$GITHUB_ENV"
+
+      # same entrypoint as the buildkite "publish tarball (aarch64-apple-darwin)" step.
+      # without CI_BRANCH it runs in dry-run mode: builds the tarball and copies
+      # it to github-action-s3-upload/ instead of publishing.
+      - name: Publish tarball (dry run)
+        shell: bash
+        run: ci/publish-tarball.sh
+
+      - name: Inspect outputs
+        if: always()
+        shell: bash
+        run: |
+          df -h .
+          du -sh target dev-bins/target 2>/dev/null || true
+          ls -lh solana-release-*.tar.bz2 solana-release-*.yml agave-install-init-* 2>/dev/null || true
+          for bin in solana-release/bin/*; do
+            [[ -f "$bin" ]] || continue
+            echo "--- $bin"
+            vtool -show-build "$bin" | grep -E 'minos|sdk' || true
+            otool -L "$bin" | tail -n +2
+          done
+          solana-release/bin/solana --version || true
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9  # v7.0.2
+        with:
+          name: solana-release-aarch64-apple-darwin
+          path: github-action-s3-upload/
+          if-no-files-found: error
